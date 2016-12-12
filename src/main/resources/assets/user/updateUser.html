@@ -1,0 +1,65 @@
+<meta charset="utf-8">
+<head>
+</head>
+
+<div ng-controller="UserUpdateController as userUpdate">
+	<div class="message">用户权限修改</div>
+	<form class="form-user" name="updateuser">
+	<div>
+			<table id="table-style" style="margin:50px auto">
+				<tbody>
+					<tr>
+						<th class="labelformat">用户名</th>
+						<td><label class="labelformat">{{userUpdate.user.username}}</label>
+						</td>
+					</tr>
+					<tr>
+						<th class="labelformat">角色</th>
+						<td>
+							<div isteven-multi-select input-model="userUpdate.roles"
+								output-model="newroles" button-label="rolename"
+								item-label="rolename" tick-property="ticked"></div>
+						</td>
+					</tr>
+					
+					<tr>
+						<th class="labelformat">特殊权限</th>
+						<td>
+							<table>
+								<tr>
+									<th class="labelformat">功能</td>
+									<th class="labelformat">操作</td>
+								</tr>
+								<tr ng-repeat="func in userUpdate.funcs">
+									<td>{{func.name}}</td>
+									<td>
+										<div isteven-multi-select
+											input-model="func.ops"
+											output-model="func.output" button-label="operationname"
+											item-label="operationname" tick-property="ticked" orientation="horizontal"></div>
+									</td>
+								</tr>
+								
+								</table>
+                                
+								<tr>
+									<td></td>
+									<td><button class="btn btn-large btn-primary"
+											ng-disabled="!updateuser.$valid"
+											ng-click="userUpdate.updateUser()">
+											<span class="glyphicon glyphicon-upload"></span> 确定修改
+										</button>
+                                        <button class="btn btn-large btn-primary"
+											ng-disabled="!updateuser.$valid"
+											ng-click="userUpdate.deleteUserModal('sm')">
+											<span class="glyphicon glyphicon-trash"
+												style="color: rgb(255, 140, 60);"></span> 删除用户
+										</button></td>
+								</tr>
+					
+				</tbody>
+			</table>
+			</div>
+		</form>
+</div>
+<!-- /container -->

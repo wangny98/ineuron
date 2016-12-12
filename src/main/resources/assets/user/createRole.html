@@ -1,0 +1,56 @@
+<meta charset="utf-8">
+<head>
+</head>
+
+<div ng-controller="RoleCreateController as roleCreate">
+	<div class="message">添加角色</div>
+
+	<div class="template">
+		<form class="form-role" name="createrole">
+			<table id="table-style" style="margin:50px auto">
+				<tbody>
+					<tr>
+						<th class="labelformat">角色名</td>
+						<td><input class="input-block-level" type="text"
+							ng-model="updateRolename" required></td><td style="color:red">*</td>
+					</tr>
+					<tr>
+						<th class="labelformat">备注</td>
+						<td><input class="input-block-level" type="text"
+							ng-model="updateRoleDescription" value=""></td>
+                            <td></td>
+					</tr>
+					<tr>
+						<th class="labelformat">权限</th>
+						<td>
+							<table>
+								<tr>
+									<th class="labelformat">功能</td>
+									<th class="labelformat">操作</td>
+								</tr>
+								<tr ng-repeat="func in roleCreate.funcs">
+									<td>{{func.name}}</td>
+									<td>
+										<div isteven-multi-select
+											input-model="func.ops"
+											output-model="func.output" button-label="operationname"
+											item-label="operationname" tick-property="ticked" orientation="horizontal"></div>
+									</td>
+								</tr>
+								</table>
+                                <td></td>
+                                </tr>
+								<tr>
+									<td></td>
+									<td><button class="btn btn-large btn-primary"
+											ng-disabled="!createrole.$valid"
+											ng-click="roleCreate.createRole()">
+											<span class="glyphicon glyphicon-upload"></span> 提交
+										</button></td>
+                                        <td></td>
+								</tr>
+								</tbody>
+							</table>
+							</form>
+			</div>
+</div> <!-- /container -->

@@ -1,0 +1,43 @@
+<meta charset="utf-8">
+<head>
+<!-- Le styles -->
+<link href="/ineuron/css/lib/bootstrap.css" rel="stylesheet">
+<link href="/ineuron/css/user.css" rel="stylesheet">
+<link href="/ineuron/css/lib/bootstrap-responsive.css" rel="stylesheet">
+
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="../ineuron/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+
+<div class="login">
+	<div class="message">琥崧智能工厂运营与控制系统-管理登录</div>
+    <div id="darkbannerwrap"></div>
+    
+	<form name="loginform">
+	    <div ng-show="invalidUserPwd">
+	    <label style="text-align:center;font-weight:bold;color:red">不正确的用户名或者密码！请重新输入。</label>
+	    <hr class="hr15">
+	    </div>
+		<input type="text" ng-model="username" placeholder="用戶名"	required> 
+		<hr class="hr15">
+		<input type="password" ng-model="password" placeholder="密码" required>
+		<hr class="hr15">
+		<button ng-disabled="!loginform.$valid" class="btn btn-large btn-primary" ng-click="login()" style="width:100%";>
+			<span class="glyphicon glyphicon-user"></span>  登	录
+		</button>	
+		<!-- show an error if this isn't filled in -->
+		<p ng-show="userForm.username.$error.required">Your username is
+			required.</p>
+
+		<hr class="hr20">
+        
+       <div align="right">
+         <h1><a rel="register" href="#/register"><h2><strong>新用户注册</strong></h2></a></h1>
+       </div>
+	</form>
+
+</div>

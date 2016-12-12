@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ineuron.dataaccess.db.mappers.ProductMapper">
+
+	<!-- attributes -->
+
+	<select id="getAttributes" resultType="com.ineuron.domain.product.valueobject.Attribute">
+		select * from Attributes
+	</select>
+
+	<select id="getAttributesByCategoryId" resultType="com.ineuron.domain.product.valueobject.Attribute">
+		select * from Attributes where attributeCategoryId=#{attributeCategoryId}
+	</select>
+
+	<select id="getAttributeCategoryById" resultType="com.ineuron.domain.product.valueobject.AttributeCategory">
+		select * from AttributeCategories where id=#{attributeCategoryId}
+	</select>
+	
+	<insert id="addAttribute">
+		insert into Attributes (id,name,code,description,attributeCategoryId)
+		values(#{id},#{name},#{code},#{description},#{attributeCategoryId})
+	</insert>
+
+	<update id="updateAttribute">
+		update Attributes set name = #{name} where id = #{id}
+	</update>
+
+	<delete id="deleteAttribute">
+		delete from Attributes where id = #{id}
+	</delete>
+
+	
+	
+	<!-- ProductCategory -->
+	
+	<insert id="addProductCategory">
+		insert into ProductCategories (name,code,description,characters,techParameters,scope)
+		values(#{name},#{code},#{description},#{characters},#{techParameters},#{scope})
+	</insert>
+
+	<select id="getProductCategories"
+		resultType="com.ineuron.domain.product.valueobject.ProductCategory">
+		select * from ProductCategories
+	</select>
+	
+	<select id="getProductCategoryByName"
+		resultType="com.ineuron.domain.product.valueobject.ProductCategory">
+		select * from ProductCategories where name=#{name}
+	</select>
+	
+	<select id="getProductCategoryByCode"
+		resultType="com.ineuron.domain.product.valueobject.ProductCategory">
+		select * from ProductCategories where code=#{code}
+	</select>
+	
+	
+	<update id="updateProductCategory">
+		update ProductCategories set name = #{name}, code =#{code}, 
+		description=#{description}, characters=#{characters}, techParameters=#{techParameters}, scope=#{scope} where id = #{id}
+	</update>
+
+
+
+	<!-- Product -->
+	
+	<insert id="addProduct">
+		insert into Products (name,productCategoryId,serialNumber,code,formulaId,description)
+		values(#{name},#{productCategoryId},#{serialNumber},#{code},#{formulaId},#{description})
+	</insert>
+
+	<select id="getProducts" resultType="com.ineuron.domain.product.entity.Product">
+		select * from Products
+	</select>
+	
+	<select id="getProductByCategory" resultType="com.ineuron.domain.product.entity.Product">
+		select * from Products where productCategoryId=#{productCategoryId}
+	</select>
+	
+	<select id="getProductByName" resultType="com.ineuron.domain.product.entity.Product">
+		select * from Products where name=#{name}
+	</select>
+	
+	<select id="getProductById" resultType="com.ineuron.domain.product.entity.Product">
+		select * from products where id=#{id}
+	</select>
+	
+	<select id="getMaxProductSNByCategoryId" resultType="com.ineuron.domain.product.entity.Product">
+		select * from Products where productCategoryId=#{productCategoryId} and serialNumber=( select max(serialNumber) from products where productCategoryId=#{productCategoryId})
+	</select>
+
+	<update id="updateProduct">
+		update Products set name = #{name}, code =
+		#{code}, description=#{description} where id = #{id}
+	</update>
+
+	<update id="deleteProduct">
+		delete from Products where name = #{name}
+	</update>
+
+	
+	
+    <!-- ManufacturingProcess -->
+    
+	<select id="getProcesses"
+		resultType="com.ineuron.domain.product.valueobject.ManufacturingProcess">
+		select * from ProductManufacturingProcess where productId = #{productId}
+	</select>
+
+	<delete id="deleteProcesses">
+		delete from ProductManufacturingProcess where productId = #{productId}
+	</delete>
+
+	<insert id="insertProcess">
+		insert into ProductManufacturingProcess
+		(productId,orderId,operationId,materialId,materialQuantity)
+		values
+		(#{productId},#{orderId},#{operationId},#{materialId},#{materialQuantity})
+	</insert>
+
+	<select id="getOperations" resultType="com.ineuron.domain.product.valueobject.Operation">
+		select * from Operations
+	</select>
+	
+	<select id="getOperationTypes" resultType="com.ineuron.domain.product.valueobject.OperationType">
+		select * from operationTypes
+	</select>
+
+	<select id="getMaterials" resultType="com.ineuron.domain.product.valueobject.Material">
+		select * from Materials
+	</select>
+	
+	<select id="getMaterialByIds" resultType="com.ineuron.domain.product.valueobject.Material">
+		select * from materials where id in 
+		
+		<foreach item="item" index="index" collection="list"   
+                         open="(" separator="," close=")">  
+                        #{item}  
+                </foreach>  
+	</select>
+
+
+
+    <!-- Formula -->
+    
+	<select id="getFormulas" resultType="com.ineuron.domain.product.entity.Formula">
+		select * from ProductFormulas
+	</select>
+	
+	<select id="getFormulaById" resultType="com.ineuron.domain.product.entity.Formula">
+		select * from productFormulas where id = #{id}
+	</select>
+
+	<insert id="addFormula">
+		insert into ProductFormulas (name,description)
+		values(#{name},#{description})
+	</insert>
+
+	<update id="updateFormula">
+		update ProductFormulas set name=#{name},description=#{description} where
+		id=#{id}
+	</update>
+
+	<delete id="deleteFormula">
+		delete from ProductFormulas where id = #{id}
+	</delete>
+
+	<select id="getFormulaMaterials"
+		resultType="com.ineuron.domain.product.valueobject.FormulaMaterial">
+		select * from productFormulaMaterials where formulaId = #{id}
+	</select>
+
+	<insert id="addFormulaMaterial">
+		insert into ProductFormulaMaterials (formulaId,materialId,materialQuantity)
+		values(#{formulaId},#{materialId},#{materialQuantity})
+	</insert>
+
+	<delete id="deleteFormulaMaterial">
+		delete from ProductFormulaMaterials where formulaId = #{id}
+	</delete>
+
+</mapper>

@@ -1,0 +1,102 @@
+<meta charset="utf-8">
+
+<div ng-controller="ProductManufacturingProcessController as productManufacturing">
+	<div class="message">产品工艺流程</div>
+		<table id="table-style">
+			<tbody>
+				<tr>
+					<th class="labelformat">产品名称：</th>
+					<td>{{productName}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="right-align">
+				<button type="button" style="float:right"
+						ng-click="addRow()"	class="custombutton">
+						<span class="glyphicon glyphicon-new"></span> 增加步骤
+				</button>
+				
+				<button type="button" style="float:right"
+						ng-click="saveProcesses()"
+						class="custombutton">
+						<span class="glyphicon glyphicon-update"
+				style="font-weight:bold;color: rgb(255, 140, 60);"></span> 保存步骤
+				</button>
+				
+		</div>	
+			<div class="col-xs-12">
+				<table style="width:100%" id="table-style">
+					<thead>
+						<tr>
+							<th>操作顺序</th>
+							<th>操作</th>
+							<th>物料</th>
+							<th>操作内容</th>
+							<th>编辑步骤</th>
+						</tr>
+					</thead>
+					<tbody ui-sortable="sortableOptions" ng-model="model.rows" class="list">
+						<tr ng-repeat="row in model.rows" ng-include="getTemplate(row)" class="item" style="cursor: move;">
+						</tr>
+					</tbody>
+				</table>
+		<script type="text/ng-template" id="display">
+			  <td>{{$index}}</td>
+              <td>
+				<select class="td-item" disabled
+    				ng-model="row.operationId"
+    				ng-options="value.id as value.name for value in operations">
+				</select>
+      	      </td>	
+              <td>
+                <select class="td-item" disabled
+    				ng-model="row.materialId"
+    				ng-options="value.id as value.name for value in materials">
+				</select>
+              </td>
+			  <td>{{row.materialQuantity}}</td>
+			  <td>
+            	<button ng-click="editContact($index)">编辑</button>
+				<button ng-click="removeRow($index)">删除</button>
+       		  </td>
+		</script>
+		<script type="text/ng-template" id="editMaterial">
+        	<td>{{$index}}</td>
+			<td>
+				<select class="td-item"
+    				ng-model="row.operationId"
+    				ng-options="value.id as value.name for value in operations">
+				</select>
+      	      </td>	
+              <td>
+                <select class="td-item"
+    				ng-model="row.materialId"
+    				ng-options="value.id as value.name for value in materials">
+				</select>
+              </td>
+            <td><input type="text" ng-model="model.selected.materialQuantity" /></td>
+        	<td>
+            	<button ng-click="saveContact($index)">完成</button>
+            	<button ng-click="reset()">取消</button>
+        	</td>
+    	</script>
+    	<script type="text/ng-template" id="editOp">
+        	<td>{{$index}}</td>
+			<td>
+				<select class="td-item"
+    				ng-model="row.operationId"
+    				ng-options="value.id as value.name for value in operations">
+				</select>
+      	      </td>	
+              <td>
+                
+              </td>
+            <td><input type="text" ng-model="model.selected.materialQuantity" /></td>
+        	<td>
+            	<button ng-click="saveContact($index)">完成</button>
+            	<button ng-click="reset()">取消</button>
+        	</td>
+    	</script>
+	</div>
+</div>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ineuron.dataaccess.db.mappers.UserMapper">
+  
+  
+  <insert id="addUser">
+    insert into Users (username,lastname,firstname,password, roles, permissions) 
+	values(#{username},#{lastname},#{firstname},#{password},#{roles},#{permissions})  
+  </insert>
+  
+  <update id="updateUser">
+    update Users set roles = #{roles}, permissions = #{permissions} where username = #{username}
+  </update>
+  
+  <update id="deleteUser">
+    delete from Users where username = #{username}
+  </update>
+  
+   <select id="getUserByUsername" resultType="com.ineuron.domain.user.entity.User">
+    select * from Users where username = #{username}
+  </select>
+  
+  <select id="getUsers" resultType="com.ineuron.domain.user.entity.User">
+    select id, username, lastname, firstname, roles, permissions from Users;
+  </select>
+  
+  <!-- mappers for roles -->
+
+ <insert id="addRole">
+    insert into Roles (rolename, permissions, description) 
+	values(#{rolename},#{permissions},#{description})  
+  </insert>
+  
+  <update id="updateRole" >
+    update Roles set rolename = #{rolename}, description = #{description}, permissions = #{permissions} where id = #{id}
+  </update>
+  
+  <delete id="deleteRole">
+    delete from Roles where id = #{id}
+  </delete>
+  
+  <select id="getRoles" resultType="com.ineuron.domain.user.valueobject.Role">
+    select * from Roles
+  </select>
+</mapper>
