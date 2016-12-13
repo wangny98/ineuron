@@ -143,6 +143,7 @@ ineuronApp.controller('UpdateFormulaController', [
 				validateApiToken(data, $cookies, $rootScope, $modal);
 				if(data.success == true){
 					ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
+					$state.go("formulaList");
 				}
 				else{
 					ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
