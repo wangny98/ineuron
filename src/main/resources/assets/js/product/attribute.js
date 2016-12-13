@@ -72,8 +72,8 @@ $scope.CheckAttributeName=function(){
 		data :  $scope.attributeName
 	}).success(function(data) {
 		var a = data.value;
-		if(a==null) $scope.existedProductCategoryName=false; 
-		 else $scope.existedProductCategoryName=true;
+		if(a==null) $scope.existedAttributeName=false; 
+		 else $scope.existedAttributeName=true;
 	}).error(function(data) {
 		ineuronApp.confirm("提示","依据名称调用属性失败！", 'sm', $rootScope, $modal);
 		console.log("error to get attribute ");

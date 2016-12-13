@@ -59,6 +59,11 @@
 		select * from ProductCategories where name=#{name}
 	</select>
 	
+	<select id="getProductCategoryById"
+		resultType="com.ineuron.domain.product.valueobject.ProductCategory">
+		select * from ProductCategories where id=#{id}
+	</select>
+	
 	<select id="getProductCategoryByCode"
 		resultType="com.ineuron.domain.product.valueobject.ProductCategory">
 		select * from ProductCategories where code=#{code}
@@ -100,8 +105,8 @@
 	</select>
 
 	<update id="updateProduct">
-		update Products set name = #{name}, code =
-		#{code}, description=#{description} where id = #{id}
+		update Products set name = #{name}, formulaId =
+		#{formulaId}, description=#{description} where id = #{id}
 	</update>
 
 	<update id="deleteProduct">

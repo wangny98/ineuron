@@ -39,6 +39,11 @@ public class ProductService {
 		return productCategory;
 	}
 	
+	public ProductCategory getProductCategoryById(Integer id) throws RepositoryException{		
+		ProductCategory productCategory = productRepository.getProductCategoryById(id);
+		return productCategory;
+	}
+	
 	public ProductCategory getProductCategoryByCode(String code) throws RepositoryException{		
 		ProductCategory productCategory = productRepository.getProductCategoryByCode(code);
 		return productCategory;

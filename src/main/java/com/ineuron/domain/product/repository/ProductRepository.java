@@ -61,7 +61,20 @@ public class ProductRepository {
 			session.close();
 		}
 	}
-	
+
+	public ProductCategory getProductCategoryById(Integer id) throws RepositoryException {
+
+		SqlSession session = INeuronDBConnection.getSession();
+		try {
+			System.out.println("id: "+id);
+			ProductCategory productCategory = session.selectOne("getProductCategoryById", id);
+			System.out.println("productCategory: "+productCategory.getName());
+			return productCategory;
+		} finally {
+			session.close();
+		}
+	}
+
 	public ProductCategory getProductCategoryByCode(String code) throws RepositoryException {
 
 		SqlSession session = INeuronDBConnection.getSession();

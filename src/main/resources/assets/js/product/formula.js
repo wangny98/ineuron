@@ -10,7 +10,7 @@ ineuronApp.controller('FormulaListController', ['$http', '$scope', '$rootScope',
 		validateApiToken(data, $cookies, $rootScope, $modal);
 		vm.formulas = data.value;
 	}).error(function(data) {
-		alert('error');
+		ineuronApp.confirm("提示","查询配方列表失败！", 'sm', $rootScope, $modal);
 		console.log("error");
 	});
 
