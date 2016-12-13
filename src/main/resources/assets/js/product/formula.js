@@ -10,7 +10,7 @@ ineuronApp.controller('FormulaListController', ['$http', '$scope', '$rootScope',
 		validateApiToken(data, $cookies, $rootScope, $modal);
 		vm.formulas = data.value;
 	}).error(function(data) {
-		ineuronApp.confirm("提示","查询配方列表失败！", 'sm', $rootScope, $modal);
+		alert('error');
 		console.log("error");
 	});
 
@@ -76,7 +76,10 @@ ineuronApp.controller('UpdateFormulaController', [
 			//alert(JSON.stringify(data));
 			validateApiToken(data, $cookies, $rootScope, $modal);
 			$scope.formula.materialSettings = data.value.materialSettings;
-			$scope.materials = data.value.materials;
+			if($scope.formula.materialSettings == null){
+				$scope.formula.materialSettings = [];
+			}
+			$scope.materials = data.value.allMaterials;
 			$scope.formula.selected = {};
 		}).error(function(data) {
 			alert('error');
