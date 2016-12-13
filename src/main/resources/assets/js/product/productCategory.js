@@ -216,9 +216,6 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 	});
 
 	$scope.CheckProductCategoryName=function(){
-		// alert("checkproductcategeryname");
-		// $scope.existedProductCategoryName=VerifyExistedProductCategoryName($scope.productCategoryName,
-		// $http);
 		$http({
 			url : '/product/getproductcategorybyname',
 			method : 'POST',
@@ -226,7 +223,8 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 		}).success(function(data) {
 			var pc = data.value;
 			// did not change the name
-			if(productCategory.name==$scope.productCategoryName)$scope.existedProductCategoryCode=false; 
+			if(productCategory.name==$scope.productCategoryName)
+				$scope.existedProductCategoryName=false; 
 			else{
 			if(pc==null) $scope.existedProductCategoryName=false; 
 			 else $scope.existedProductCategoryName=true;
@@ -246,7 +244,8 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 		}).success(function(data) {
 			var pc = data.value;
 			// did not change code
-			if(productCategory.code==$scope.productCategoryCode)$scope.existedProductCategoryCode=false; 
+			if(productCategory.code==$scope.productCategoryCode)
+				$scope.existedProductCategoryCode=false; 
 			else{
 				if(pc==null) $scope.existedProductCategoryCode=false; 
 				 else $scope.existedProductCategoryCode=true;	

@@ -22,7 +22,7 @@ public class Product {
 	private Integer formulaId;
 	private String description;
 	
-	private ProductCategory category;
+	private ProductCategory productCategory;
 	private Formula formula;
 	private List<ManufacturingProcess> manufacturingProcesses;
 	private List<Operation> operations;
@@ -49,6 +49,7 @@ public class Product {
 			formula.init(productRepository);
 		}
 		
+		productCategory=productRepository.getProductCategoryById(productCategoryId);
 		operations = productRepository.getOperationList();
 		manufacturingProcesses = productRepository.getProcessList(id);
 		operationTypes = productRepository.getOperationTypeList();
@@ -111,12 +112,12 @@ public class Product {
 		this.description = description;
 	}
 
-	public ProductCategory getCategory() {
-		return category;
+	public ProductCategory getProductCategory() {
+		return productCategory;
 	}
 
-	public void setCategory(ProductCategory category) {
-		this.category = category;
+	public void setProductCategory(ProductCategory productCategory) {
+		this.productCategory = productCategory;
 	}
 
 	public Formula getFormula() {
