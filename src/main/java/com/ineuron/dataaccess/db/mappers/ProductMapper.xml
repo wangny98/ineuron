@@ -24,7 +24,8 @@
 	</insert>
 
 	<update id="updateAttribute">
-		update Attributes set name = #{name} where id = #{id}
+		update Attributes set name = #{name}, code = #{code}, 
+		description = #{description}, attributeCategoryId=#{attributeCategoryId} where id = #{id}
 	</update>
 
 	<delete id="deleteAttribute">

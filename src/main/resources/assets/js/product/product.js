@@ -139,6 +139,7 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 			method : 'POST',
 			data :  $scope.productName
 		}).success(function(data) {
+			validateApiToken(data, $cookies, $rootScope, $modal);
 			var pc = data.value;
 			// did not change the name
 			if(product.name==$scope.productName)$scope.existedProductName=false; 
@@ -175,6 +176,7 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 		method : 'POST',
 		data :  product.productCategoryId
 	}).success(function(data) {
+		validateApiToken(data, $cookies, $rootScope, $modal);
 		productCategory = data.value;
 	}).error(function(data) {
 		// alert('error');
