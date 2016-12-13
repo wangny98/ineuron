@@ -51,6 +51,7 @@ ineuronApp.controller('ProductCategoryCreateController', ['$scope', '$stateParam
 			method : 'POST',
 			data :  $scope.productCategoryName
 		}).success(function(data) {
+			validateApiToken(data, $cookies, $rootScope, $modal);
 			var pc = data.value;
 			if(pc==null) $scope.existedProductCategoryName=false; 
 			 else $scope.existedProductCategoryName=true;
@@ -67,6 +68,7 @@ ineuronApp.controller('ProductCategoryCreateController', ['$scope', '$stateParam
 			method : 'POST',
 			data :  $scope.productCategoryCode
 		}).success(function(data) {
+			validateApiToken(data, $cookies, $rootScope, $modal);
 			var pc = data.value;
 			if(pc==null) $scope.existedProductCategoryCode=false; 
 			 else $scope.existedProductCategoryCode=true;
@@ -178,6 +180,7 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 		method : 'POST',
 		data : 1
 	}).success(function(data) {
+		validateApiToken(data, $cookies, $rootScope, $modal);
 		vm.attributeUsages=data.value;
 		for (var i in vm.attributeUsages){
 			if(vm.attributeUsages[i].code==codeList[1]) vm.attributeUsages[i].ticked=true;
@@ -192,6 +195,7 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 		method : 'POST',
 		data : 2
 	}).success(function(data) {
+		//validateApiToken(data, $cookies, $rootScope, $modal);
 		vm.attributeEmulsionTypes=data.value;
 		for (var i in vm.attributeEmulsionTypes){
 			if(vm.attributeEmulsionTypes[i].code==codeList[2]) vm.attributeEmulsionTypes[i].ticked=true;
@@ -206,6 +210,7 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 		method : 'POST',
 		data : 3
 	}).success(function(data) {
+		validateApiToken(data, $cookies, $rootScope, $modal);
 		vm.attributeColors=data.value;
 		for (var i in vm.attributeColors){
 			if(vm.attributeColors[i].code==codeList[3]) vm.attributeColors[i].ticked=true;
