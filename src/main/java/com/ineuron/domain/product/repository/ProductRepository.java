@@ -353,7 +353,8 @@ public class ProductRepository {
 		
 		try{
 			if(formula != null){
-				session.update("addFormula", formula);
+				session.insert("addFormula", formula);
+				
 				List<FormulaMaterial> materials = formula.getMaterialSettings();
 				if(materials != null && materials.size() > 0){
 					for(FormulaMaterial material : materials){
