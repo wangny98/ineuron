@@ -62,7 +62,7 @@
 	
 	<select id="getProductCategoryById"
 		resultType="com.ineuron.domain.product.valueobject.ProductCategory">
-		select * from ProductCategories where id=#{id}
+		select * from ProductCategories where id=#{productCategoryId}
 	</select>
 	
 	<select id="getProductCategoryByCode"

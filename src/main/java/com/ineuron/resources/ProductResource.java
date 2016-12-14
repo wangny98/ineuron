@@ -306,6 +306,27 @@ public INeuronResponse productByName(final String name, @Context HttpHeaders htt
 	return response;
 }
 
+@Path("/productbyid")
+@GET
+@Timed
+public INeuronResponse productById(@QueryParam("id") Integer productId, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
+	INeuronResponse response = null;
+	try {
+		response = new INeuronResponse(securityService, httpHeader, false); 
+		Product product = productService.getProductById(productId);
+		response.setValue(product);
+		response.setSuccess(true);
+	} catch (RepositoryException e) {
+		LOGGER.error(e.getMessage(), e);
+		response.setMessage(e.getMessage());
+	} catch (InvalidAPITokenException e) {
+		LOGGER.error(e.getMessage(), e);
+		response = new INeuronResponse();
+		response.setMessage(e.getMessage());
+	}
+	return response;
+}
+
 
 @Path("/attributecategorylist")
 @GET
@@ -456,27 +477,6 @@ public INeuronResponse deleteAttribute(final Attribute attribute, @Context HttpH
 	return response;
 }
 
-
-@Path("/productbyid")
-@GET
-@Timed
-public INeuronResponse productById(@QueryParam("id") Integer productId, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		Product product = productService.getProductById(productId);
-		response.setValue(product);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
-	}
-	return response;
-}
 
 @Path("/saveprocesses")
 @POST

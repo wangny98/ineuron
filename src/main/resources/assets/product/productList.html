@@ -8,7 +8,7 @@
 					<td style="width:90%">
 						<table id="table-style">
 							<tr>
-								<th>产品类型名</th>
+								<th>产品类名</th>
 								<td>{{productCategoryName}}</td>
 							</tr>
 						</table>
@@ -33,6 +33,7 @@
 					<th>产品编号</th>
 					<th>产品描述</th>
 					<th style="width: 100px">查看/修改</th>
+					<th style="width: 100px">配方</th>
 					<th style="width: 100px">生产工艺</th>
 				</tr>
 			</thead>
@@ -54,6 +55,13 @@
 						<button type="button" ng-click="productList.updateProduct($index)"
 							class="btn btn-warning">
 							<i class="fa fa-edit"></i>
+						</button>
+					</td>
+					<td>
+						<button type="button"
+							ng-click="productList.updateFormula($index)"
+							class="btn btn-warning">
+							<i class="fa fa-list"></i>
 						</button>
 					</td>
 					<td>
