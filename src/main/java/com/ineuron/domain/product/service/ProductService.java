@@ -70,11 +70,19 @@ public class ProductService {
 	
 	public List<Product> getProductList() throws RepositoryException{		
 		List<Product> productList = productRepository.getProductList();
+		for(int i = 0; i < productList.size(); i++)  
+        {  
+			productList.get(i).init(productRepository);
+        } 
 		return productList;
 	}
 	
 	public List<Product> getProductListByCategory(Integer productCategoryId) throws RepositoryException{		
 		List<Product> productList = productRepository.getProductListByCategory(productCategoryId);
+		for(int i = 0; i < productList.size(); i++)  
+        {  
+			productList.get(i).init(productRepository);
+        } 
 		return productList;
 	}
 	
