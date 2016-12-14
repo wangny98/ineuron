@@ -91,17 +91,18 @@ ineuronApp.controller('ProductListController', ['$http', '$scope', '$stateParams
 	}).success(function(data) {
 		validateApiToken(data, $cookies, $rootScope, $modal);
 		vm.products = data.value;
+        alert(vm.products[0].productCategory.name);
 	}).error(function(data) {
 		// alert('error');
 		console.log("error");
 	});
-
+/*
 	vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
 	vm.dtColumnDefs = [ DTColumnDefBuilder.newColumnDef(0),
 	                    DTColumnDefBuilder.newColumnDef(1),
 	                    DTColumnDefBuilder.newColumnDef(2).notSortable(),
 	                    DTColumnDefBuilder.newColumnDef(3).notSortable(),
-	                    DTColumnDefBuilder.newColumnDef(4).notSortable()];
+	                    DTColumnDefBuilder.newColumnDef(4).notSortable()];*/
 
 	vm.updateProduct=updateProduct;
 	function updateProduct(index){
@@ -115,6 +116,22 @@ ineuronApp.controller('ProductListController', ['$http', '$scope', '$stateParams
 		$state.go("createProduct");
 	}
 
+
+	vm.updateFormula=updateFormula;
+	function updateFormula(index) {
+		$http({
+			url : '/product/formulabyid?id=' + vm.products[index].formulaId,
+			method : 'GET'
+		}).success(function(data) {
+			//alert(JSON.stringify(data));
+			validateApiToken(data, $cookies, $rootScope, $modal);
+			var formula=data.value;
+			$state.go("updateFormula", {formulaStr: JSON.stringify(formula)});
+		}).error(function(data) {
+			alert('error');
+			console.log("error");
+		});
+	}
 
 	vm.updateManufacturingProcess=updateManufacturingProcess;
 	function updateManufacturingProcess(index) {
@@ -130,6 +147,7 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 	$scope.productName=product.name;
 	$scope.productDescription=product.description;
 	$scope.existedProductName=false;
+	//alert(product.productCategory.name);
 	
 	var vm = this;
 

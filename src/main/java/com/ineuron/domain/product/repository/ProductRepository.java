@@ -62,12 +62,12 @@ public class ProductRepository {
 		}
 	}
 
-	public ProductCategory getProductCategoryById(Integer id) throws RepositoryException {
+	public ProductCategory getProductCategoryById(Integer productCategoryId) throws RepositoryException {
 
 		SqlSession session = INeuronDBConnection.getSession();
 		try {
-			System.out.println("id: "+id);
-			ProductCategory productCategory = session.selectOne("getProductCategoryById", id);
+			System.out.println("id: "+productCategoryId);
+			ProductCategory productCategory = session.selectOne("getProductCategoryById", productCategoryId);
 			System.out.println("productCategory: "+productCategory.getName());
 			return productCategory;
 		} finally {
