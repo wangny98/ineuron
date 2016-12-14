@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<div ng-controller="AllProductListController as AllProductList">
+
+	<div class="right-align">
+		<button class="custombutton" ng-click="AllProductList.productCreate()">
+			<span class="glyphicon glyphicon-new"></span> 新增产品
+		</button>
+	</div>
+
+	<div>
+		<table datatable="ng" dt-options="AllProductList.dtOptions"
+			dt-column-defs="AllProductList.dtColumnDefs" id="table-style">
+			<thead>
+				<tr>
+					<th>产品名称</th>
+					<th>产品类名称</th>
+					<th>产品编号</th>
+					<th>产品描述</th>
+					<th style="width: 100px">查看/修改</th>
+					<th style="width: 100px">配方</th>
+					<th style="width: 100px">生产工艺</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="product in AllProductList.products">
+					<!-- 
+					<td><input class="editableinput" type="text"
+						ng-model="product.name" required /></td>
+					<td><input class="editableinput" type="text"
+						ng-model="product.code" required /></td>
+					<td><textarea style="resize: none; min-width: 200px"
+							class="editableinput" type="text" ng-model="product.description" /></td>
+					-->
+				<td>{{product.name}}</td> 
+				<td>{{product.productCategory.name}}</td> 
+				<td>{{product.code}}</td>
+				<td>{{product.description}}</td>
+				
+					<td>
+						<button type="button" ng-click="AllProductList.updateProduct($index)"
+							class="btn btn-warning">
+							<i class="fa fa-edit"></i>
+						</button>
+					</td>
+					<td>
+						<button type="button"
+							ng-click="AllProductList.updateFormula($index)"
+							class="btn btn-warning">
+							<i class="fa fa-list"></i>
+						</button>
+					</td>
+					<td>
+						<button type="button"
+							ng-click="AllProductList.updateManufacturingProcess($index)"
+							class="btn btn-warning">
+							<i class="fa fa-list"></i>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

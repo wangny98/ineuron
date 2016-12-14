@@ -66,9 +66,9 @@ public class ProductRepository {
 
 		SqlSession session = INeuronDBConnection.getSession();
 		try {
-			System.out.println("id: "+productCategoryId);
+			//System.out.println("id: "+productCategoryId);
 			ProductCategory productCategory = session.selectOne("getProductCategoryById", productCategoryId);
-			System.out.println("productCategory: "+productCategory.getName());
+			//System.out.println("productCategory: "+productCategory.getName());
 			return productCategory;
 		} finally {
 			session.close();
@@ -158,9 +158,9 @@ public class ProductRepository {
 
 		SqlSession session = INeuronDBConnection.getSession();
 		try {
-			System.out.println("pc id: "+productCategoryId);
+			//System.out.println("pc id: "+productCategoryId);
 			List<Product> products = session.selectList("getProductByCategory", productCategoryId);
-			System.out.println("pc : "+products.get(0).getName());
+			//System.out.println("pc : "+products.get(0).getName());
 			return products;
 		} finally {
 			session.close();
@@ -183,10 +183,10 @@ public class ProductRepository {
 	public void addAttribute(Attribute attribute) throws RepositoryException {
 		SqlSession session = INeuronDBConnection.getSession();
 		try {
-			System.out.println("attribute: "+attribute.getName());
+			//System.out.println("attribute: "+attribute.getName());
 			session.insert("addAttribute", attribute);
 			session.commit();
-			System.out.println("insert attribute by using mybatis!");
+			//System.out.println("insert attribute by using mybatis!");
 		} finally {
 			session.close();
 		}
@@ -195,10 +195,10 @@ public class ProductRepository {
 	public void updateAttribute(Attribute attribute) throws RepositoryException {
 		SqlSession session = INeuronDBConnection.getSession();
 		try {
-			System.out.println("attribute: "+attribute.getName());
+			//System.out.println("attribute: "+attribute.getName());
 			session.update("updateAttribute", attribute);
 			session.commit();
-			System.out.println("update attribute by using mybatis!");
+			//System.out.println("update attribute by using mybatis!");
 		} finally {
 			session.close();
 		}
@@ -208,10 +208,10 @@ public class ProductRepository {
 	public void deleteAttribute(Attribute attribute) throws RepositoryException {
 		SqlSession session = INeuronDBConnection.getSession();
 		try {
-			System.out.println("attribute: "+attribute.getName());
+			//System.out.println("attribute: "+attribute.getName());
 			session.update("deleteAttribute", attribute);
 			session.commit();
-			System.out.println("delete attribute by using mybatis!");
+			//System.out.println("delete attribute by using mybatis!");
 		} finally {
 			session.close();
 		}

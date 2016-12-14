@@ -91,7 +91,7 @@ ineuronApp.controller('ProductListController', ['$http', '$scope', '$stateParams
 	}).success(function(data) {
 		validateApiToken(data, $cookies, $rootScope, $modal);
 		vm.products = data.value;
-        alert(vm.products[0].productCategory.name);
+        //alert(vm.products[0].productCategory.name);
 	}).error(function(data) {
 		// alert('error');
 		console.log("error");
@@ -119,18 +119,7 @@ ineuronApp.controller('ProductListController', ['$http', '$scope', '$stateParams
 
 	vm.updateFormula=updateFormula;
 	function updateFormula(index) {
-		$http({
-			url : '/product/formulabyid?id=' + vm.products[index].formulaId,
-			method : 'GET'
-		}).success(function(data) {
-			//alert(JSON.stringify(data));
-			validateApiToken(data, $cookies, $rootScope, $modal);
-			var formula=data.value;
-			$state.go("updateFormula", {formulaStr: JSON.stringify(formula)});
-		}).error(function(data) {
-			alert('error');
-			console.log("error");
-		});
+		$state.go("updateFormula", {formulaStr: JSON.stringify(vm.products[index].formula)});
 	}
 
 	vm.updateManufacturingProcess=updateManufacturingProcess;
@@ -187,19 +176,6 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 		ineuronApp.confirm("提示","查询配方列表失败！", 'sm', $rootScope, $modal);
 		console.log("error");
 	});
-	
-	var productCategory;
-	$http({
-		url : '/product/getproductcategorybyid',
-		method : 'POST',
-		data :  product.productCategoryId
-	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
-		productCategory = data.value;
-	}).error(function(data) {
-		// alert('error');
-		console.log("error to get productcategory ");
-	});
 
 	vm.updateProduct = updateProduct;
 	function updateProduct() {
@@ -215,11 +191,51 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 		}).success(function(data) {
 			validateApiToken(data, $cookies, $rootScope, $modal);
 			ineuronApp.confirm("提示","修改成功！", 'sm', $rootScope, $modal);		
-			$state.go("productList",{productCategoryStr: JSON.stringify(productCategory)});
+			$state.go("productList",{productCategoryStr: JSON.stringify(product.productCategory)});
 		}).error(function(data) {
 			ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
 			console.log("error");
 		})
 	}
 		
+}]);
+
+ineuronApp.controller('AllProductListController', ['$http', '$scope', '$stateParams', '$rootScope', '$modal', '$location', '$cookies', '$state', 'DTOptionsBuilder', 'DTColumnDefBuilder',
+  function($http, $scope, $stateParams, $rootScope, $modal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder) {
+	var vm = this;
+	
+	$http({
+		url : '/product/productlist',
+		method : 'GET'
+	}).success(function(data) {
+		validateApiToken(data, $cookies, $rootScope, $modal);
+		vm.products = data.value;
+		//alert(vm.products[0].productCategory.name);
+	}).error(function(data) {
+		// alert('error');
+		console.log("error");
+	});
+	
+	vm.updateProduct=updateProduct;
+	function updateProduct(index){
+		//alert(vm.products[index].productCategory);
+		$state.go("updateProduct", {productStr: JSON.stringify(vm.products[index])});		
+	}
+
+	vm.productCreate=productCreate;
+	function productCreate(){
+		// alert("create pro");
+		$state.go("createProduct");
+	}
+
+
+	vm.updateFormula=updateFormula;
+	function updateFormula(index) {
+		$state.go("updateFormula", {formulaStr: JSON.stringify(vm.products[index].formula)});
+	}
+
+	vm.updateManufacturingProcess=updateManufacturingProcess;
+	function updateManufacturingProcess(index) {
+		$state.go("productManufacturingProcess", {productStr: JSON.stringify(vm.products[index])});
+	}
 }]);
