@@ -187,8 +187,8 @@
 	</select>
 
 	<insert id="addFormulaMaterial">
-		insert into ProductFormulaMaterials (formulaId,materialId,materialQuantity)
-		values(#{formulaId},#{materialId},#{materialQuantity})
+		insert into ProductFormulaMaterials (formulaId,materialId,materialQuantity,materialPercent)
+		values(#{formulaId},#{materialId},#{materialQuantity},#{materialPercent})
 	</insert>
 
 	<delete id="deleteFormulaMaterial">

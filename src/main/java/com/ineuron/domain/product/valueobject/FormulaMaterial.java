@@ -5,7 +5,8 @@ public class FormulaMaterial {
 	private Integer id;
 	private Integer formulaId;
 	private Integer materialId;
-	private Integer materialQuantity;
+	private float materialQuantity;
+	private float materialPercent;
 
 	
 	public Integer getId() {
@@ -26,11 +27,18 @@ public class FormulaMaterial {
 	public void setMaterialId(Integer materialId) {
 		this.materialId = materialId;
 	}
-	public Integer getMaterialQuantity() {
+	public float getMaterialQuantity() {
 		return materialQuantity;
 	}
-	public void setMaterialQuantity(Integer materialQuantity) {
+	public void setMaterialQuantity(float materialQuantity) {
 		this.materialQuantity = materialQuantity;
 	}
+	public float getMaterialPercent() {
+		return materialPercent;
+	}
+	public void setMaterialPercent(float materialPercent) {
+		this.materialPercent = materialPercent;
+	}
+	
 
 }
