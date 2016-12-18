@@ -101,6 +101,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 			
 			function saveProcesses(){
 				// alert(JSON.stringify($scope.model.rows));
+				cleanProcesses($scope.model.rows);
 				$http({
 					url : '/product/saveprocesses',
 					method : 'POST',
@@ -127,6 +128,16 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					}
 				}
 				return 0;
+			}
+			
+			function cleanProcesses(rows){
+				var processes = [];
+				for(var index in rows){
+					var operationTypeId = getOperationTypeId(rows[index].operationId);
+					if(operationTypeId != 1){
+						rows[index].materialId = 0;
+					}
+				}
 			}
 
 		} 
