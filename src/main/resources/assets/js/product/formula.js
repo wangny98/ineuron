@@ -111,12 +111,14 @@ ineuronApp.controller('UpdateFormulaController', [
 				"id" : 0,
 				"formulaId" :  formulaId,
 				"materialId" : 0,
-				"materialQuantity" : 0
+				"materialQuantity" : 0,
+				"materialPercent" : 0
 			};
 		
 		$scope.addRow = addRow;
 		$scope.removeRow = removeRow;
 		$scope.updateFormula = updateFormula;
+		$scope.resetMaterialPercent = resetMaterialPercent;
 		
 		function addRow() {
 			var newMaterial = clone(emptyFormulaMaterial);
@@ -127,6 +129,7 @@ ineuronApp.controller('UpdateFormulaController', [
 
 		function removeRow(index) {
 			$scope.formula.materialSettings.splice(index, 1);
+			resetMaterialPercent();
 		};
 		
 		function updateFormula(){
@@ -154,6 +157,26 @@ ineuronApp.controller('UpdateFormulaController', [
 			})
 		}
 		
+		function resetMaterialPercent(){
+			var totalQuantity = 0;
+			for(var index in  $scope.formula.materialSettings){
+				var quantity = $scope.formula.materialSettings[index].materialQuantity;
+				if(quantity == undefined){
+					quantity = 0;
+				}
+				totalQuantity += parseFloat(quantity);
+			}
+			for(var index in  $scope.formula.materialSettings){
+				var quantity = $scope.formula.materialSettings[index].materialQuantity;
+				if(quantity == undefined){
+					quantity = 0;
+				}
+				quantity = parseFloat(quantity) * 100;
+				var percent = quantity/totalQuantity;
+				$scope.formula.materialSettings[index].materialPercent = percent.toFixed(2);
+			}
+		}
+		
 		function getFormula(){
 			var formula = {};
 			formula.id = $scope.formula.id;
@@ -165,6 +188,7 @@ ineuronApp.controller('UpdateFormulaController', [
 				newMaterial.formulaId = $scope.formula.materialSettings[index].formulaId;
 				newMaterial.materialId = $scope.formula.materialSettings[index].materialId;
 				newMaterial.materialQuantity = $scope.formula.materialSettings[index].materialQuantity;
+				newMaterial.materialPercent = $scope.formula.materialSettings[index].materialPercent;
 				formula.materialSettings.push(newMaterial);
 			}
 			
@@ -178,22 +202,26 @@ ineuronApp.controller('UpdateFormulaController', [
 				var materialQuantity = formula.materialSettings[index].materialQuantity;
 				var materialId = formula.materialSettings[index].materialId;
 				if(isNaN(materialQuantity)){
-					ineuronApp.confirm("提示","物料的比例应为数字。", 'sm', $rootScope, $modal);
+					ineuronApp.confirm("提示","原料的比例应为数字。", 'sm', $rootScope, $modal);
 					return false;
 				}
 				if(materialId == 0){
-					ineuronApp.confirm("提示","物料不能为空。", 'sm', $rootScope, $modal);
+					ineuronApp.confirm("提示","原料不能为空。", 'sm', $rootScope, $modal);
 					return false;
 				}
-				totalQuantity += parseFloat(materialQuantity);
+				for(var index2 in formula.materialSettings){
+					if(index != index2){
+						var materialId2 = formula.materialSettings[index2].materialId;
+						if(materialId2 == materialId){
+							ineuronApp.confirm("提示","原料不能重复。", 'sm', $rootScope, $modal);
+							return false;
+						}
+					}
+				}
 				
 			}
-			if(totalQuantity == 100){
-				return true;
-			}else{
-				ineuronApp.confirm("提示","所有配方的比例之和不是 100，请修改比例之后重新保存。", 'sm', $rootScope, $modal);
-				return false;
-			}
+			return true;
+			
 		}
 
 	} ]);

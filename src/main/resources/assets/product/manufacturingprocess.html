@@ -42,7 +42,7 @@
 					</tbody>
 				</table>
 		<script type="text/ng-template" id="display">
-			  <td>{{$index}}</td>
+			  <td>{{$index + 1}}</td>
               <td>
 				<select class="td-item" disabled
     				ng-model="row.operationId"
@@ -62,7 +62,7 @@
        		  </td>
 		</script>
 		<script type="text/ng-template" id="editMaterial">
-        	<td>{{$index}}</td>
+        	<td>{{$index + 1}}</td>
 			<td>
 				<select class="td-item"
     				ng-model="row.operationId"
@@ -82,7 +82,7 @@
         	</td>
     	</script>
     	<script type="text/ng-template" id="editOp">
-        	<td>{{$index}}</td>
+        	<td>{{$index + 1}}</td>
 			<td>
 				<select class="td-item"
     				ng-model="row.operationId"
