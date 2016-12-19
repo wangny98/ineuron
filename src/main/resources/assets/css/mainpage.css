@@ -1,5 +1,6 @@
 #main-nav {
 margin-left: 1px;
+width:200px;
 }
 #main-nav.nav-tabs.nav-stacked > li > a {
 padding: 10px 8px;
