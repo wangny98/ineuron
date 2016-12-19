@@ -105,6 +105,14 @@ color: #fff;
 	height:30px;
 }
 
+hr.hr10 {
+    height: 10px;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+
 body{
     background-size: cover;
     background:url(../images/bgcube.jpg);

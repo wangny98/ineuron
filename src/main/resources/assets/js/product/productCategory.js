@@ -104,6 +104,11 @@ ineuronApp.controller('ProductCategoryCreateController', ['$scope', '$stateParam
 	  		})
 	  	}
 	  		
+	
+	vm.backward = backward;
+	function backward() {
+		$state.go("productCategoryList");
+	}
 }]);
 
 
@@ -292,5 +297,10 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 		});				
 	}
 
+	vm.backward = backward;
+	function backward() {
+		$state.go("productCategoryList");
+	}
+	
 }]);
 

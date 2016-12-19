@@ -73,7 +73,11 @@ ineuronApp.controller('ProductCreateController', ['$scope', '$stateParams', '$ht
 			console.log("error");
 		})
 	}
-		
+	
+	vm.backward = backward;
+	function backward() {
+		$state.go("allProductList");
+	}
 }]);
 
 
@@ -198,6 +202,11 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 		})
 	}
 		
+	vm.backward = backward;
+	function backward() {
+		$state.go("allProductList");
+	}
+	
 }]);
 
 ineuronApp.controller('AllProductListController', ['$http', '$scope', '$stateParams', '$rootScope', '$modal', '$location', '$cookies', '$state', 'DTOptionsBuilder', 'DTColumnDefBuilder',

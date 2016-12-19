@@ -3,6 +3,11 @@
 <div
 	ng-controller="AttributeUpdateController as attributeUpdate">
 	<div class="message">修改属性</div>
+	<div class="right-align">
+		<button class="custombutton" ng-click="attributeUpdate.backward()">
+			<span class="glyphicon glyphicon-new"></span> 返回
+		</button>
+	</div>
 	<div>
 			<table id="table-style" style="margin: 50px auto">
 				<tbody>

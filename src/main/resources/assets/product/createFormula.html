@@ -2,6 +2,11 @@
 
 <div ng-controller="CreateFormulaController">
 	<div class="message">新增产品配方</div>
+	<div class="right-align">
+		<button class="custombutton" ng-click="backward()">
+			<span class="glyphicon glyphicon-new"></span> 返回
+		</button>
+	</div>
 	<table id="table-style" style="margin: 50px auto">
 		<tbody>
 			<tr>
@@ -12,8 +17,9 @@
 			</tr>
 			<tr>
 				<th class="labelformat">描述：</th>
-				<td><input class="input-block-level" type="text"
-					ng-model="formula.description"></td>
+				<td><textarea style="min-height:60px" class="input-block-level" type="text"
+					ng-model="formula.description" />
+				</td>
 				<td></td>
 			</tr>
 			<tr>
