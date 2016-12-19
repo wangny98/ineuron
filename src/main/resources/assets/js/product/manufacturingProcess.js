@@ -139,6 +139,11 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					}
 				}
 			}
+			
+			//$scope.backward = backward;		
+			function backward(){
+				$state.go("allProductList");
+			}
 
 		} 
 	]);

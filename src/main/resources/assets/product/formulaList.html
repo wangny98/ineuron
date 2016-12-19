@@ -21,10 +21,8 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="formula in formulaList.formulas">
-					<td><input class="editableinput" type="text"
-						ng-model="formula.name" required /></td>
-					<td><textarea style="resize: none; min-width: 200px"
-							class="editableinput" type="text" ng-model="formula.description" /></td>
+					<td>{{formula.name}}</td>
+					<td>{{formula.description}}</td>
 					<td>
 						<button type="button" ng-click="formulaList.updateFormula($index)"
 							class="btn btn-warning">
@@ -33,8 +31,8 @@
 					</td>
 					<td>
 						<button type="button" ng-click="formulaList.deleteFormula($index)"
-							class="btn btn-warning">
-							<i class="fa fa-edit"></i>
+							class="btn btn-danger">
+							<i class="fa fa-times"></i>
 						</button>
 					</td>
 				</tr>

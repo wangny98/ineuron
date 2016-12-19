@@ -3,8 +3,12 @@
 </head>
 
 <div ng-controller="ProductCategoryUpdateController as productCategoryUpdate">
-	<div class="message">修改产品类型</div>
-
+	<div class="message">修改产品类</div>
+	<div class="right-align">
+		<button class="custombutton" ng-click="productCategoryUpdate.backward()">
+			<span class="glyphicon glyphicon-new"></span> 返回
+		</button>
+	</div>
 	<div>
 		<form class="form-product" name="updateProductCategory">
 			<table id="table-style" style="margin:50px auto">

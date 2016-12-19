@@ -2,6 +2,11 @@
 
 <div ng-controller="ProductManufacturingProcessController as productManufacturing">
 	<div class="message">产品工艺流程</div>
+	<div class="right-align">
+		<button class="custombutton" ng-click="backward()">
+			<span class="glyphicon glyphicon-new"></span> 返回
+		</button>
+	</div>
 		<table id="table-style">
 			<tbody>
 				<tr>
@@ -31,7 +36,7 @@
 						<tr>
 							<th>操作顺序</th>
 							<th>操作</th>
-							<th>物料</th>
+							<th>原料</th>
 							<th>操作内容</th>
 							<th>编辑步骤</th>
 						</tr>

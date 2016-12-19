@@ -220,8 +220,12 @@ ineuronApp.controller('UpdateFormulaController', [
 				}
 				
 			}
-			return true;
-			
+			return true;			
+		}
+		
+		$scope.backward = backward;		
+		function backward(){
+			$state.go("formulaList");
 		}
 
 	} ]);
@@ -266,4 +270,8 @@ ineuronApp.controller('CreateFormulaController', [
 			})
 		}
 		
-	} ]);
+		$scope.backward = backward;		
+		function backward(){
+			$state.go("formulaList");
+		}
+	}]);

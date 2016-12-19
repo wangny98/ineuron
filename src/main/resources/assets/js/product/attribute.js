@@ -94,6 +94,11 @@ function createAttribute() {
   		})
   	}
 
+vm.backward = backward;
+function backward() {
+	$state.go("attributeList");
+}
+
 }]);
 
 
@@ -169,6 +174,12 @@ ineuronApp.controller('AttributeUpdateController', ['$scope', '$stateParams', '$
 			console.log("error");
 		})
 	}
-
+	
+	
+	vm.backward = backward;
+	function backward() {
+		$state.go("attributeList");
+	}
+	
 }]);
 

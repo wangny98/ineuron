@@ -5,7 +5,11 @@
 <div
 	ng-controller="ProductCreateController as productCreate">
 	<div class="message">添加产品</div>
-
+	<div class="right-align">
+		<button class="custombutton" ng-click="productCreate.backward()">
+			<span class="glyphicon glyphicon-new"></span> 返回
+		</button>
+	</div>
 	<div>
 		<form class="form-product" name="createProduct">
 			<table id="table-style" style="margin: 50px auto">
