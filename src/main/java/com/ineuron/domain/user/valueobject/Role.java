@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ineuron.common.exception.INeuronException;
 import com.ineuron.common.exception.RepositoryException;
-import com.ineuron.domain.user.repository.UserRepository;
+import com.ineuron.dataaccess.db.INeuronRepository;
 
 public class Role {
 
@@ -21,16 +21,16 @@ public class Role {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Role.class);
 
-	public void addRole(UserRepository userRepository) throws RepositoryException, INeuronException {
+	public void addRole(INeuronRepository repository) throws RepositoryException, INeuronException {
 		if(this.id == null){
 			this.id = UUID.randomUUID().toString();
 		}
-		userRepository.addRole(this);
+		repository.add("addRole", this);
 		
 	}
 
-	public void updateRole(UserRepository userRepository) throws RepositoryException {
-		userRepository.updateRole(this);
+	public void updateRole(INeuronRepository repository) throws RepositoryException {
+		repository.update("updateRole", this);
 	}
 
 	public void translatePermissionsToPermissionList() {
@@ -60,8 +60,8 @@ public class Role {
 
 	}
 
-	public void deleteRole(UserRepository userRepository) throws RepositoryException {
-		userRepository.deleteRole(this);
+	public void deleteRole(INeuronRepository repository) throws RepositoryException {
+		repository.delete("deleteRole", this);
 		
 	}
 	

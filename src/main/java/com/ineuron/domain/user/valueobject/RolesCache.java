@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.ineuron.common.exception.INeuronException;
 import com.ineuron.common.exception.RepositoryException;
-import com.ineuron.domain.user.repository.UserRepository;
+import com.ineuron.dataaccess.db.INeuronRepository;
 
 public class RolesCache {
 	
@@ -21,9 +21,9 @@ public class RolesCache {
 
 	public static void init() throws RepositoryException{	
 		if(rolesCache == null){
-			UserRepository userRepository = new UserRepository();
+			INeuronRepository repository = new INeuronRepository();
 			rolesCache = new RolesCache();
-			List<Role> roles = userRepository.getRoleList();
+			List<Role> roles = repository.select("getRoles", null);
 			for(Role role : roles){
 				role.translatePermissionsToPermissionList();
 			}
