@@ -139,6 +139,25 @@ ineuronApp.config(function($stateProvider) {
 			templateUrl : '/ineuron/product/createFormula.html'
 		}
 
+	var materialManagementState = {
+			name : 'materialList',
+			url : 'materialList',
+			templateUrl : '/ineuron/product/materialList.html'
+		}
+	
+	var updateMaterialState = {
+			name : 'updateMaterial',
+			url : 'updateMaterial/:materialStr',
+			templateUrl : '/ineuron/product/updateMaterial.html'
+		}
+	
+	var createMaterialState = {
+			name : 'createMaterial',
+			url : 'createMaterial/',
+			templateUrl : '/ineuron/product/createMaterial.html'
+		}
+
+
 	$stateProvider.state(userManagementState);
 	$stateProvider.state(roleManagementState);
 	$stateProvider.state(updateUserState);
@@ -162,6 +181,11 @@ ineuronApp.config(function($stateProvider) {
 	$stateProvider.state(formulaManagementState);
 	$stateProvider.state(updateFormulaState);
 	$stateProvider.state(createFormulaState);
+	
+	$stateProvider.state(materialManagementState);
+	$stateProvider.state(createMaterialState);
+	$stateProvider.state(updateMaterialState);
+	
 	
 	$stateProvider.state(aboutState);
 

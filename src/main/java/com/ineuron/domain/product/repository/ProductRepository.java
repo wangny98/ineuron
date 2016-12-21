@@ -100,6 +100,17 @@ public class ProductRepository {
 		}
 	}
 	
+	public void deleteProductCategory(ProductCategory productCategory) throws RepositoryException {
+		SqlSession session = INeuronDBConnection.getSession();
+		try {
+			session.delete("deleteProductCategory", productCategory);
+			session.commit();
+			System.out.println("delete productcategory by using mybatis!");
+		} finally {
+			session.close();
+		}
+	}
+	
 	public void addProduct(Product product) throws RepositoryException {
 		SqlSession session = INeuronDBConnection.getSession();
 		try {
@@ -135,7 +146,7 @@ public class ProductRepository {
 	public void deleteProduct(Product product) throws RepositoryException {
 		SqlSession session = INeuronDBConnection.getSession();
 		try {
-			session.update("deleteProduct", product);
+			session.delete("deleteProduct", product);
 			session.commit();
 			System.out.println("delete product by using mybatis!");
 		} finally {
@@ -208,8 +219,8 @@ public class ProductRepository {
 	public void deleteAttribute(Attribute attribute) throws RepositoryException {
 		SqlSession session = INeuronDBConnection.getSession();
 		try {
-			//System.out.println("attribute: "+attribute.getName());
-			session.update("deleteAttribute", attribute);
+			System.out.println("attribute: "+attribute.getName());
+			session.delete("deleteAttribute", attribute);
 			session.commit();
 			//System.out.println("delete attribute by using mybatis!");
 		} finally {
@@ -296,16 +307,7 @@ public class ProductRepository {
 		}
 	}
 	
-	
-	public List<Material> getMaterialList() throws RepositoryException {
-		SqlSession session = INeuronDBConnection.getSession();
-		try {
-			List<Material> materials = session.selectList("getMaterials");
-			return materials;
-		} finally {
-			session.close();
-		}
-	}
+
 	
 	public List<Formula> getFormulaList() throws RepositoryException {
 		SqlSession session = INeuronDBConnection.getSession();
@@ -451,6 +453,67 @@ public class ProductRepository {
 			return session.selectList("getMaterialByIds", materialIds);
 		} catch(RuntimeException e){
 			throw new RepositoryException("failed to excute sql: getMaterialByIds!", e);
+		} finally {
+			session.close();
+		}
+	}
+	
+	
+	public void addMaterial(Material material) throws RepositoryException {
+		SqlSession session = INeuronDBConnection.getSession();
+		try {
+			//System.out.println("material: "+material.getName());
+			session.insert("addMaterial", material);
+			session.commit();
+			//System.out.println("insert material by using mybatis!");
+		} finally {
+			session.close();
+		}
+	}
+
+	public void updateMaterial(Material material) throws RepositoryException {
+		SqlSession session = INeuronDBConnection.getSession();
+		try {
+			//System.out.println("material: "+material.getName());
+			session.update("updateMaterial", material);
+			session.commit();
+			//System.out.println("update material by using mybatis!");
+		} finally {
+			session.close();
+		}
+	}
+	
+	
+	public void deleteMaterial(Material material) throws RepositoryException {
+		SqlSession session = INeuronDBConnection.getSession();
+		try {
+			System.out.println("material: "+material.getName());
+			session.delete("deleteMaterial", material);
+			session.commit();
+			//System.out.println("delete material by using mybatis!");
+		} finally {
+			session.close();
+		}
+	}
+
+
+	public List<Material> getMaterialList() throws RepositoryException {
+		SqlSession session = INeuronDBConnection.getSession();
+		try {
+			List<Material> materials = session.selectList("getMaterials");
+			return materials;
+		} finally {
+			session.close();
+		}
+	}
+	
+	public Material getMaterialByName(String name) throws RepositoryException {
+		SqlSession session = INeuronDBConnection.getSession();
+		try {
+			//System.out.println("material name: "+name);
+			Material material = session.selectOne("getMaterialByName", name);
+			//System.out.println("materiallist size "+materials.get(0).getMaterial());
+			return material;
 		} finally {
 			session.close();
 		}

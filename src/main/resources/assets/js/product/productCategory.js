@@ -96,7 +96,7 @@ ineuronApp.controller('ProductCategoryCreateController', ['$scope', '$stateParam
 			}
 		}).success(function(data) {
 			validateApiToken(data, $cookies, $rootScope, $modal);
-			ineuronApp.confirm("提示","产品类型添加成功！", 'sm', $rootScope, $modal);		
+			ineuronApp.confirm("提示","产品类添加成功！", 'sm', $rootScope, $modal);		
 			$state.go("productCategoryList");
 		}).error(function(data) {
 			alert('error');
@@ -287,7 +287,7 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 					}
 				}).success(function(data) {
 					validateApiToken(data, $cookies, $rootScope, $modal);
-					ineuronApp.confirm("提示","修改类型成功！", 'sm', $rootScope, $modal);		
+					ineuronApp.confirm("提示","修改成功！", 'sm', $rootScope, $modal);		
 					$state.go("productCategoryList");
 				}).error(function(data) {
 					ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
@@ -297,6 +297,30 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 		});				
 	}
 
+	
+	vm.deleteProductCategory=deleteProductCategory;
+	function deleteProductCategory(){
+		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $modal).result.then(function(clickok){  
+			if(clickok){
+				 $http({
+					url : '/product/deleteproductcategory',
+					method : 'POST',
+					data : {
+						name : $scope.productCategoryName
+					}
+				}).success(function(data) {
+					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
+					validateApiToken(data, $cookies, $rootScope, $modal);
+					$state.go("productCategoryList");
+				}).error(function(data) {
+					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal)
+					console.log("error");
+				})
+			}
+		});		
+	}
+	
+	
 	vm.backward = backward;
 	function backward() {
 		$state.go("productCategoryList");
