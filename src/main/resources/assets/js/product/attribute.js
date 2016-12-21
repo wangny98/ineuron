@@ -13,7 +13,7 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 		vm.attributes = data.value;
 		//alert(vm.attributes[0].name+" "+vm.attributes[0].attributeCategory.name);
 	}).error(function(data) {
-		alert('error');
+		ineuronApp.confirm("提示","获取属性列表失败！", 'sm', $rootScope, $modal);
 		console.log("error");
 	});
 
@@ -31,6 +31,28 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 	function createAttribute(){
 		// alert("index: "+index);
 		$state.go("createAttribute");
+	}
+	
+	vm.deleteAttribute=deleteAttribute;
+	function deleteAttribute(index){
+		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $modal).result.then(function(clickok){  
+			if(clickok){
+				 $http({
+					url : '/product/deleteattribute',
+					method : 'POST',
+					data : {
+						name : vm.attributes[index].name
+					}
+				}).success(function(data) {
+					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
+					validateApiToken(data, $cookies, $rootScope, $modal);
+					$state.go("attributeList", null, {reload:true});
+				}).error(function(data) {
+					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
+					console.log("error");
+				})
+			}
+		});		
 	}
 		
 }]);

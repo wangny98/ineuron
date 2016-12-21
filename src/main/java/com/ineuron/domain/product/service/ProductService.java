@@ -54,6 +54,11 @@ public class ProductService {
 		return productCategory;
 	}
 	
+	public void deleteProductCategory(ProductCategory productCategory) throws RepositoryException {
+		productRepository.deleteProductCategory(productCategory);
+		//return productCategory;
+	}
+	
 	public Product createProduct(Product product) throws RepositoryException {
 		product.addProduct(productRepository);
 		return product;
@@ -65,7 +70,7 @@ public class ProductService {
 	}
 	
 	public void deleteProduct(Product product) throws RepositoryException {
-		product.deleteProduct(productRepository);
+	    productRepository.deleteProduct(product);
 	}
 	
 	public List<Product> getProductList() throws RepositoryException{		
@@ -100,7 +105,7 @@ public class ProductService {
 	}
 	
 	public void deleteAttribute(Attribute attribute) throws RepositoryException {
-		attribute.deleteAttibute(productRepository);
+		productRepository.deleteAttribute(attribute);
 	}
 
 	public List<Attribute> getAttributeList() throws RepositoryException{		
@@ -142,11 +147,7 @@ public class ProductService {
 		return operationList;
 	}
 	
-	public List<Material> getMaterials() throws RepositoryException {
-		List<Material> materialList = productRepository.getMaterialList();
-		return materialList;
-	}
-	
+		
 	public List<Formula> getFormulas() throws RepositoryException {
 		List<Formula> formulaList = productRepository.getFormulaList();
 		return formulaList;
@@ -191,6 +192,33 @@ public class ProductService {
 			product.init(productRepository);
 		}	
 		return product;
+	}
+	
+	
+	//Material
+	
+	public Material createMaterial(Material material) throws RepositoryException {
+		productRepository.addMaterial(material);
+		return material;
+	}
+	
+	public void updateMaterial(Material material) throws RepositoryException {
+		productRepository.updateMaterial(material);
+	}
+	
+	public void deleteMaterial(Material material) throws RepositoryException {
+		productRepository.deleteMaterial(material);
+	}
+
+	public List<Material> getMaterials() throws RepositoryException {
+		List<Material> materialList = productRepository.getMaterialList();
+		return materialList;
+	}
+	
+	
+	public Material getMaterialByName(String name) throws RepositoryException{		
+		Material material = productRepository.getMaterialByName(name);
+		return material;
 	}
 
 }

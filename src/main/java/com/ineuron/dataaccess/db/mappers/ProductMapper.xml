@@ -29,7 +29,7 @@
 	</update>
 
 	<delete id="deleteAttribute">
-		delete from Attributes where id = #{id}
+		delete from Attributes where name = #{name}
 	</delete>
 	
 	<select id="getAttributeCategoryById" resultType="com.ineuron.domain.product.valueobject.AttributeCategory">
@@ -76,6 +76,9 @@
 		description=#{description}, characters=#{characters}, techParameters=#{techParameters}, scope=#{scope} where id = #{id}
 	</update>
 
+	<delete id="deleteProductCategory">
+		delete from ProductCategories where name = #{name}
+	</delete>
 
 
 	<!-- Product -->
@@ -110,9 +113,9 @@
 		#{formulaId}, description=#{description} where id = #{id}
 	</update>
 
-	<update id="deleteProduct">
+	<delete id="deleteProduct">
 		delete from Products where name = #{name}
-	</update>
+	</delete>
 
 	
 	
@@ -140,19 +143,6 @@
 	
 	<select id="getOperationTypes" resultType="com.ineuron.domain.product.valueobject.OperationType">
 		select * from operationTypes
-	</select>
-
-	<select id="getMaterials" resultType="com.ineuron.domain.product.valueobject.Material">
-		select * from Materials
-	</select>
-	
-	<select id="getMaterialByIds" resultType="com.ineuron.domain.product.valueobject.Material">
-		select * from materials where id in 
-		
-		<foreach item="item" index="index" collection="list"   
-                         open="(" separator="," close=")">  
-                        #{item}  
-                </foreach>  
 	</select>
 
 
@@ -195,4 +185,36 @@
 		delete from ProductFormulaMaterials where formulaId = #{id}
 	</delete>
 
+
+<!-- materials -->
+
+	<select id="getMaterials" resultType="com.ineuron.domain.product.valueobject.Material">
+		select * from Materials
+	</select>
+	
+	<select id="getMaterialByName" resultType="com.ineuron.domain.product.valueobject.Material">
+		select * from Materials where name=#{name}
+	</select>
+
+	<insert id="addMaterial">
+		insert into Materials (name,description)
+		values(#{name},#{description})
+	</insert>
+
+	<update id="updateMaterial">
+		update Materials set name = #{name},description = #{description} where id = #{id}
+	</update>
+
+	<delete id="deleteMaterial">
+		delete from Materials where name = #{name}
+	</delete>
+	
+	<select id="getMaterialByIds" resultType="com.ineuron.domain.product.valueobject.Material">
+		select * from materials where id in 
+		
+		<foreach item="item" index="index" collection="list"   
+                         open="(" separator="," close=")">  
+                        #{item}  
+         </foreach>  
+	</select>
 </mapper>

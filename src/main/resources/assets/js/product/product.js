@@ -201,7 +201,29 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 			console.log("error");
 		})
 	}
-		
+	
+	vm.deleteProduct=deleteProduct;
+	function deleteProduct(){
+		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $modal).result.then(function(clickok){  
+			if(clickok){
+				 $http({
+					url : '/product/deleteproduct',
+					method : 'POST',
+					data : {
+						name : $scope.productName
+					}
+				}).success(function(data) {
+					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
+					validateApiToken(data, $cookies, $rootScope, $modal);
+					$state.go("allProductList");
+				}).error(function(data) {
+					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal)
+					console.log("error");
+				})
+			}
+		});		
+	}
+	
 	vm.backward = backward;
 	function backward() {
 		$state.go("allProductList");
