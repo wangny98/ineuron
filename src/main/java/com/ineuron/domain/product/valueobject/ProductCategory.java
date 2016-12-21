@@ -1,15 +1,10 @@
 package com.ineuron.domain.product.valueobject;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ineuron.common.exception.INeuronException;
 import com.ineuron.common.exception.RepositoryException;
-import com.ineuron.domain.product.repository.ProductRepository;
+import com.ineuron.dataaccess.db.INeuronRepository;
 
 public class ProductCategory {
 
@@ -23,18 +18,18 @@ public class ProductCategory {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductCategory.class);
 
-	public void addProductCategory(ProductRepository productRepository) throws RepositoryException {
-		productRepository.addProductCategory(this);
+	public void addProductCategory(INeuronRepository repository) throws RepositoryException {
+		repository.add("addProductCategory", this);
 		
 	}
 
-	/*public void updateProductCategory(ProductRepository productRepository) throws RepositoryException {
-		productRepository.updateProductCategory(this);
+	/*public void updateProductCategory(INeuronRepository repository) throws RepositoryException {
+		repository.updateProductCategory(this);
 	}
 
 	
-	public void deleteProductCategory(ProductRepository productRepository) throws RepositoryException {
-		productRepository.deleteProductCategory(this);
+	public void deleteProductCategory(INeuronRepository repository) throws RepositoryException {
+		repository.deleteProductCategory(this);
 		
 	}*/
 	

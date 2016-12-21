@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ineuron.common.exception.RepositoryException;
+import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.domain.product.repository.ProductRepository;
 import com.ineuron.domain.product.valueobject.FormulaMaterial;
 import com.ineuron.domain.product.valueobject.Material;
@@ -22,22 +23,22 @@ public class Formula {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Formula.class);
 	
-	public void addFormula(ProductRepository productRepository) throws RepositoryException{
-		productRepository.addFormula(this);
+	public void addFormula(ProductRepository repository) throws RepositoryException{
+		repository.addFormula(this);
 	}
 	
-	public void updateFormula(ProductRepository productRepository) throws RepositoryException{
-		productRepository.updateFormula(this);
+	public void updateFormula(ProductRepository repository) throws RepositoryException{
+		repository.updateFormula(this);
 	}
 	
-	public void deleteFormula(ProductRepository productRepository) throws RepositoryException {
-		productRepository.deleteFormula(this);
+	public void deleteFormula(ProductRepository repository) throws RepositoryException {
+		repository.deleteFormula(this);
 		
 	}
 	
-	public void init(ProductRepository productRepository) throws RepositoryException {
+	public void init(INeuronRepository repository) throws RepositoryException {
 		if(materialSettings == null){
-			materialSettings = productRepository.getFormulaMaterialList(this);
+			materialSettings = repository.select("getFormulaMaterials", this);
 		}
 		if(materialSettings != null && materials == null){
 			List<Integer> materialIds = new ArrayList<Integer>();
@@ -47,11 +48,11 @@ public class Formula {
 			
 			LOGGER.info("materialIds size in materialSettings = " + materialIds.size());
 			if(materialIds.size() > 0){
-				materials = productRepository.getMaterialByIds(materialIds);
+				materials = repository.select("getMaterialByIds", materialIds);
 				LOGGER.info("material number is " + materials.size() + " in formula " + name);
 			}
 			
-			allMaterials = productRepository.getMaterialList();
+			allMaterials = repository.select("getMaterials", null);
 			
 		}
 		
