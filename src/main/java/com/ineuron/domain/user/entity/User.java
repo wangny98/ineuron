@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ineuron.common.exception.INeuronException;
 import com.ineuron.common.exception.RepositoryException;
-import com.ineuron.domain.user.repository.UserRepository;
+import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.domain.user.valueobject.Permission;
 import com.ineuron.domain.user.valueobject.Role;
 import com.ineuron.domain.user.valueobject.RolesCache;
@@ -33,27 +33,35 @@ public class User {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger("User");
 
-	public void addUser(UserRepository userRepository) throws RepositoryException {
-		// set default role
-		//setRoles("5");
-		userRepository.addUser(this);
+	public void addUser(INeuronRepository repository) throws RepositoryException {
+		repository.add("addUser", this);
 	}
 
-	public void updateUser(UserRepository userRepository) throws RepositoryException {
+	public void updateUser(INeuronRepository repository) throws RepositoryException {
 
-		userRepository.updateUser(this);
+		repository.update("updateUser", this);
 
 	}
 	
-	public void deleteUser(UserRepository userRepository) throws RepositoryException {
+	public void deleteUser(INeuronRepository repository) throws RepositoryException {
 
-		userRepository.deleteUser(this);
+		repository.delete("deleteUser", this);
 
 	}
 
-	public User doAuthenticate(UserRepository userRepository) throws RepositoryException {
-
-		return userRepository.DoAuthenticate(this);
+	public User doAuthenticate(INeuronRepository repository) throws RepositoryException {
+		boolean validUser = false;
+		User foundUser = repository.selectOne("getUserByUsername", username);
+		if (foundUser != null) {
+			validUser = this.getPassword().equals(foundUser.getPassword());
+			System.out.println("select user by using getUserByUsername!"
+					+ "Hi " + foundUser.getUsername() + "  role: "
+					+ foundUser.getRoles());
+		}
+		if (validUser)
+			return foundUser;
+		else
+			return null;
 
 	}
 

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ineuron.common.exception.INeuronException;
 import com.ineuron.common.exception.RepositoryException;
-import com.ineuron.domain.product.repository.ProductRepository;
+import com.ineuron.dataaccess.db.INeuronRepository;
 
 public class Attribute {
 
@@ -23,24 +23,24 @@ public class Attribute {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Attribute.class);
 
-	public void addAttribute(ProductRepository productRepository) throws RepositoryException {
-		productRepository.addAttribute(this);
+	public void addAttribute(INeuronRepository repository) throws RepositoryException {
+		repository.add("addAttribute", this);
 		
 	}
 
-	public void updateAttribute(ProductRepository productRepository) throws RepositoryException {
-		productRepository.updateAttribute(this);
+	public void updateAttribute(INeuronRepository repository) throws RepositoryException {
+		repository.update("updateAttribute", this);
 	}
 
 	
-	public void deleteAttibute(ProductRepository productRepository) throws RepositoryException {
-		productRepository.deleteAttribute(this);
+	public void deleteAttibute(INeuronRepository repository) throws RepositoryException {
+		repository.delete("deleteAttribute", this);
 		
 	}
 	
-	public void init(ProductRepository productRepository) throws RepositoryException{
+	public void init(INeuronRepository repository) throws RepositoryException{
 		
-		attributeCategory = productRepository.getAttributeCategoryById(attributeCategoryId);	
+		attributeCategory = repository.selectOne("getAttributeCategoryById", attributeCategoryId);	
 	
 	}
 	

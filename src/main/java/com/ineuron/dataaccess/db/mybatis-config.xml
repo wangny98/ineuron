@@ -19,7 +19,7 @@
 		</environment>
 	</environments>
 	<mappers>
-		<mapper resource="com/ineuron/dataaccess/db/mappers/UserMapper.xml" />
-		<mapper resource="com/ineuron/dataaccess/db/mappers/ProductMapper.xml" />
+		<mapper resource="com/ineuron/domain/user/repository/UserMapper.xml" />
+		<mapper resource="com/ineuron/domain/product/repository/ProductMapper.xml" />
 	</mappers>
 </configuration>

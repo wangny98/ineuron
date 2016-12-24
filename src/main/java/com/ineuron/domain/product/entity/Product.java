@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ineuron.common.exception.RepositoryException;
-import com.ineuron.domain.product.repository.ProductRepository;
+import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.domain.product.valueobject.ManufacturingProcess;
 import com.ineuron.domain.product.valueobject.Operation;
 import com.ineuron.domain.product.valueobject.OperationType;
@@ -30,29 +30,29 @@ public class Product {
 
 	//private static final Logger LOGGER = LoggerFactory.getLogger("Product");
 
-	public void addProduct(ProductRepository productRepository) throws RepositoryException {
-		productRepository.addProduct(this);
+	public void addProduct(INeuronRepository repository) throws RepositoryException {
+		repository.add("addProduct", this);
 	}
 
-	public void updateProduct(ProductRepository productRepository) throws RepositoryException {
-		productRepository.updateProduct(this);
+	public void updateProduct(INeuronRepository repository) throws RepositoryException {
+		repository.update("updateProduct", this);
 	}
 	
-	public void deleteProduct(ProductRepository productRepository) throws RepositoryException {
-		productRepository.deleteProduct(this);
+	public void deleteProduct(INeuronRepository repository) throws RepositoryException {
+		repository.delete("deleteProduct", this);
 	}
 	
-	public void init(ProductRepository productRepository) throws RepositoryException{
+	public void init(INeuronRepository repository) throws RepositoryException{
 		
-		formula = productRepository.getFormulaById(formulaId);
+		formula = repository.selectOne("getFormulaById", formulaId.toString());
 		if(formula != null){
-			formula.init(productRepository);
+			formula.init(repository);
 		}
 		
-		productCategory=productRepository.getProductCategoryById(productCategoryId);
-		operations = productRepository.getOperationList();
-		manufacturingProcesses = productRepository.getProcessList(id);
-		operationTypes = productRepository.getOperationTypeList();
+		productCategory=repository.selectOne("getProductCategoryById", productCategoryId.toString());
+		operations = repository.select("getOperations", null);
+		manufacturingProcesses = repository.select("getProcesses", id);
+		operationTypes = repository.select("getOperationTypes", null);
 		
 	}
 	

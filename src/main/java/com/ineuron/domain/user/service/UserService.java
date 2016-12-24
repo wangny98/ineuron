@@ -8,32 +8,33 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.ineuron.common.exception.INeuronException;
 import com.ineuron.common.exception.RepositoryException;
+import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.domain.user.entity.User;
-import com.ineuron.domain.user.repository.UserRepository;
 import com.ineuron.domain.user.valueobject.Role;
 import com.ineuron.domain.user.valueobject.RolesCache;
 
 public class UserService {
 
+	
 	@Inject
-	UserRepository userRepository;
+	INeuronRepository repository;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 	
 	public void doRegister(User user) throws RepositoryException {
-		user.addUser(userRepository);
+		user.addUser(repository);
 	}
 
 	public void updateUser(User user) throws RepositoryException {
-		user.updateUser(userRepository);
+		user.updateUser(repository);
 	}
 	
 	public void deleteUser(User user) throws RepositoryException {
-		user.deleteUser(userRepository);
+		user.deleteUser(repository);
 	}
 	
 	public User doAuthenticate(User user) throws RepositoryException, INeuronException {
-		User founduser = user.doAuthenticate(userRepository);
+		User founduser = user.doAuthenticate(repository);
 		if(founduser != null){
 			founduser.getAllPermissions();
 		}
@@ -43,27 +44,31 @@ public class UserService {
 	}
 
 	public List<User> getUserList() throws RepositoryException, INeuronException {
-		List<User> users = userRepository.getUserList();
-		for(User user : users){
-			user.getAllPermissions();
+		List<User> users = repository.select("getUsers", null);
+		if(users != null && !users.isEmpty()){
+			for(User user : users){
+				user.getAllPermissions();
+			}
 		}
 		return users;
 	}
 	
 	public User getUserByUsername(String username) throws RepositoryException, INeuronException {
-		User user = userRepository.getUserByUsername(username);
-		if (user!=null)user.getAllPermissions();
+		User user = repository.selectOne("getUserByUsername", username);
+		if(user != null){
+			user.getAllPermissions();
+		}
 		return user;
 	}
 	
 	public void createRole(Role role) throws RepositoryException, INeuronException {
-		role.addRole(userRepository);
+		role.addRole(repository);
 		RolesCache rolesCache = RolesCache.getRolesCache();
 		rolesCache.addRole(role);
 	}
 	
 	public void updateRole(Role role) throws RepositoryException, INeuronException {
-		role.updateRole(userRepository);
+		role.updateRole(repository);
 		RolesCache rolesCache = RolesCache.getRolesCache();
 		rolesCache.updateRole(role);
 	}
@@ -74,7 +79,7 @@ public class UserService {
 	}
 
 	public void deleteRole(Role role) throws RepositoryException, INeuronException {
-		role.deleteRole(userRepository);
+		role.deleteRole(repository);
 		RolesCache rolesCache = RolesCache.getRolesCache();
 		rolesCache.deleteRole(role);
 	}
