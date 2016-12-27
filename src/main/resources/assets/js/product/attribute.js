@@ -2,8 +2,8 @@
 ineuronApp.controller('AttributeListController', ['$http', '$scope', '$stateParams', '$rootScope', '$modal', '$location', '$cookies', '$state', 'DTOptionsBuilder', 'DTColumnDefBuilder',
 	function($http, $scope, $stateParams, $rootScope, $modal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder) {
 	var vm = this;
-	//var selectedProductStr = $stateParams.productStr;
-	//var selectedProduct = eval('(' + selectedProductStr + ')');	
+	// var selectedProductStr = $stateParams.productStr;
+	// var selectedProduct = eval('(' + selectedProductStr + ')');
 	
 	$http({
 		url : '/product/attributelist',
@@ -11,7 +11,8 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 	}).success(function(data) {
 		validateApiToken(data, $cookies, $rootScope, $modal);
 		vm.attributes = data.value;
-		//alert(vm.attributes[0].name+" "+vm.attributes[0].attributeCategory.name);
+		// alert(vm.attributes[0].name+"
+		// "+vm.attributes[0].attributeCategory.name);
 	}).error(function(data) {
 		ineuronApp.confirm("提示","获取属性列表失败！", 'sm', $rootScope, $modal);
 		console.log("error");
@@ -24,13 +25,13 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 	
 	vm.updateAttribute=updateAttribute;
 	function updateAttribute(index){
-		$state.go("updateAttribute", {attributeStr: JSON.stringify(vm.attributes[index])});
+		$state.go("createAndUpdateAttribute", {attributeStr: JSON.stringify(vm.attributes[index])});
 	}
 	
 	vm.createAttribute=createAttribute;
 	function createAttribute(){
 		// alert("index: "+index);
-		$state.go("createAttribute");
+		$state.go("createAndUpdateAttribute", {attributeStr: JSON.stringify(null)});
 	}
 	
 	vm.deleteAttribute=deleteAttribute;
@@ -58,92 +59,34 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 }]);
 
 
-ineuronApp.controller('AttributeCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$modal',
-   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $modal) {
-
-	var vm = this;
-	$scope.existedAttributeName=false;
-		$http({
-			url : '/product/attributecategorylist',
-			method : 'GET'
-		}).success(function(data) {
-			vm.attributeCategories = data.value;
-			validateApiToken(data, $cookies, $rootScope, $modal);
-		}).error(function(data) {
-			ineuronApp.confirm("提示","调用属性类型列表失败！", 'sm', $rootScope, $modal);
-			console.log("error to get attribute category list ");
-		});				
-
-$scope.CheckAttributeName=function(){
-	// alert("checkproductcategeryname");
-	// $scope.existedProductCategoryName=VerifyExistedProductCategoryName($scope.productCategoryName,
-	// $http);
-	$http({
-		url : '/product/getattributebyname',
-		method : 'POST',
-		data :  $scope.attributeName
-	}).success(function(data) {
-		//validateApiToken(data, $cookies, $rootScope, $modal);
-		var a = data.value;
-		if(a==null) $scope.existedAttributeName=false; 
-		 else $scope.existedAttributeName=true;
-	}).error(function(data) {
-		ineuronApp.confirm("提示","依据名称调用属性失败！", 'sm', $rootScope, $modal);
-		console.log("error to get attribute ");
-	});				
-}
-
-
-vm.createAttribute = createAttribute;
-function createAttribute() {
-	
-	$http({
-		url : '/product/createattribute',
-		method : 'POST',
-		data : {
-			name : $scope.attributeName,
-			code: $scope.attributeCode,
-			description : $scope.attributeDescription,
-			attributeCategoryId: $scope.selectedAttributeCategory[0].id
-		}
-	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
-		ineuronApp.confirm("提示","属性添加成功！", 'sm', $rootScope, $modal);		
-		$state.go("attributeList");
-	}).error(function(data) {
-		ineuronApp.confirm("提示","添加属性失败！", 'sm', $rootScope, $modal);
-		console.log("error");
-  		})
-  	}
-
-vm.backward = backward;
-function backward() {
-	$state.go("attributeList");
-}
-
-}]);
-
-
-ineuronApp.controller('AttributeUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$modal',
+ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$modal',
   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $modal) {
 	var attribute = eval('(' + $stateParams.attributeStr + ')');
-	var vm = this;
 	
+	var forCreate=true;
+	if (attribute!=null){
+		forCreate=false;	
+		$scope.attributeName=attribute.name;
+		$scope.attributeCode=attribute.code;
+		$scope.attributeDescription=attribute.description;
+	} 
+	
+	var vm = this;	
 	$scope.existedAttributeName=false;
-	$scope.attributeName=attribute.name;
-	$scope.attributeCode=attribute.code;
-	$scope.attributeDescription=attribute.description;
+	
 	
 	$http({
 		url : '/product/attributecategorylist',
 		method : 'GET'
 	}).success(function(data) {
 		vm.attributeCategories = data.value;
+		if(!forCreate){
 		for (var i in vm.attributeCategories){
 			if(vm.attributeCategories[i].id==attribute.attributeCategoryId){
 				vm.attributeCategories[i].ticked=true;
 				break;
 			}
+		}
 		}
 		validateApiToken(data, $cookies, $rootScope, $modal);
 	}).error(function(data) {
@@ -152,20 +95,25 @@ ineuronApp.controller('AttributeUpdateController', ['$scope', '$stateParams', '$
 	});				
 
 	$scope.CheckAttributeName=function(){
-		// alert("checkproductcategeryname");
-		// $scope.existedProductCategoryName=VerifyExistedProductCategoryName($scope.productCategoryName,
-		// $http);
+		
 		$http({
 			url : '/product/getattributebyname',
 			method : 'POST',
 			data :  $scope.attributeName
 		}).success(function(data) {
-			//validateApiToken(data, $cookies, $rootScope, $modal);
+			// validateApiToken(data, $cookies, $rootScope, $modal);
 			var a = data.value;
-			if($scope.attributeName==attribute.name) $scope.existedAttributeName=false;
-			else {
-				if(a==null) $scope.existedAttributeName=false; 
+			if(forCreate){
+				if (a==null) $scope.existedAttributeName=false;
 				else $scope.existedAttributeName=true;
+			}
+			else 
+			{
+				if($scope.attributeName==attribute.name) $scope.existedAttributeName=false;
+				else {
+					if(a==null) $scope.existedAttributeName=false; 
+					else $scope.existedAttributeName=true;
+			}
 			}
 		}).error(function(data) {
 			ineuronApp.confirm("提示","依据名称调用属性失败！", 'sm', $rootScope, $modal);
@@ -174,10 +122,30 @@ ineuronApp.controller('AttributeUpdateController', ['$scope', '$stateParams', '$
 	}
 
 
-	vm.updateAttribute = updateAttribute;
-	function updateAttribute() {
+	vm.createAndUpdateAttribute = createAndUpdateAttribute;
+	function createAndUpdateAttribute() {
 
-		$http({
+		if(forCreate){
+			$http({
+				url : '/product/createattribute',
+				method : 'POST',
+				data : {
+					name : $scope.attributeName,
+					code: $scope.attributeCode,
+					description : $scope.attributeDescription,
+					attributeCategoryId: $scope.selectedAttributeCategory[0].id
+				}
+			}).success(function(data) {
+				validateApiToken(data, $cookies, $rootScope, $modal);
+				ineuronApp.confirm("提示","属性添加成功！", 'sm', $rootScope, $modal);		
+				$state.go("attributeList");
+			}).error(function(data) {
+				ineuronApp.confirm("提示","添加属性失败！", 'sm', $rootScope, $modal);
+				console.log("error");
+		  		})
+		}
+		else{
+		 $http({
 			url : '/product/updateattribute',
 			method : 'POST',
 			data : {
@@ -195,6 +163,7 @@ ineuronApp.controller('AttributeUpdateController', ['$scope', '$stateParams', '$
 			ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
 			console.log("error");
 		})
+	  }
 	}
 	
 	

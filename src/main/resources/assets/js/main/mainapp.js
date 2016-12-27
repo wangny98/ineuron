@@ -103,16 +103,17 @@ ineuronApp.config(function($stateProvider) {
 			templateUrl : '/ineuron/product/attributeList.html'
 		}
 	
-	var createAttributeState = {
+	/* combine attribute create and update to one controller
+	 * var createAttributeState = {
 			name : 'createAttribute',
 			url : 'createAttribute',
 			templateUrl : '/ineuron/product/createAttribute.html'
-		}
+		}*/
 	
-	var updateAttributeState = {
-			name : 'updateAttribute',
-			url : 'updateAttribute/:attributeStr',
-			templateUrl : '/ineuron/product/updateAttribute.html'
+	var createAndUpdateAttributeState = {
+			name : 'createAndUpdateAttribute',
+			url : 'createAndUpdateAttribute/:attributeStr',
+			templateUrl : '/ineuron/product/createAndUpdateAttribute.html'
 		}
 	
 	var productManufacturingProcessState = {
@@ -157,6 +158,12 @@ ineuronApp.config(function($stateProvider) {
 			templateUrl : '/ineuron/product/createMaterial.html'
 		}
 
+	//Order
+	var searchForOrderState = {
+			name : 'searchForOrder',
+			url : 'searchForOrder/',
+			templateUrl : '/ineuron/order/SearchForOrder.html'
+		}
 
 	$stateProvider.state(userManagementState);
 	$stateProvider.state(roleManagementState);
@@ -174,8 +181,7 @@ ineuronApp.config(function($stateProvider) {
 	$stateProvider.state(createProductState);
 	
 	$stateProvider.state(attributeManagementState);
-	$stateProvider.state(createAttributeState);
-	$stateProvider.state(updateAttributeState);
+	$stateProvider.state(createAndUpdateAttributeState);
 	
 	$stateProvider.state(productManufacturingProcessState);
 	$stateProvider.state(formulaManagementState);
@@ -186,6 +192,7 @@ ineuronApp.config(function($stateProvider) {
 	$stateProvider.state(createMaterialState);
 	$stateProvider.state(updateMaterialState);
 	
+	$stateProvider.state(searchForOrderState);
 	
 	$stateProvider.state(aboutState);
 

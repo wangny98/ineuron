@@ -1,10 +1,10 @@
 <meta charset="utf-8">
 <head></head>
 <div
-	ng-controller="@Xxx@CreateController as @Xxx@Create">
-	<div class="message">添加@中文名@</div>
+	ng-controller="@Xxx@CreateAndUpdateController as @Xxx@CreateAndUpdate">
+	<div class="message">修改@中文名@</div>
 	<div class="right-align">
-		<button class="custombutton" ng-click="@Xxx@Create.backward()">
+		<button class="custombutton" ng-click="@Xxx@CreateAndUpdate.backward()">
 			<span class="glyphicon glyphicon-new"></span> 返回
 		</button>
 	</div>
@@ -24,6 +24,7 @@
 						</td>
 						<td></td>
 					</tr>
+					
 					<tr>
 						<th class="labelformat">说明</th>
 						<td><textarea style="min-height: 60px"
@@ -34,7 +35,7 @@
 					<tr>
 						<td></td>
 						<td><button class="btn btn-large btn-primary"
-								ng-click="@Xxx@Create.create@Xxx@()">
+								ng-click="@Xxx@CreateAndUpdate.createAndUpdate@Xxx@()">
 								<span class="glyphicon glyphicon-upload"></span> 提交
 							</button></td>
 						<td></td>

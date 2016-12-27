@@ -21,7 +21,7 @@ ineuronApp.controller('@Xxx@ListController', ['$http', '$scope', '$stateParams',
 	
 	vm.update@Xxx@=update@Xxx@;
 	function update@Xxx@(index){
-		$state.go("update@Xxx@", {@xxx@Str: JSON.stringify(vm.@xxx@s[index])});
+		$state.go("createAndUpdate@Xxx@", {@xxx@Str: JSON.stringify(vm.@xxx@s[index])});
 	}
 	
 	vm.create@Xxx@=create@Xxx@;
@@ -55,7 +55,7 @@ ineuronApp.controller('@Xxx@ListController', ['$http', '$scope', '$stateParams',
 }]);
 
 
-ineuronApp.controller('@Xxx@CreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$modal',
+ineuronApp.controller('@Xxx@CreateAndUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$modal',
    function($scope, $stateParams, $http, $state, $cookies, $rootScope, $modal) {
 
 	var vm = this;

@@ -1,10 +1,10 @@
 <meta charset="utf-8">
 <head></head>
 <div
-	ng-controller="AttributeCreateController as attributeCreate">
-	<div class="message">添加属性</div>
+	ng-controller="AttributeCreateAndUpdateController as attributeCreateAndUpdate">
+	<div class="message">属性</div>
 	<div class="right-align">
-		<button class="custombutton" ng-click="attributeCreate.backward()">
+		<button class="custombutton" ng-click="attributeCreateAndUpdate.backward()">
 			<span class="glyphicon glyphicon-new"></span> 返回
 		</button>
 	</div>
@@ -27,7 +27,7 @@
 					<tr>
 						<th class="labelformat">属性类型</th>
 						<td><div isteven-multi-select
-								input-model="attributeCreate.attributeCategories"
+								input-model="attributeCreateAndUpdate.attributeCategories"
 								output-model="selectedAttributeCategory" output-properties="id name"
 								button-label="name" item-label="name"
 								tick-property="ticked" orientation="horizontal"
@@ -51,7 +51,7 @@
 					<tr>
 						<td></td>
 						<td><button class="btn btn-large btn-primary"
-								ng-click="attributeCreate.createAttribute()">
+								ng-click="attributeCreateAndUpdate.createAndUpdateAttribute()">
 								<span class="glyphicon glyphicon-upload"></span> 提交
 							</button></td>
 						<td></td>
