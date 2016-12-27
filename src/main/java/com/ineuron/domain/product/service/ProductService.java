@@ -97,6 +97,7 @@ public class ProductService {
 	
 	public Product getProductByName(String name) throws RepositoryException{		
 		Product product = repository.selectOne("getProductByName", name);
+		product.init(repository);
 		return product;
 	}
 	

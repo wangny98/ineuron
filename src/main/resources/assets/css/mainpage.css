@@ -1,6 +1,6 @@
 #main-nav {
 margin-left: 1px;
-min-width:220px;
+min-width:200px;
 }
 #main-nav.nav-tabs.nav-stacked > li > a {
 padding: 10px 8px;
@@ -93,6 +93,10 @@ color: #fff;
 	width:190px;
 	margin-right:10px;
 	
+}
+
+#submitbutton{
+	width:150px;
 }
 
 .editableinput{

@@ -10,7 +10,7 @@ ineuronApp.controller('ProductCreateController', ['$scope', '$stateParams', '$ht
 		// $scope.existedProductCategoryName=VerifyExistedProductCategoryName($scope.productCategoryName,
 		// $http);
 		$http({
-			url : '/product/productbyname',
+			url : '/product/getproductbyname',
 			method : 'POST',
 			data :  $scope.productName
 		}).success(function(data) {

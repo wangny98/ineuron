@@ -1,0 +1,46 @@
+<meta charset="utf-8">
+<head></head>
+<div
+	ng-controller="@Xxx@UpdateController as @Xxx@Update">
+	<div class="message">修改@中文名@</div>
+	<div class="right-align">
+		<button class="custombutton" ng-click="@Xxx@Update.backward()">
+			<span class="glyphicon glyphicon-new"></span> 返回
+		</button>
+	</div>
+	<div>
+			<table id="table-style" style="margin: 50px auto">
+				<tbody>
+					<tr>
+						<th class="labelformat">@中文名@名</th>
+						<td><input class="input-block-level" type="text"
+							ng-model="@xxx@Name" ng-change="Check@Xxx@Name()" required /></td>
+						<td style="color: red">*</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><label ng-show="existed@Xxx@Name"
+							style="text-align: center; font-weight: bold; color: red">@中文名@名已存在！请重新输入。</label>
+						</td>
+						<td></td>
+					</tr>
+					
+					<tr>
+						<th class="labelformat">说明</th>
+						<td><textarea style="min-height: 60px"
+								class="input-block-level" type="text"
+								ng-model="@xxx@Description" /></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><button class="btn btn-large btn-primary"
+								ng-click="@Xxx@Update.update@Xxx@()">
+								<span class="glyphicon glyphicon-upload"></span> 提交
+							</button></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+	</div>
+</div>
