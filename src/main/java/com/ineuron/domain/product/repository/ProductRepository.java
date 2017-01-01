@@ -123,6 +123,7 @@ public class ProductRepository {
 		try {
 			if (formula != null) {
 				session.delete("deleteFormula", formula);
+				session.delete("deleteFormulaMaterial", formula.getId());
 				session.commit();
 			}
 

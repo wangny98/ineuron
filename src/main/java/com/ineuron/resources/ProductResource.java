@@ -544,7 +544,7 @@ public INeuronResponse formulas(@Context HttpHeaders httpHeader, @QueryParam("de
 @Path("/formulabyid")
 @GET
 @Timed
-public INeuronResponse formulaById(@QueryParam("id") int formulaId, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
+public INeuronResponse formulaById(@QueryParam("id") String formulaId, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
 	INeuronResponse response = null;
 	try {
 		response = new INeuronResponse(securityService, httpHeader, debug); 
