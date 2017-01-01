@@ -19,6 +19,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 			var selectedProduct = eval('(' + productStr + ')');
 			$scope.productName = selectedProduct.name;
 			var productId = selectedProduct.id;
+			var hasFormula = true;
 			$http({
 				url : '/product/productbyid?id=' + productId,
 				method : 'GET'
@@ -35,7 +36,9 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					}
 				$scope.operations = data.value.operations;
 				if(data.value.formula == undefined || data.value.formula.materials == undefined){
-					ineuronApp.confirm("提示","请为产品选择配方，然后设置工艺流程！", 'sm', $rootScope, $modal);
+					ineuronApp.confirm("提示","该产品尚未设置配方", 'sm', $rootScope, $modal);
+					hasFormula = false;
+					$scope.materials = data.value.formula.allMaterials;
 				}else{
 					$scope.materials = data.value.formula.materials;
 				}
@@ -103,7 +106,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 				// alert(JSON.stringify($scope.model.rows));
 				cleanProcesses($scope.model.rows);
 				$http({
-					url : '/product/saveprocesses',
+					url : '/product/saveprocesses?hasformula=' + hasFormula,
 					method : 'POST',
 					data : $scope.model.rows
 				}).success(function(data) {

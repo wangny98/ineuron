@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import com.ineuron.common.exception.RepositoryException;
-import com.ineuron.domain.user.entity.User;
 
 public class INeuronRepository {
 	

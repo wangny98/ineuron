@@ -1,5 +1,6 @@
 package com.ineuron.domain.product.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.domain.product.entity.Formula;
 import com.ineuron.domain.product.entity.Product;
 import com.ineuron.domain.product.valueobject.AttributeCategory;
+import com.ineuron.domain.product.valueobject.FormulaMaterial;
 import com.ineuron.domain.product.valueobject.Attribute;
 import com.ineuron.domain.product.valueobject.ProductCategory;
 import com.ineuron.domain.product.repository.ProductRepository;
@@ -64,7 +66,7 @@ public class ProductService {
 	}
 	
 	public Product createProduct(Product product) throws RepositoryException {
-		product.addProduct(repository);
+		product.addProduct(productRepository);
 		return product;
 	}
 	
@@ -167,9 +169,20 @@ public class ProductService {
 	}
 
 
-	public void saveProcesses(List<ManufacturingProcess> processes) throws RepositoryException {
+	public void saveProcesses(List<ManufacturingProcess> processes, boolean hasFormula) throws RepositoryException {
 		productRepository.saveProcesses(processes);
+		if(!hasFormula){
+			Formula formula = createFormulaWithProcesses();
+			
+		}
 		
+	}
+
+	private Formula createFormulaWithProcesses() {
+		Formula formula = new Formula();
+		List<FormulaMaterial> materialSettings = new ArrayList<FormulaMaterial>();
+		
+		return formula;
 	}
 
 	public void addFormula(Formula formula) throws RepositoryException {
@@ -183,7 +196,7 @@ public class ProductService {
 	}
 
 
-	public void deleteFormula(int id) throws RepositoryException {
+	public void deleteFormula(String id) throws RepositoryException {
 		Formula formula = new Formula();
 		formula.setId(id);
 		formula.deleteFormula(productRepository);

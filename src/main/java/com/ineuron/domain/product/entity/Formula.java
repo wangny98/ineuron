@@ -2,6 +2,7 @@ package com.ineuron.domain.product.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ import com.ineuron.domain.product.valueobject.Material;
 
 public class Formula {
 	
-	private Integer id;
+	private String id;
 	private String name;
 	private String description;
 	private List<FormulaMaterial> materialSettings;
@@ -24,6 +25,7 @@ public class Formula {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Formula.class);
 	
 	public void addFormula(ProductRepository repository) throws RepositoryException{
+		id = UUID.randomUUID().toString();
 		repository.addFormula(this);
 	}
 	
@@ -52,10 +54,8 @@ public class Formula {
 				LOGGER.info("material number is " + materials.size() + " in formula " + name);
 			}
 			
-			allMaterials = repository.select("getMaterials", null);
-			
 		}
-		
+		allMaterials = repository.select("getMaterials", null);
 	}
 	
 	
@@ -76,10 +76,10 @@ public class Formula {
 		
 	}
 	
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getName() {

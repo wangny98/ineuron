@@ -54,6 +54,11 @@ ineuronApp.controller('ProductCreateController', ['$scope', '$stateParams', '$ht
 	function createProduct() {
 	   // alert("pc id:
 		// "+$scope.selectedProductCategory[0].id+$scope.selectedProductCategory[0].code+$scope.selectedProductFormula.id);
+		var selectedFormula = $scope.selectedProductFormula[0];
+		var selectedFormulaId = "";
+		if(selectedFormula != undefined){
+			selectedFormulaId = selectedFormula.id;
+		}
 		$http({
 			url : '/product/createproduct',
 			method : 'POST',
@@ -61,13 +66,18 @@ ineuronApp.controller('ProductCreateController', ['$scope', '$stateParams', '$ht
 				name : $scope.productName,
 				productCategoryId: $scope.selectedProductCategory[0].id,
 				code: $scope.selectedProductCategory[0].code,
-				formulaId: $scope.selectedProductFormula[0].id,
+				formulaId: selectedFormulaId,
 				description : $scope.productDescription
 			}
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
-			ineuronApp.confirm("提示","产品添加成功！", 'sm', $rootScope, $modal);		
-			$state.go("productList", {productCategoryStr: JSON.stringify($scope.selectedProductCategory[0])});
+			if (data.success == true) {
+				validateApiToken(data, $cookies, $rootScope, $modal);
+				ineuronApp.confirm("提示","产品添加成功！", 'sm', $rootScope, $modal);		
+				$state.go("productList", {productCategoryStr: JSON.stringify($scope.selectedProductCategory[0])});
+			}else{
+				ineuronApp.confirm("提示","产品添加失败！", 'sm', $rootScope, $modal);	
+			}
+			
 		}).error(function(data) {
 			ineuronApp.confirm("提示","产品添加失败！", 'sm', $rootScope, $modal);
 			console.log("error");
