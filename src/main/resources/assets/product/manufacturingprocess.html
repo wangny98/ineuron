@@ -38,10 +38,11 @@
 	<table style="width: 100%" id="table-style">
 		<thead>
 			<tr>
-				<th style="width:50px">操作顺序</th>
+				<th style="width:85px">操作顺序</th>
 				<th>操作</th>
 				<th>原料</th>
 				<th>操作内容</th>
+				<th>剩余质量</th>
 				<th>编辑步骤</th>
 			</tr>
 		</thead>
@@ -67,6 +68,7 @@
 				</select>
               </td>
 			  <td>{{row.materialQuantity}}</td>
+			  <td>{{row.remainingQuantity}}</td>
 			  <td>
             	<button ng-click="editContact($index)">编辑</button>
 				<button ng-click="removeRow($index)">删除</button>
@@ -87,6 +89,7 @@
 				</select>
               </td>
             <td><input type="text" ng-model="model.selected.materialQuantity" /></td>
+			<td>{{row.remainingQuantity}}</td>
         	<td>
             	<button ng-click="saveContact($index)">完成</button>
             	<button ng-click="reset()">取消</button>
@@ -102,6 +105,7 @@
       	      </td>	
               <td></td>
             <td><input type="text" ng-model="model.selected.materialQuantity" /></td>
+			<td></td>
         	<td>
             	<button ng-click="saveContact($index)">完成</button>
             	<button ng-click="reset()">取消</button>

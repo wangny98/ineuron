@@ -51,7 +51,16 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 
 			// gets the template to ng-include for a table row / item
 			$scope.getTemplate = function(row) {
+				
+				setRemainingQuantity();
 				if (row === $scope.model.selected){
+					if(row.materialQuantity == " " && row.materialId != 0){
+						setDefaultValue(row);
+					}
+					if(isNaN(row.materialQuantity)){
+						ineuronApp.confirm("提示","该列只能输入数字！", 'sm', $rootScope, $modal);
+						row.materialQuantity = 0;
+					}
 					var operationId = $scope.model.selected.operationId;
 					var operationTypeId = getOperationTypeId(operationId);
 					if(operationTypeId == 1){
@@ -64,6 +73,57 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					return 'display';
 			};
 
+			function setRemainingQuantity(){
+				
+				if(hasFormula){
+					for(index in $scope.materialSettings){
+						var materialId = $scope.materialSettings[index].materialId;
+						var materialQuantity = $scope.materialSettings[index].materialQuantity;
+						var quantityInRow = 0;
+						for(rowIndex in $scope.model.rows){
+							if($scope.model.rows[rowIndex].materialId == materialId 
+									&& !isNaN($scope.model.rows[rowIndex].materialQuantity)){
+								quantityInRow += parseFloat($scope.model.rows[rowIndex].materialQuantity);
+							}
+							
+						}
+						for(rowIndex in $scope.model.rows){
+							if($scope.model.rows[rowIndex].materialId == materialId){
+								$scope.model.rows[rowIndex].remainingQuantity = (materialQuantity - quantityInRow).toFixed(2);
+							}
+							
+						}
+						
+					}
+				}
+				
+			}
+			function setDefaultValue(row){
+				if(hasFormula){
+					for(index in $scope.materialSettings){
+						var materialId = $scope.materialSettings[index].materialId;
+						if(materialId == row.materialId){
+							var materialQuantity = $scope.materialSettings[index].materialQuantity;
+							var quantityInRow = 0;
+							for(rowIndex in $scope.model.rows){
+								if($scope.model.rows[rowIndex].materialId == materialId 
+										&& !isNaN($scope.model.rows[rowIndex].materialQuantity)){
+									quantityInRow += parseFloat($scope.model.rows[rowIndex].materialQuantity);
+								}
+								
+							}
+							var remaining = materialQuantity - quantityInRow;
+							if(remaining > 0){
+								row.materialQuantity = remaining;
+							}else{
+								row.materialQuantity = 0;
+							}
+							
+						}
+					}
+				}
+			}
+			
 			$scope.editContact = function(index) {
 				$scope.model.selected = $scope.model.rows[index];
 				
@@ -90,7 +150,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					"orderId" : 0,
 					"operationId" : 0,
 					"materialId" : 0,
-					"materialQuantity" : 0
+					"materialQuantity" : " "
 				};
 			
 			$scope.addRow = addRow;
@@ -126,7 +186,6 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					
 			
 			function excuteSaveProcesses(){
-				// alert(JSON.stringify($scope.model.rows));
 				
 				cleanProcesses($scope.model.rows);
 				$http({
@@ -167,7 +226,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 						var quantityInRow = 0;
 						for(rowIndex in rows){
 							if(rows[rowIndex].materialId == materialId){
-								quantityInRow += rows[rowIndex].materialQuantity;
+								quantityInRow += parseFloat(rows[rowIndex].materialQuantity);
 							}
 							
 						}
@@ -198,11 +257,13 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					var operationTypeId = getOperationTypeId(rows[index].operationId);
 					if(operationTypeId != 1){
 						rows[index].materialId = 0;
+						
 					}
+					rows[index].remainingQuantity = undefined;
 				}
 			}
 			
-			//$scope.backward = backward;		
+			$scope.backward = backward;		
 			function backward(){
 				$state.go("allProductList");
 			}

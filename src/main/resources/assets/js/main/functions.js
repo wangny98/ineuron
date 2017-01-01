@@ -77,7 +77,7 @@ ineuronFuncs.funcList = [ineuronFuncs.userAdmin,
 	ineuronFuncs.prodAdmin,
 	ineuronFuncs.prodAttrAdmin,
 	ineuronFuncs.prodFormulaAdmin,
-	prodMaterialAdmin,
+	ineuronFuncs.prodMaterialAdmin,
 	ineuronFuncs.orderAdmin
 ];
 

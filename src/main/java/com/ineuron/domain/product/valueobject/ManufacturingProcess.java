@@ -7,7 +7,7 @@ public class ManufacturingProcess {
 	private Integer orderId;
 	private Integer operationId;
 	private Integer materialId;
-	private Integer materialQuantity;
+	private Float materialQuantity;
 
 	public Integer getStepId() {
 		return stepId;
@@ -39,10 +39,10 @@ public class ManufacturingProcess {
 	public void setMaterialId(Integer materialId) {
 		this.materialId = materialId;
 	}
-	public Integer getMaterialQuantity() {
+	public Float getMaterialQuantity() {
 		return materialQuantity;
 	}
-	public void setMaterialQuantity(Integer materialQuantity) {
+	public void setMaterialQuantity(Float materialQuantity) {
 		this.materialQuantity = materialQuantity;
 	}
 	
