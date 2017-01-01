@@ -3,17 +3,12 @@
 <div
 	ng-controller="MaterialCreateController as MaterialCreate">
 	<div class="message">添加原料</div>
-	<div class="right-align">
-		<button class="custombutton" ng-click="MaterialCreate.backward()">
-			<span class="glyphicon glyphicon-new"></span> 返回
-		</button>
-	</div>
 	<div>
 			<table id="table-style" style="margin: 50px auto">
 				<tbody>
 					<tr>
-						<th class="labelformat">原料名</th>
-						<td><input class="input-block-level" type="text"
+						<th style="width:80px" class="labelformat">原料名</th>
+						<td><input style="width:200px" class="input-block-level" type="text"
 							ng-model="materialName" ng-change="CheckMaterialName()" required /></td>
 						<td style="color: red">*</td>
 					</tr>
@@ -25,8 +20,8 @@
 						<td></td>
 					</tr>
 					<tr>
-						<th class="labelformat">说明</th>
-						<td><textarea style="min-height: 60px"
+						<th style="width:80px" class="labelformat">说明</th>
+						<td><textarea  style="width:200px" style="min-height: 90px"
 								class="input-block-level" type="text"
 								ng-model="materialDescription" /></td>
 						<td></td>
@@ -36,7 +31,12 @@
 						<td><button class="btn btn-large btn-primary"
 								ng-click="MaterialCreate.createMaterial()">
 								<span class="glyphicon glyphicon-upload"></span> 提交
-							</button></td>
+							</button>
+							<button class="btn btn-large btn-primary"
+								ng-click="MaterialCreate.backward()">
+								<span class="glyphicon glyphicon-arrow-left"></span> 返	回
+							</button>
+							</td>
 						<td></td>
 					</tr>
 				</tbody>

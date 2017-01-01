@@ -3,14 +3,16 @@
 <meta charset="UTF-8">
 <div ng-controller="AttributeListController as AttributeList">
 	<div class="right-align">
-		<button class="custombutton" ng-click="AttributeList.createAttribute()">
-			<span class="glyphicon glyphicon-new"></span> 新增属性
+		<button class="btn btn-large btn-primary" style="float:right;"
+			ng-click="AttributeList.createAttribute()">
+			<span class="glyphicon glyphicon-plus"></span> 新增属性
 		</button>
 	</div>
 	<table datatable="ng" dt-options="AttributeList.dtOptions"
 		dt-column-defs="AttributeList.dtColumnDefs" class="row-border hover" id="table-style">
 		<thead>
 			<tr>
+				<th style="width:5%">序号</th>
 				<th>名称</th>
 				<th>编码</th>
 				<th>类型</th>
@@ -20,6 +22,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="attribute in AttributeList.attributes">
+			   <td>{{$index+1}}</td>
 			   <td>{{attribute.name}}</td>
 			   <td>{{attribute.code}}</td>
 			   <td>{{attribute.attributeCategory.name}}</td>

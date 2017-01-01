@@ -2,62 +2,64 @@
 
 <div ng-controller="UpdateFormulaController as formulaEdit">
 	<div class="message">产品配方</div>
-		<div class="right-align">
-		<button class="custombutton" ng-click="backward()">
-			<span class="glyphicon glyphicon-new"></span> 返回
-		</button>
-	</div>
-	<div class="right-align">
-		<button type="button" style="float: right" ng-click="addRow()"
-			class="custombutton">
-			<span class="glyphicon glyphicon-new"
-				style="font-weight: bold; color: rgb(255, 140, 60);"></span> 增加材料
-		</button>
+	<table>
+		<tbody>
+			<tr>
+				<td>
+					<table id="table-style">
+						<tbody>
+							<tr>
+								<th class="labelformat" style="min-width: 100px">配方名</th>
+								<td><input class="input-block-level" type="text"
+									ng-model="formula.name" required></td>
+							</tr>
+							<tr>
+								<th class="labelformat">描述</th>
+								<td><input style="min-width: 200px"
+									class="input-block-level" type="text"
+									ng-model="formula.description" /></td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+				<td style="width:100%; vertical-align:bottom;">
+					<div>
+						<button class="btn btn-large btn-primary"
+							style="float: right; margin: 2px;" ng-click="backward()">
+							<span class="glyphicon glyphicon-arrow-left"></span> 返 回
+						</button>
+						<button class="btn btn-large btn-primary"
+							style="float: right; margin: 2px;" ng-click="updateFormula()">
+							<span class="glyphicon glyphicon-save"></span> 保存配方
+						</button>
+						<button class="btn btn-large btn-primary"
+							style="float: right; margin: 2px;" ng-click="addRow()">
+							<span class="glyphicon glyphicon-plus"></span> 增加材料
+						</button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 
-		<button type="button" style="float: right" ng-click="updateFormula()"
-			class="custombutton">
-			<span class="glyphicon glyphicon-update"
-				style="font-weight: bold; color: rgb(255, 140, 60);"></span> 保存配方
-		</button>
-
-	</div>
-		<table id="table-style">
-				<tbody>
-					<tr>
-						<th class="labelformat">配方名：</th>
-						<td><input class="input-block-level" type="text"
-							ng-model="formula.name" required></td>
-						<td></td>
-					</tr>
-					<tr>
-						<th class="labelformat">描述：</th>
-						<td><textarea style="min-height:60px" class="input-block-level" 
-						type="text"	ng-model="formula.description" />
-					    </td>
-						<td></td>
-					</tr>
-
-				</tbody>
-			</table>
-	
-			<table style="width:100%" id="table-style">
-				<thead>
-					<tr>
-						<th>序号</th>
-						<th>原料</th>
-						<th>质量分数</th>
-						<th>比例（%）</th>
-						<th style="width: 120px">编辑</th>
-						<th style="width: 100px">删除</th>
-					</tr>
-				</thead>
-				<tbody ng-model="formula.materialSettings">
-					<tr ng-repeat="row in formula.materialSettings" ng-include="getTemplate(row)"
-						class="item" style="cursor: move;">
-					</tr>
-				</tbody>
-			</table>
-			<script type="text/ng-template" id="display">
+	<table style="width: 100%" id="table-style">
+		<thead>
+			<tr>
+				<th style="width:50px">序号</th>
+				<th>原料</th>
+				<th>质量分数</th>
+				<th>比例（%）</th>
+				<th style="width: 120px">编辑</th>
+				<th style="width: 100px">删除</th>
+			</tr>
+		</thead>
+		<tbody ng-model="formula.materialSettings">
+			<tr ng-repeat="row in formula.materialSettings"
+				ng-include="getTemplate(row)" class="item" style="cursor: move;">
+			</tr>
+		</tbody>
+	</table>
+	<script type="text/ng-template" id="display">
 			  <td>{{$index + 1}}</td>
               <td>
                 <select class="td-item" disabled
@@ -74,7 +76,7 @@
 				<button ng-click="removeRow($index)">删除</button>
        		  </td>
 		</script>
-			<script type="text/ng-template" id="edit">
+	<script type="text/ng-template" id="edit">
 			  <td>{{$index + 1}}</td>
               <td>
                 <select class="td-item"
@@ -89,5 +91,5 @@
             	<button ng-click="reset()">取消</button>
         	</td>
     	</script>
-	
+
 </div>
