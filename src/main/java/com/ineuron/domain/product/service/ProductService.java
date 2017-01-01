@@ -2,6 +2,7 @@ package com.ineuron.domain.product.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +98,14 @@ public class ProductService {
 		return productList;
 	}
 	
+	public Product getProductById(Integer productId) throws RepositoryException {
+		Product product = repository.selectOne("getProductById", productId);
+		if(product != null){
+			product.init(repository);
+		}	
+		return product;
+	}
+	
 	public Product getProductByName(String name) throws RepositoryException{		
 		Product product = repository.selectOne("getProductByName", name);
 		product.init(repository);
@@ -160,7 +169,7 @@ public class ProductService {
 		return formulaList;
 	}
 	
-	public Formula getFormulaById(int formulaId) throws RepositoryException {
+	public Formula getFormulaById(String formulaId) throws RepositoryException {
 		Formula formula = repository.selectOne("getFormulaById", formulaId);
 		if(formula != null){
 			formula.init(repository);
@@ -170,18 +179,39 @@ public class ProductService {
 
 
 	public void saveProcesses(List<ManufacturingProcess> processes, boolean hasFormula) throws RepositoryException {
-		productRepository.saveProcesses(processes);
-		if(!hasFormula){
-			Formula formula = createFormulaWithProcesses();
+		if(processes != null && !processes.isEmpty()){
+			Product product = getProductById(processes.get(0).getProductId());
+			if(!hasFormula){
+				Formula formula = createFormulaWithProcesses(processes, product);	
+				productRepository.addFormula(formula);
+				product.updateProduct(repository);
+			}
 			
+			productRepository.saveProcesses(processes);
 		}
+		
 		
 	}
 
-	private Formula createFormulaWithProcesses() {
+	private Formula createFormulaWithProcesses(List<ManufacturingProcess> processes, Product product) {
 		Formula formula = new Formula();
+		String formulaName = product.getName() + "的配方-" + UUID.randomUUID().toString();
+		formula.setName(formulaName);
+		product.setFormulaId(formula.getId());
 		List<FormulaMaterial> materialSettings = new ArrayList<FormulaMaterial>();
-		
+		float totalQuantity = 0;
+		for(ManufacturingProcess process : processes){
+			FormulaMaterial formulaMaterial = new FormulaMaterial();
+			formulaMaterial.setFormulaId(formula.getId());
+			formulaMaterial.setMaterialId(process.getMaterialId());
+			formulaMaterial.setMaterialQuantity(process.getMaterialQuantity());
+			materialSettings.add(formulaMaterial);
+			totalQuantity += process.getMaterialQuantity();
+		}
+		for(FormulaMaterial formulaMaterial : materialSettings){
+			formulaMaterial.setMaterialPercent((float)(Math.round(formulaMaterial.getMaterialQuantity()*100/totalQuantity*100)/100));
+		}
+		formula.setMaterialSettings(materialSettings);
 		return formula;
 	}
 
@@ -203,14 +233,6 @@ public class ProductService {
 		
 	}
 
-	public Product getProductById(Integer productId) throws RepositoryException {
-		Product product = repository.selectOne("getProductById", productId);
-		if(product != null){
-			product.init(repository);
-		}	
-		return product;
-	}
-	
 	
 	//Material
 	

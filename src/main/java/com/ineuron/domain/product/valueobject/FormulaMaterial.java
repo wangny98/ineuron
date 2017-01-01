@@ -3,7 +3,7 @@ package com.ineuron.domain.product.valueobject;
 public class FormulaMaterial {
 	
 	private Integer id;
-	private Integer formulaId;
+	private String formulaId;
 	private Integer materialId;
 	private float materialQuantity;
 	private float materialPercent;
@@ -15,10 +15,10 @@ public class FormulaMaterial {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getFormulaId() {
+	public String getFormulaId() {
 		return formulaId;
 	}
-	public void setFormulaId(Integer formulaId) {
+	public void setFormulaId(String formulaId) {
 		this.formulaId = formulaId;
 	}
 	public Integer getMaterialId() {

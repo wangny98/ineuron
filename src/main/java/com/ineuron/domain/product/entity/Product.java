@@ -17,7 +17,7 @@ public class Product {
 	private String code;
 	private Integer productCategoryId;
 	private Integer serialNumber;
-	private Integer formulaId;
+	private String formulaId;
 	private String description;
 	
 	private ProductCategory productCategory;
@@ -77,11 +77,11 @@ public class Product {
 		this.productCategoryId = productCategoryId;
 	}
 	
-	public Integer getFormulaId() {
+	public String getFormulaId() {
 		return formulaId;
 	}
 
-	public void setFormulaId(Integer formulaId) {
+	public void setFormulaId(String formulaId) {
 		this.formulaId = formulaId;
 	}
 	

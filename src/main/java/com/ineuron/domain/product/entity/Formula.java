@@ -25,7 +25,10 @@ public class Formula {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Formula.class);
 	
 	public void addFormula(ProductRepository repository) throws RepositoryException{
-		id = UUID.randomUUID().toString();
+		if(id == null){
+			id = UUID.randomUUID().toString();
+		}
+		
 		repository.addFormula(this);
 	}
 	
@@ -77,6 +80,9 @@ public class Formula {
 	}
 	
 	public String getId() {
+		if(id == null){
+			id = UUID.randomUUID().toString();
+		}
 		return id;
 	}
 	public void setId(String id) {
