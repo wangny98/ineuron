@@ -3,15 +3,16 @@
 <meta charset="UTF-8">
 <div ng-controller="RoleListController as roleList">
 	<div class="right-align">
-		<button class="custombutton"
+		<button class="btn btn-large btn-primary" style="float:right;"
 			ng-click="roleList.createRole()">
-			<span class="glyphicon glyphicon-new"></span> 新增角色
+			<span class="glyphicon glyphicon-plus"></span> 新增角色
 		</button>
 	</div>
 	<table datatable="ng" dt-options="roleList.dtOptions"
 		dt-column-defs="roleList.dtColumnDefs" class="row-border hover" id="table-style">
 		<thead>
 			<tr>
+			    <th style="width:5%">序号</th>
 				<th>角色名</th>
 				<th>描述</th>
 				<th>查看/修改</th>
@@ -19,6 +20,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="role in roleList.roles">
+			    <td>{{$index+1}}</td>
 				<td>{{ role.rolename }}</td>
 				<td>{{ role.description }}</td>
 				<td>

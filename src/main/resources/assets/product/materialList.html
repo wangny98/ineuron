@@ -3,14 +3,16 @@
 <meta charset="UTF-8">
 <div ng-controller="MaterialListController as MaterialList">
 	<div class="right-align">
-		<button class="custombutton" ng-click="MaterialList.createMaterial()">
-			<span class="glyphicon glyphicon-new"></span> 新增原料
+		<button class="btn btn-large btn-primary" style="float:right;"
+			ng-click="MaterialList.createMaterial()">
+			<span class="glyphicon glyphicon-plus"></span> 新增原料
 		</button>
 	</div>
 	<table datatable="ng" dt-options="MaterialList.dtOptions"
 		dt-column-defs="MaterialList.dtColumnDefs" class="row-border hover" id="table-style">
 		<thead>
 			<tr>
+			    <th style="width:5%">序号</th>
 				<th style="width:25%">名称</th>
 				<th>描述</th>
 				<th style="width:100px">编辑</th>
@@ -19,6 +21,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="material in MaterialList.materials">
+			   <td>{{$index+1}}</td>
 			   <td>{{material.name}}</td>
 			   <td>{{material.description}}</td>
 				<td>

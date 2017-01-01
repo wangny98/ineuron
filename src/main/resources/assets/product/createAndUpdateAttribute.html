@@ -3,11 +3,6 @@
 <div
 	ng-controller="AttributeCreateAndUpdateController as attributeCreateAndUpdate">
 	<div class="message">属性</div>
-	<div class="right-align">
-		<button class="custombutton" ng-click="attributeCreateAndUpdate.backward()">
-			<span class="glyphicon glyphicon-new"></span> 返回
-		</button>
-	</div>
 	<div>
 			<table id="table-style" style="margin: 50px auto">
 				<tbody>
@@ -50,10 +45,16 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td><button class="btn btn-large btn-primary"
+						<td>
+						    <button class="btn btn-large btn-primary"
 								ng-click="attributeCreateAndUpdate.createAndUpdateAttribute()">
-								<span class="glyphicon glyphicon-upload"></span> 提交
-							</button></td>
+								<span class="glyphicon glyphicon-upload"></span> 提	交
+							</button>
+							<button class="btn btn-large btn-primary"
+								ng-click="attributeCreateAndUpdate.backward()">
+								<span class="glyphicon glyphicon-arrow-left"></span> 返	回
+							</button>
+							</td>
 						<td></td>
 					</tr>
 				</tbody>

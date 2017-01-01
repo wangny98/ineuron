@@ -3,7 +3,8 @@
 	text-align: center;
 	border-collapse: collapse;
 	font:100% Arial, Helvetica, sans-serif; 
-	border-collapse:collapse;margin:1em 0;
+	border-collapse:collapse;
+	margin:5px;
 }
 #table-style th
 {

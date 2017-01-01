@@ -5,11 +5,6 @@
 <div
 	ng-controller="ProductCreateController as productCreate">
 	<div class="message">添加产品</div>
-	<div class="right-align">
-		<button class="custombutton" ng-click="productCreate.backward()">
-			<span class="glyphicon glyphicon-new"></span> 返回
-		</button>
-	</div>
 	<div>
 		<form class="form-product" name="createProduct">
 			<table id="table-style" style="margin: 50px auto">
@@ -45,7 +40,7 @@
 								button-label="name" item-label="name"
 								tick-property="ticked" orientation="horizontal"
 								selection-mode="single"></div></td>
-						<td style="color: red">*</td>
+						<td></td>
 					</tr>
 					<tr>
 						<th class="labelformat">简介</th>
@@ -59,7 +54,12 @@
 						<td><button class="btn btn-large btn-primary"
 								ng-click="productCreate.createProduct()">
 								<span class="glyphicon glyphicon-upload"></span> 提交
-							</button></td>
+							</button>
+						<button class="btn btn-large btn-primary"
+								ng-click="productCreate.backward()">
+								<span class="glyphicon glyphicon-arrow-left"></span> 返	回
+							</button>	
+						</td>
 						<td></td>
 					</tr>
 				</tbody>

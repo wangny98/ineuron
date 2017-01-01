@@ -53,7 +53,7 @@ ineuronFuncs.prodFormulaAdmin = {id:"13", name:"配方管理", ops:[
 }
 
 //原料管理
-ineuronFuncs.prodFormulaAdmin = {id:"14", name:"原料管理", ops:[ 
+ineuronFuncs.prodMaterialAdmin = {id:"14", name:"原料管理", ops:[ 
 		{id : "1", operationname : "查询", ticked : false}, 
 		{id : "2", operationname : "新增", ticked : false}, 
 		{id : "3", operationname : "编辑", ticked : false}, 
@@ -77,6 +77,7 @@ ineuronFuncs.funcList = [ineuronFuncs.userAdmin,
 	ineuronFuncs.prodAdmin,
 	ineuronFuncs.prodAttrAdmin,
 	ineuronFuncs.prodFormulaAdmin,
+	prodMaterialAdmin,
 	ineuronFuncs.orderAdmin
 ];
 
