@@ -158,8 +158,8 @@
 	</select>
 
 	<insert id="addFormula">
-		insert into ProductFormulas (name,description)
-		values(#{name},#{description})
+		insert into ProductFormulas (id, name,description)
+		values(#{id},#{name},#{description})
 	</insert>
 
 	<update id="updateFormula">

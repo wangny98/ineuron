@@ -41,6 +41,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					$scope.materials = data.value.formula.allMaterials;
 				}else{
 					$scope.materials = data.value.formula.materials;
+					$scope.materialSettings = data.value.formula.materialSettings;
 				}
 				
 			}).error(function(data) {
@@ -71,6 +72,11 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 			$scope.saveContact = function(index) {
 				console.log("Saving contact");
 				$scope.model.rows[index] = angular.copy($scope.model.selected);
+				
+				var operationTypeId = getOperationTypeId($scope.model.rows[index].operationId);
+				if(operationTypeId != 1){
+					$scope.model.rows[index].materialId = 0;
+				}
 				$scope.reset();
 			};
 
@@ -102,8 +108,26 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 				$scope.model.rows.splice(index, 1);
 			};
 			
+			
 			function saveProcesses(){
+				var message = validateProcesses($scope.model.rows);
+				
+				if(message == undefined){
+					excuteSaveProcesses();
+				}else{
+					ineuronApp.confirm("确认", message, 'sm', $rootScope, $modal).result.then(function(clickok){  
+						if(clickok){
+							hasFormula = false;
+							excuteSaveProcesses();
+						}
+					})
+				}
+			}
+					
+			
+			function excuteSaveProcesses(){
 				// alert(JSON.stringify($scope.model.rows));
+				
 				cleanProcesses($scope.model.rows);
 				$http({
 					url : '/product/saveprocesses?hasformula=' + hasFormula,
@@ -122,6 +146,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
 					console.log("error");
 				})
+				
 			}
 			
 			function getOperationTypeId(operationId){
@@ -133,6 +158,40 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 				return 0;
 			}
 			
+			function validateProcesses(rows){
+				var message;
+				if(hasFormula){
+					for(index in $scope.materialSettings){
+						var materialId = $scope.materialSettings[index].materialId;
+						var materialQuantity = $scope.materialSettings[index].materialQuantity;
+						var quantityInRow = 0;
+						for(rowIndex in rows){
+							if(rows[rowIndex].materialId == materialId){
+								quantityInRow += rows[rowIndex].materialQuantity;
+							}
+							
+						}
+						if(materialQuantity != quantityInRow){
+							var materialName = getMaterialName(materialId);
+							message = "原材料  " + materialName + " 的质量分數（" +quantityInRow + 
+									"）与配方中的（" + materialQuantity + "）不一致 , " +
+									"如果继续保存，系统将会为该流程创建新的配方。";
+							
+							return message;
+						}
+					}
+				}
+				return message;
+			}
+			
+			function getMaterialName(materialId){
+				for(index in $scope.materials){
+					if(materialId == $scope.materials[index].id){
+						return $scope.materials[index].name;
+					}
+				}
+				return materialId;
+			}
 			function cleanProcesses(rows){
 				var processes = [];
 				for(var index in rows){
