@@ -12,7 +12,6 @@ import com.ineuron.domain.product.valueobject.AttributeCategory;
 import com.ineuron.domain.product.valueobject.Attribute;
 import com.ineuron.domain.product.valueobject.ManufacturingProcess;
 import com.ineuron.domain.product.valueobject.Material;
-import com.ineuron.domain.product.valueobject.Operation;
 import com.ineuron.domain.product.service.ProductService;
 import com.ineuron.domain.user.service.SecurityService;
 
@@ -208,12 +207,14 @@ public INeuronResponse createProduct(final Product product, @Context HttpHeaders
 		response.setValue(product);
 		response.setSuccess(true);
 	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
+		LOGGER.error(e.getMessage(), e.getRootCause());
 		response.setMessage(e.getMessage());
+		response.setSuccess(false);
 	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
+		LOGGER.error(e.getMessage(), e.getRootCause());
 		response = new INeuronResponse();
 		response.setMessage(e.getMessage());
+		response.setSuccess(false);
 	}
 	return response;
 }
@@ -332,7 +333,7 @@ public INeuronResponse productByName(final String name, @Context HttpHeaders htt
 public INeuronResponse productById(@QueryParam("id") Integer productId, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
 	INeuronResponse response = null;
 	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
+		response = new INeuronResponse(securityService, httpHeader, debug); 
 		Product product = productService.getProductById(productId);
 		response.setValue(product);
 		response.setSuccess(true);
@@ -501,12 +502,12 @@ public INeuronResponse deleteAttribute(final Attribute attribute, @Context HttpH
 @Path("/saveprocesses")
 @POST
 @Timed
-public INeuronResponse saveProcesses(final List<ManufacturingProcess> processes, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
+public INeuronResponse saveProcesses(final List<ManufacturingProcess> processes,@QueryParam("hasformula") boolean hasFormula,  @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
 	
 	INeuronResponse response = null;
 	try {
 		response = new INeuronResponse(securityService, httpHeader, debug); 
-		productService.saveProcesses(processes);
+		productService.saveProcesses(processes, hasFormula);
 		response.setSuccess(true);
 	} catch (RepositoryException e) {
 		LOGGER.error(e.getMessage(), e);
@@ -606,7 +607,7 @@ public INeuronResponse updateFormula(final Formula formula, @Context HttpHeaders
 @Path("/deleteformula")
 @POST
 @Timed
-public INeuronResponse deleteFormula(@QueryParam("id") int id, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
+public INeuronResponse deleteFormula(@QueryParam("id") String id, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
 	LOGGER.info("deleteformula:" + id);
 	INeuronResponse response = null;
 	try {

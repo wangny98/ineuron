@@ -2,11 +2,9 @@ package com.ineuron.domain.product.entity;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.INeuronRepository;
+import com.ineuron.domain.product.repository.ProductRepository;
 import com.ineuron.domain.product.valueobject.ManufacturingProcess;
 import com.ineuron.domain.product.valueobject.Operation;
 import com.ineuron.domain.product.valueobject.OperationType;
@@ -30,8 +28,8 @@ public class Product {
 
 	//private static final Logger LOGGER = LoggerFactory.getLogger("Product");
 
-	public void addProduct(INeuronRepository repository) throws RepositoryException {
-		repository.add("addProduct", this);
+	public void addProduct(ProductRepository repository) throws RepositoryException {
+		repository.addProduct(this);
 	}
 
 	public void updateProduct(INeuronRepository repository) throws RepositoryException {
@@ -44,10 +42,17 @@ public class Product {
 	
 	public void init(INeuronRepository repository) throws RepositoryException{
 		
-		formula = repository.selectOne("getFormulaById", formulaId.toString());
-		if(formula != null){
-			formula.init(repository);
+		if(formulaId != null){
+			formula = repository.selectOne("getFormulaById", formulaId.toString());
+			if(formula == null){
+				formula = new Formula();
+				formulaId = null;
+			}
+		}else{
+			formula = new Formula();		
 		}
+		
+		formula.init(repository);
 		
 		productCategory=repository.selectOne("getProductCategoryById", productCategoryId.toString());
 		operations = repository.select("getOperations", null);
