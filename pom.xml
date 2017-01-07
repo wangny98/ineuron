@@ -20,7 +20,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.dropwizard</groupId>
@@ -52,6 +51,51 @@
             <artifactId>sqljdbc42</artifactId>  
             <version>4.2</version>  
         </dependency>  
+        <dependency>  
+            <groupId>nlp</groupId>  
+            <artifactId>ejml</artifactId>  
+            <version>0.23</version>  
+        </dependency>
+        <dependency>  
+            <groupId>nlp</groupId>  
+            <artifactId>javax.json</artifactId>  
+            <version>0.23</version>  
+        </dependency>
+        <dependency>  
+            <groupId>nlp</groupId>  
+            <artifactId>joda-time</artifactId>  
+            <version>0.23</version>  
+        </dependency>
+        <dependency>  
+            <groupId>nlp</groupId>  
+            <artifactId>jollyday</artifactId>  
+            <version>0.23</version>  
+        </dependency>
+        <dependency>  
+            <groupId>nlp</groupId>  
+            <artifactId>protobuf</artifactId>  
+            <version>0.23</version>  
+        </dependency>
+        <dependency>  
+            <groupId>nlp</groupId>  
+            <artifactId>xom</artifactId>  
+            <version>0.23</version>  
+        </dependency>
+        <dependency>  
+            <groupId>nlp</groupId>  
+            <artifactId>stanford-chinese-corenlp-models</artifactId>  
+            <version>3.6.0</version>  
+        </dependency>
+        <dependency>  
+            <groupId>nlp</groupId>  
+            <artifactId>stanford-corenlp</artifactId>  
+            <version>3.7.0</version>  
+        </dependency>
+        <dependency>  
+            <groupId>nlp</groupId>  
+            <artifactId>models</artifactId>  
+            <version>3.7.0</version>  
+        </dependency>
 	</dependencies>
 	<build>
 
