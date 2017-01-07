@@ -1,7 +1,9 @@
 package com.ineuron.domain.nlp.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -9,10 +11,7 @@ import com.ineuron.domain.nlp.valueobject.ProductSelection;
 
 import edu.stanford.nlp.coref.CorefCoreAnnotations;
 import edu.stanford.nlp.coref.data.CorefChain;
-import edu.stanford.nlp.ie.AbstractSequenceClassifier;
-import edu.stanford.nlp.ie.crf.CRFClassifier;
 import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
@@ -28,15 +27,16 @@ public class NLPService {
 	private static final String COLOR = "COLOR";
 	private static final String QUALITY = "QUALITY";
 	private static final String TYPE_BY_FORM = "TYPE_BY_FORM";
+	private static final String TYPE_BY_SCOPE = "TYPE_BY_SCOPE";
 	private static final String TYPE_BY_FUNCTION = "TYPE_BY_FUNCTION";
-	private static final String TYPE_BY_PURPOSE = "TYPE_BY_PURPOSE";
 	
-	private static final String TYPE_BY_EFFECT_OF_SURFACE = "TYPE_BY_EFFECT_OF_SURFACE";
-	private static final String TYPE_BY_FUNCTION_FORM = "TYPE_BY_FUNCTION_FORM";
-	private static final String TYPE_BY_PLACE = "TYPE_BY_PLACE";
+	private static Set<String> PAINT_NAMES;
+
 
 	private NLPService() {
 		corenlp = new StanfordCoreNLP("com/ineuron/domain/nlp/nlp-chinese.properties");
+		String[] paintNames = {"PAINT_BY_EFFECT_OF_SURFACE","PAINT_BY_FORM","PAINT_BY_FUNCTION_FORM","PAINT_BY_FUNCTION","PAINT_BY_PLACE"};
+		PAINT_NAMES = new HashSet<String>(Arrays.asList(paintNames));
 	}
 
 	public static NLPService getInstance() {
@@ -56,62 +56,62 @@ public class NLPService {
 		corenlp.annotate(document);
 		SemanticGraph dependencies = parserOutput(document);
 		IndexedWord root = dependencies.getFirstRoot();
-		
-		
-		List<String> otherAttrs = new ArrayList<String>();
-		Set<IndexedWord> children = dependencies.descendants(root);
-		for(IndexedWord child : children){
-			
-		
-				switch (child.ner()){
-					case COLOR:
-						result.setColor(child.lemma());
-						break;
-					case TYPE_BY_FORM:
-						result.setForm(child.lemma());
-						break;
-					case QUALITY:
-						result.setQuality(child.lemma());
-						break;
-					case TYPE_BY_FUNCTION:
-						result.setFunction(child.lemma());
-						break;
-					case TYPE_BY_PURPOSE:
-						result.setPurpose(child.lemma());
-						break;
-					default:
-						otherAttrs.add(child.lemma());
-						break;
-						
-				}
 
-			
+        List<String> otherAttrs = new ArrayList<String>();
+        Set<IndexedWord> children = dependencies.descendants(root);
+        String productName = null;
+        
+        for (IndexedWord child : children)
+        {
+        	if(COLOR.equals(child.ner())){
+        		result.setColor(child.lemma());
+        		continue;
+        	}else if(TYPE_BY_FORM.equals(child.ner())){
+        		result.setForm(child.lemma());
+        		continue;
+        	}else if(QUALITY.equals(child.ner())){
+        		result.setQuality(child.lemma());
+        		continue;
+        	}else if(TYPE_BY_SCOPE.equals(child.ner())){
+        		result.setScope(child.lemma());
+        		continue;
+        	}else if(TYPE_BY_FUNCTION.equals(child.ner())){
+        		result.setFunction(child.lemma());
+        		continue;
+        	}else if(PAINT_NAMES.contains(child.ner())){
+                productName = child.lemma();
+                continue;
+            }else if(!"VV".equals(child.tag()) && !"DEC".equals(child.tag())){
+            	otherAttrs.add(child.lemma());
+            }
+        	
 		}
-		
-		result.setOtherAttributes(otherAttrs);
-		IndexedWord productName = getProductName(dependencies, root);
-		if(productName != null){
-			result.setProductName(productName.lemma());
+       
+		if(productName == null){
+		    IndexedWord product = getProductName(dependencies, root);
+		    if(product != null){
+		        productName = product.lemma();
+		    }
 		}
-		
+        result.setProductName(productName);
+        result.setOtherAttributes(otherAttrs);
 		
 		System.out.println(dependencies.toString());
 		System.out.println(result.toString());
 		System.out.println("----------------------------------------------");
-		return null;
+		return result;
 
 	}
 
 
 	private IndexedWord getProductName(SemanticGraph dependencies, IndexedWord root) {
-		System.out.println("getProductName。root.tag() = " + root.tag());
 		if(root.lemma().lastIndexOf("漆") != -1){
 			return root;
 		}
 		Set<IndexedWord> children = dependencies.getChildren(root);
 		for(IndexedWord child : children){
-			System.out.println("child = " + child);
-			System.out.println("child.ner() = " + child.ner());
+			//System.out.println("child = " + child);
+			//System.out.println("child.ner() = " + child.ner());
 			if(child.lemma().lastIndexOf("漆") != -1){
 				return child;
 			}
@@ -140,3 +140,4 @@ public class NLPService {
 	}
 
 }
+

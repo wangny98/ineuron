@@ -38,7 +38,7 @@ public class ProductResource {
 	
 	@Inject
 	private SecurityService securityService;
-		
+			
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductResource.class);
 
 	public ProductResource() {

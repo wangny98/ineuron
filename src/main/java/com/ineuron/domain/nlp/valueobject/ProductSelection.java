@@ -12,7 +12,7 @@ public class ProductSelection {
 	//功能
 	private String function;
 	//用途
-	private String purpose;	
+	private String scope;	
 	//品质
 	private String quality;
 	//其他属性
@@ -30,8 +30,8 @@ public class ProductSelection {
 			.append("form = ")
 			.append(form)
 			.append("\n")
-			.append("purpose = ")
-			.append(purpose)
+			.append("scope = ")
+			.append(scope)
 			.append("\n")
 			.append("function = ")
 			.append(function)
@@ -69,11 +69,11 @@ public class ProductSelection {
 	public void setForm(String form) {
 		this.form = form;
 	}
-	public String getPurpose() {
-		return purpose;
+	public String getScope() {
+		return scope;
 	}
-	public void setPurpose(String purpose) {
-		this.purpose = purpose;
+	public void setScope(String scope) {
+		this.scope = scope;
 	}
 	
 	public String getFunction() {
