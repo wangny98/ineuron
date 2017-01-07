@@ -1,0 +1,2 @@
+水性	TYPE_BY_FORM
+油性	TYPE_BY_FORM
