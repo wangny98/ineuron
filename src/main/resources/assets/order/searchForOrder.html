@@ -2,16 +2,12 @@
 <head></head>
 <div ng-controller="SearchForOrderController as SearchForOrder">
 	<div class="message">下订单</div>
-	<div class="right-align">
-		<button class="custombutton" ng-click="SearchForOrder.backward()">
-			<span class="glyphicon glyphicon-new"></span> 返回
-		</button>
-	</div>
 	<div>
+	   <form ng-submit="SearchForOrder.searchProducts()">
 		<table id="table-style" style="float:left;">
 			<tbody>
 				<tr>
-					<th class="labelformat">查询产品</th>
+					<th style="min-width: 100px;">查询产品</th>
 					<td><input class="input-block-level" type="text"
 						ng-model="productSearchText" required ng-required="true"
 						ng-minlength="1" style="min-width: 500px;" /></td>
@@ -23,11 +19,17 @@
 							class="btn btn-large btn-primary"
 							ng-click="SearchForOrder.searchProducts()">
 							<span class="glyphicon glyphicon-upload"></span> 提交
-						</button></td>
+						</button>
+						<button id="submitbutton" class="btn btn-large btn-primary"
+								ng-click="SearchForOrder.backward()">
+								<span class="glyphicon glyphicon-arrow-left"></span> 返	回
+							</button>
+					</td>
 					<td></td>
 				</tr>
 			</tbody>
 		</table>
+		</form>
 	</div>
 
 	<div ng-show="searchSubmitted">
@@ -39,24 +41,26 @@
 					</td>
 				</tr>
 				<tr>
+					<th style="max-width: 50px">序号</th>
 					<th>产品名称</th>
+					<th>产品编号</th>					
 					<th>产品类名称</th>
-					<th>产品编号</th>
 					<th>产品描述</th>
 					<th style="width: 100px">下订单</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>{{productName}}</td>
-					<td>{{productCategoryName}}</td>
-					<td>{{productCode}}</td>
-					<td>{{productDescription}}</td>
-					<td>
+				<tr ng-repeat="product in SearchForOrder.products">
+					<td style="max-width:50px;text-align: center;">{{ $index+1}}</td>
+					<td style="width:20%;">{{product.name}}</td>
+					<td style="width:20%;">{{product.code}}</td>
+					<td style="width:20%;">{{product.productCategory.name}}</td>
+					<td style="width:25%;">{{product.description}}</td>
+					<td style="width:10%;">
 						<button type="button"
 							ng-click="SearchForOrder.createOrder($index)"
-							class="btn btn-warning">
-							<i class="fa fa-cart-plus"></i>
+							class="btn btn-success">
+							<i class="fa fa-shopping-cart"></i>
 						</button>
 					</td>
 				</tr>

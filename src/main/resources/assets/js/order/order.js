@@ -5,25 +5,18 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 	$scope.searchSubmitted=false;	
 	$scope.notFoundProducts=false;	
 
-vm.searchProducts=searchProducts;
-function searchProducts(){
+	vm.searchProducts=searchProducts;
+	function searchProducts(){
 	$scope.searchSubmitted=true;
 	$http({
-		url : '/product/getproductbyname',
-		method : 'POST',
-		data :  $scope.productSearchText
+		url : '/product/productsbynlpwords?words=' + $scope.productSearchText,
+		method : 'GET'
 	}).success(function(data) {
 		validateApiToken(data, $cookies, $rootScope, $modal);
-		vm.product = data.value;
-		if(vm.product==null){
+		vm.products = data.value;
+		if(vm.products==null){
 			$scope.notFoundProducts=true;
 		}	
-		else {
-			$scope.productName=vm.product.name;
-			$scope.productCategoryName=vm.product.productCategory.name;
-			$scope.productCode=vm.product.code;
-			$scope.productDescription=vm.product.description;
-		}
 	}).error(function(data) {
 		ineuronApp.confirm("提示","查询产品失败！", 'sm', $rootScope, $modal);
 		console.log("error to get productbyname ");

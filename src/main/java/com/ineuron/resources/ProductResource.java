@@ -737,4 +737,28 @@ public INeuronResponse deleteMaterial(final Material material, @Context HttpHead
 }
 
 
+/*
+ * NLP based Search for Products 
+ */
+@Path("/productsbynlpwords")
+@GET
+@Timed
+public INeuronResponse productsByNLPWords(@QueryParam("words") String words, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
+	INeuronResponse response = null;
+	try {
+		response = new INeuronResponse(securityService, httpHeader, debug);
+		List<Product> products = productService.getProductsByNLPWords(words);
+		response.setValue(products);
+		response.setSuccess(true);
+	} catch (RepositoryException e) {
+		LOGGER.error(e.getMessage(), e);
+		response.setMessage(e.getMessage());
+	} catch (InvalidAPITokenException e) {
+		LOGGER.error(e.getMessage(), e);
+		response = new INeuronResponse();
+		response.setMessage(e.getMessage());
+	}
+	return response;
+}
+
 }

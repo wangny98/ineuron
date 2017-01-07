@@ -200,13 +200,17 @@ public class ProductService {
 		product.setFormulaId(formula.getId());
 		List<FormulaMaterial> materialSettings = new ArrayList<FormulaMaterial>();
 		float totalQuantity = 0;
+		Integer materialId;
 		for(ManufacturingProcess process : processes){
-			FormulaMaterial formulaMaterial = new FormulaMaterial();
-			formulaMaterial.setFormulaId(formula.getId());
-			formulaMaterial.setMaterialId(process.getMaterialId());
-			formulaMaterial.setMaterialQuantity(process.getMaterialQuantity());
-			materialSettings.add(formulaMaterial);
-			totalQuantity += process.getMaterialQuantity();
+			materialId=process.getMaterialId();
+			if(materialId!=0&&materialId!=null){
+				FormulaMaterial formulaMaterial = new FormulaMaterial();
+				formulaMaterial.setFormulaId(formula.getId());
+				formulaMaterial.setMaterialId(process.getMaterialId());
+				formulaMaterial.setMaterialQuantity(process.getMaterialQuantity());
+				materialSettings.add(formulaMaterial);
+				totalQuantity += process.getMaterialQuantity();
+			}
 		}
 		for(FormulaMaterial formulaMaterial : materialSettings){
 			formulaMaterial.setMaterialPercent((float)(Math.round(formulaMaterial.getMaterialQuantity()*100/totalQuantity*100)/100));
@@ -259,5 +263,62 @@ public class ProductService {
 		Material material = repository.selectOne("getMaterialByName", name);
 		return material;
 	}
+	
 
+	/*
+	 * NLP based Search for Products 
+	 */
+	
+	public List<Product> getProductsByNLPWords(String words) throws RepositoryException{
+		String[] strArray=words.split(";");
+		String attributeStr=strArray[0];
+		String[] attributeWords=attributeStr.split("-");
+		//String productCategoryStr=strArray[1];
+		//String productStr=strArray[2];
+		
+		List<Product> productsResult=new ArrayList<Product>();		
+		List<Product> allProducts = repository.select("getProducts", null);
+		
+		//get all the products which code includes the matched attribute's code
+		for(int i=0;i<attributeWords.length;i++){
+			List<Attribute> attributeList = repository.select("getAttributesByNLPWord", "%"+attributeWords[i]+"%");
+			for(int j = 0;j<attributeList.size();j++){
+				for(int k = 0;k<allProducts.size();k++){
+					//product's code include attribute's code
+					if(allProducts.get(k).getCode().indexOf(attributeList.get(j).getCode())>-1){
+						{
+							Product p=allProducts.get(k);
+							if(productsResult.indexOf(p)==-1) productsResult.add(p);
+						}
+					}
+				}
+			}
+		}
+		
+		//get all the products which productcategory equals to the matched productcategory
+		/*List<ProductCategory> productCategoryList = repository.select("getProductCategoriesByNLPWord", productCategoryStr);
+		for(int j = 0;j<productCategoryList.size();j++){
+			for(int k = 0;k<allProducts.size();k++){
+				//product's pc id equals to matched pc id
+				if(allProducts.get(k).getProductCategoryId()==productCategoryList.get(j).getId()){
+					Product p=allProducts.get(k);
+					if(productsResult.indexOf(p)==-1) productsResult.add(p);
+				}
+			}
+		}*/
+		
+		/*List<Product> productList = repository.select("getProductsByNLPWord", productStr);
+		for(int k = 0;k<productList.size();k++){
+				Product p=allProducts.get(k);
+				if(productsResult.indexOf(p)==-1) productsResult.add(p);
+			}*/
+		
+		for(int i = 0; i < productsResult.size(); i++)  
+        {  
+			productsResult.get(i).initForProductCategory(repository);
+        }
+		return productsResult;
+	}
+	
+	
 }
