@@ -162,7 +162,13 @@ ineuronApp.config(function($stateProvider) {
 	var searchForOrderState = {
 			name : 'searchForOrder',
 			url : 'searchForOrder/',
-			templateUrl : '/ineuron/order/SearchForOrder.html'
+			templateUrl : '/ineuron/order/searchForOrder.html'
+		}
+	
+	var createAndUpdateOrderState = {
+			name : 'createAndUpdateOrder',
+			url : 'createAndUpdateOrder/',
+			templateUrl : '/ineuron/order/createAndUpdateOrder.html'
 		}
 
 	$stateProvider.state(userManagementState);
@@ -193,6 +199,7 @@ ineuronApp.config(function($stateProvider) {
 	$stateProvider.state(updateMaterialState);
 	
 	$stateProvider.state(searchForOrderState);
+	$stateProvider.state(createAndUpdateOrderState);
 	
 	$stateProvider.state(aboutState);
 

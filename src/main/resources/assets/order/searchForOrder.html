@@ -3,6 +3,7 @@
 <div ng-controller="SearchForOrderController as SearchForOrder">
 	<div class="message">下订单</div>
 	<div>
+	   <form ng-submit="SearchForOrder.searchProducts()">
 		<table id="table-style" style="float:left;">
 			<tbody>
 				<tr>
@@ -28,6 +29,7 @@
 				</tr>
 			</tbody>
 		</table>
+		</form>
 	</div>
 
 	<div ng-show="searchSubmitted">
