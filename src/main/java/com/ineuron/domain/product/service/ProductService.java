@@ -20,6 +20,8 @@ import com.ineuron.domain.product.repository.ProductRepository;
 import com.ineuron.domain.product.valueobject.ManufacturingProcess;
 import com.ineuron.domain.product.valueobject.Material;
 import com.ineuron.domain.product.valueobject.Operation;
+import com.ineuron.domain.nlp.service.NLPService;
+import com.ineuron.domain.nlp.valueobject.ProductSelection;
 
 public class ProductService {
 
@@ -270,9 +272,9 @@ public class ProductService {
 	 */
 	
 	public List<Product> getProductsByNLPWords(String words) throws RepositoryException{
-		String[] strArray=words.split(";");
-		String attributeStr=strArray[0];
-		String[] attributeWords=attributeStr.split("-");
+		ProductSelection parsedResult=NLPService.getInstance().parseText(words);
+		
+		String attributeWord=parsedResult.getPurpose();
 		//String productCategoryStr=strArray[1];
 		//String productStr=strArray[2];
 		
@@ -280,7 +282,7 @@ public class ProductService {
 		List<Product> allProducts = repository.select("getProducts", null);
 		
 		//get all the products which code includes the matched attribute's code
-		for(int i=0;i<attributeWords.length;i++){
+		/*for(int i=0;i<attributeWords.length;i++){
 			List<Attribute> attributeList = repository.select("getAttributesByNLPWord", "%"+attributeWords[i]+"%");
 			for(int j = 0;j<attributeList.size();j++){
 				for(int k = 0;k<allProducts.size();k++){
@@ -294,6 +296,20 @@ public class ProductService {
 				}
 			}
 		}
+		*/
+		
+		List<Attribute> attributeList = repository.select("getAttributesByNLPWord", "%"+attributeWord+"%");
+			for(int j = 0;j<attributeList.size();j++){
+				for(int k = 0;k<allProducts.size();k++){
+					//product's code include attribute's code
+					if(allProducts.get(k).getCode().indexOf(attributeList.get(j).getCode())>-1){
+						{
+							Product p=allProducts.get(k);
+							if(productsResult.indexOf(p)==-1) productsResult.add(p);
+						}
+					}
+				}
+			}
 		
 		//get all the products which productcategory equals to the matched productcategory
 		/*List<ProductCategory> productCategoryList = repository.select("getProductCategoriesByNLPWord", productCategoryStr);
