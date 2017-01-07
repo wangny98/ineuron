@@ -217,4 +217,20 @@
                         #{item}  
          </foreach>  
 	</select>
+	
+	<!-- For NLP Search -->
+
+	<select id="getAttributesByNLPWord" resultType="com.ineuron.domain.product.valueobject.Attribute">
+		select * from Attributes where name + description like #{word}
+	</select>
+	
+	<select id="getProductsByNLPWord" resultType="com.ineuron.domain.product.entity.Product">
+		select * from Products where name + description like #{word}
+	</select>
+
+	<select id="getProductCategoriesByNLPWord" resultType="com.ineuron.domain.product.valueobject.ProductCategory">
+		select * from ProductCategories where name + description +
+		characters + techParameters + scope like #{word}
+	</select>
+	
 </mapper>

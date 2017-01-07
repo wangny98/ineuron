@@ -61,6 +61,12 @@ public class Product {
 		
 	}
 	
+	public void initForProductCategory(INeuronRepository repository) throws RepositoryException{
+	
+		productCategory=repository.selectOne("getProductCategoryById", productCategoryId.toString());
+		
+	}
+	
 	public Integer getId() {
 		return id;
 	}
