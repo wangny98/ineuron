@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import com.ineuron.common.exception.RepositoryException;
+import com.ineuron.domain.nlp.service.NLPService;
 import com.ineuron.domain.user.valueobject.RolesCache;
 
 import io.dropwizard.Application;
@@ -49,6 +50,7 @@ public class INeuronApplication extends Application<INeuronConfiguration> {
 	public void run(INeuronConfiguration configuration, Environment environment) {
 		try {
 			RolesCache.init();
+			NLPService.getInstance();
 			LOGGER.info("RolesCache is initiallized...");
 		} catch (RepositoryException e) {
 			LOGGER.error("Failed to initiallize the RolesCache", e);
