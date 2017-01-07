@@ -62,7 +62,7 @@ public class NLPService {
 		Set<IndexedWord> children = dependencies.descendants(root);
 		for(IndexedWord child : children){
 			
-			if("NN".equals(child.tag())){
+		
 				switch (child.ner()){
 					case COLOR:
 						result.setColor(child.lemma());
@@ -84,7 +84,7 @@ public class NLPService {
 						break;
 						
 				}
-			}
+
 			
 		}
 		
@@ -94,14 +94,7 @@ public class NLPService {
 			result.setProductName(productName.lemma());
 		}
 		
-		/*Iterator<SemanticGraphEdge> i = dependencies.edgeIterable().iterator();
-		while(i.hasNext()){
-			SemanticGraphEdge h = i.next();
-			
-			System.out.println(h);
-			System.out.println(h.getSource());
-			System.out.println(h.getTarget());
-		}*/
+		
 		System.out.println(dependencies.toString());
 		System.out.println(result.toString());
 		System.out.println("----------------------------------------------");
@@ -111,14 +104,15 @@ public class NLPService {
 
 
 	private IndexedWord getProductName(SemanticGraph dependencies, IndexedWord root) {
-		if(root.tag().lastIndexOf("漆") != -1){
+		System.out.println("getProductName。root.tag() = " + root.tag());
+		if(root.lemma().lastIndexOf("漆") != -1){
 			return root;
 		}
 		Set<IndexedWord> children = dependencies.getChildren(root);
 		for(IndexedWord child : children){
 			System.out.println("child = " + child);
 			System.out.println("child.ner() = " + child.ner());
-			if(child.tag().lastIndexOf("漆") != -1){
+			if(child.lemma().lastIndexOf("漆") != -1){
 				return child;
 			}
 		}
