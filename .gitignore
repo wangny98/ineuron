@@ -1,0 +1,5 @@
+/target/
+/dependency-reduced-pom.xml
+/logs/
+/lib/
+/tallinstall-file -Dfile=clibejml-0.23.jar -DgroupId=nlp -DartifactId=ejml -Dversion=0.23 -Dpackaging=jar
