@@ -3,6 +3,8 @@ package com.ineuron;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.domain.nlp.service.NLPService;
@@ -19,6 +21,7 @@ import io.dropwizard.setup.Environment;
  */
 public class INeuronApplication extends Application<INeuronConfiguration> {
 
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(INeuronApplication.class);
 	
 	public static void main(String[] args) throws Exception {
@@ -43,14 +46,18 @@ public class INeuronApplication extends Application<INeuronConfiguration> {
 				.build();
 
 		bootstrap.addBundle(guiceBundle);
-		
 	}
 
 	@Override
 	public void run(INeuronConfiguration configuration, Environment environment) {
 		try {
 			RolesCache.init();
-			NLPService.getInstance();
+			String nlpEnabled = configuration.getNlpEnabled();
+			System.out.println("nlpEnabled=" + nlpEnabled);
+			if("yes".equalsIgnoreCase(nlpEnabled)
+					|| "true".equalsIgnoreCase(nlpEnabled)){
+				NLPService.getInstance();
+			}
 			LOGGER.info("RolesCache is initiallized...");
 		} catch (RepositoryException e) {
 			LOGGER.error("Failed to initiallize the RolesCache", e);

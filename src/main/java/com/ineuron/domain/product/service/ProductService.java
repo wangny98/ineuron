@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.domain.product.entity.Formula;
@@ -30,6 +31,10 @@ public class ProductService {
 	
 	@Inject
 	ProductRepository productRepository;
+	
+	@Inject
+	@Named("nlpEnabled")
+	String nlpEnabled;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 	
@@ -272,9 +277,15 @@ public class ProductService {
 	 */
 	
 	public List<Product> getProductsByNLPWords(String words) throws RepositoryException{
-		ProductSelection parsedResult=NLPService.getInstance().parseText(words);
 		
-		String attributeWord=parsedResult.getPurpose();
+		ProductSelection parsedResult = new ProductSelection();
+		System.out.println("nlpEnabled in Service=" + nlpEnabled);
+		if("yes".equalsIgnoreCase(nlpEnabled)
+				|| "true".equalsIgnoreCase(nlpEnabled)){
+			parsedResult=NLPService.getInstance().parseText(words);
+		}
+		
+		String attributeWord=parsedResult.getScope();
 		//String productCategoryStr=strArray[1];
 		//String productStr=strArray[2];
 		

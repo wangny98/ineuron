@@ -9,6 +9,10 @@ public class INeuronConfiguration extends Configuration {
     @NotEmpty
     @JsonProperty
     private String environment;
+    
+    @NotEmpty
+    @JsonProperty
+    private String nlpEnabled;
 
 
     @JsonProperty
@@ -20,4 +24,16 @@ public class INeuronConfiguration extends Configuration {
     public void setEnvironment(String environment) {
         this.environment = environment;
     }
+
+    @JsonProperty
+	public String getNlpEnabled() {
+		return nlpEnabled;
+	}
+
+    @JsonProperty
+	public void setNlpEnabled(String nlpEnabled) {
+		this.nlpEnabled = nlpEnabled;
+	}
+    
+    
 }
