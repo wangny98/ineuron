@@ -70,14 +70,10 @@ ineuronApp.controller('ProductCreateController', ['$scope', '$stateParams', '$ht
 				description : $scope.productDescription
 			}
 		}).success(function(data) {
-			if (data.success == true) {
-				validateApiToken(data, $cookies, $rootScope, $modal);
-				ineuronApp.confirm("提示","产品添加成功！", 'sm', $rootScope, $modal);		
-				$state.go("productList", {productCategoryStr: JSON.stringify($scope.selectedProductCategory[0])});
-			}else{
-				ineuronApp.confirm("提示","产品添加失败！", 'sm', $rootScope, $modal);	
-			}
-			
+			validateApiToken(data, $cookies, $rootScope, $modal);
+			ineuronApp.confirm("提示","产品添加成功！", 'sm', $rootScope, $modal);		
+			$state.go("productList", {productCategoryStr: JSON.stringify($scope.selectedProductCategory[0])});
+		
 		}).error(function(data) {
 			ineuronApp.confirm("提示","产品添加失败！", 'sm', $rootScope, $modal);
 			console.log("error");

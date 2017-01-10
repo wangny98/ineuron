@@ -144,13 +144,8 @@ ineuronApp.controller('UpdateFormulaController', [
 				data : formula
 			}).success(function(data) {
 				validateApiToken(data, $cookies, $rootScope, $modal);
-				if(data.success == true){
-					ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
-					$state.go("formulaList");
-				}
-				else{
-					ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
-				}
+				ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
+				$state.go("formulaList");
 			}).error(function(data) {
 				ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
 				console.log("error");
@@ -256,14 +251,8 @@ ineuronApp.controller('CreateFormulaController', [
 				data : $scope.formula
 			}).success(function(data) {
 				validateApiToken(data, $cookies, $rootScope, $modal);
-				if(data.success == true){
-					ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
-					$state.go("formulaList");
-				}
-				else{
-					ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
-				}
-				
+				ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
+				$state.go("formulaList");
 			}).error(function(data) {
 				ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
 				console.log("error");

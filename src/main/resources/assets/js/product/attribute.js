@@ -13,7 +13,8 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 		vm.attributes = data.value;
 		// alert(vm.attributes[0].name+"
 		// "+vm.attributes[0].attributeCategory.name);
-	}).error(function(data) {
+	}).error(function(data, status) {
+		handleSessionOutOfDateError(status, $rootScope, $modal);
 		ineuronApp.confirm("提示","获取属性列表失败！", 'sm', $rootScope, $modal);
 		console.log("error");
 	});
@@ -48,7 +49,8 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
 					validateApiToken(data, $cookies, $rootScope, $modal);
 					$state.go("attributeList", null, {reload:true});
-				}).error(function(data) {
+				}).error(function(data,status) {
+					handleSessionOutOfDateError(status, $rootScope, $modal);
 					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
 					console.log("error");
 				})
@@ -89,7 +91,8 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 		}
 		}
 		validateApiToken(data, $cookies, $rootScope, $modal);
-	}).error(function(data) {
+	}).error(function(data, status) {
+		handleSessionOutOfDateError(status, $rootScope, $modal);
 		ineuronApp.confirm("提示","调用属性类型列表失败！", 'sm', $rootScope, $modal);
 		console.log("error to get attribute category list ");
 	});				
@@ -115,7 +118,8 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 					else $scope.existedAttributeName=true;
 			}
 			}
-		}).error(function(data) {
+		}).error(function(data, status) {
+			handleSessionOutOfDateError(status, $rootScope, $modal);
 			ineuronApp.confirm("提示","依据名称调用属性失败！", 'sm', $rootScope, $modal);
 			console.log("error to get attribute ");
 		});				
@@ -139,7 +143,8 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 				validateApiToken(data, $cookies, $rootScope, $modal);
 				ineuronApp.confirm("提示","属性添加成功！", 'sm', $rootScope, $modal);		
 				$state.go("attributeList");
-			}).error(function(data) {
+			}).error(function(data,status) {
+				handleSessionOutOfDateError(status, $rootScope, $modal);
 				ineuronApp.confirm("提示","添加属性失败！", 'sm', $rootScope, $modal);
 				console.log("error");
 		  		})
@@ -159,7 +164,8 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 			validateApiToken(data, $cookies, $rootScope, $modal);
 			ineuronApp.confirm("提示","属性修改成功！", 'sm', $rootScope, $modal);		
 			$state.go("attributeList");
-		}).error(function(data) {
+		}).error(function(data, status) {
+			handleSessionOutOfDateError(status, $rootScope, $modal);
 			ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
 			console.log("error");
 		})
