@@ -19,7 +19,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,24 +47,27 @@ public class UserResource {
 	@Path("/validateloginstatus")
 	@GET
 	@Timed
-	public INeuronResponse validateLoginStatus(@Context HttpHeaders httpHeader) {
-		INeuronResponse response = null;
+	public Response validateLoginStatus(@Context HttpHeaders httpHeader) {	
 		try {
-			response = new INeuronResponse(securityService, httpHeader, false); 
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false); 
 			if(response.getApiToken() != null){
-				response.setSuccess(true);
+				LOGGER.info("user/validateloginstatus newApiToken=" + response.getApiToken());
+				return Response.ok(response).build();
+			}else{
+				return Response.status(Status.UNAUTHORIZED).build();			
 			}
-			LOGGER.info("user/validateloginstatus newApiToken=" + response.getApiToken());
+			
 		} catch (Exception e) {
-			response = new INeuronResponse();
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
-		return response;
+
 	}
 
 	@Path("/authenticate")
 	@POST
 	@Timed
-	public INeuronResponse login(final User user, @Context final UriInfo uriInfo) {
+	public Response login(final User user, @Context final UriInfo uriInfo) {
 		System.out.println("LOGGER.isDebugEnabled() = " + LOGGER.isDebugEnabled());
 		INeuronResponse response = new INeuronResponse();
 		try {
@@ -70,229 +75,212 @@ public class UserResource {
 			if(foundUser!=null){
 				String apiToken = securityService.createApiToken(user.getUsername());
 				LOGGER.info("user/authenticate newApiToken=" + apiToken);
-				response.setSuccess(true);
 				response.setValue(foundUser);
 				response.setApiToken(apiToken);
+				return Response.ok(response).build();
+			}else{
+				return Response.status(Status.UNAUTHORIZED).build();
 			}
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
-		return response;
 
 	}
 
 	@Path("/register")
 	@POST
 	@Timed
-	public INeuronResponse signup(final User user, @Context final UriInfo uriInfo) {
-		INeuronResponse response = new INeuronResponse();
+	public Response signup(final User user, @Context final UriInfo uriInfo) {
 		try {
 			userService.doRegister(user);
-			response.setSuccess(true);
-			response.setValue(null);
+			return Response.ok().build();
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
-		return response;
 
 	}
 
 	@Path("/update")
 	@POST
 	@Timed
-	public INeuronResponse update(final User user, @Context final UriInfo uriInfo, @Context HttpHeaders httpHeader) {
-		INeuronResponse response = null;
+	public Response update(final User user, @Context final UriInfo uriInfo, @Context HttpHeaders httpHeader) {
+		
 		try {
-			response = new INeuronResponse(securityService, httpHeader, false); 
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false); 
 			LOGGER.info("user/update newApiToken=" + response.getApiToken());
 			userService.updateUser(user);			
-			response.setSuccess(true);
 			response.setValue(user);
+			return Response.ok(response).build();
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
 			LOGGER.error(e.getMessage(), e);
-			response = new INeuronResponse();
-			response.setMessage(e.getMessage());
+			return Response.status(Status.UNAUTHORIZED).build();
 		} 
-		return response;
+
 	}
 	
 	@Path("/delete")
 	@POST
 	@Timed
-	public INeuronResponse delete(final User user, @Context final UriInfo uriInfo, @Context HttpHeaders httpHeader) {
-		INeuronResponse response = null;
-			
+	public Response delete(final User user, @Context final UriInfo uriInfo, @Context HttpHeaders httpHeader) {
+		
 		try {
-			response = new INeuronResponse(securityService, httpHeader, false); 
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false); 
 			LOGGER.info("user/delete newApiToken=" + response.getApiToken());
-				userService.deleteUser(user);			
-				response.setSuccess(true);
+			userService.deleteUser(user);			
+			return Response.ok(response).build();
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
 			LOGGER.error(e.getMessage(), e);
-			response = new INeuronResponse();
-			response.setMessage(e.getMessage());
+			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		return response;
+
 	}
 
 
 	@Path("/list")
 	@GET
 	@Timed
-	public INeuronResponse getUserList(@Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
-		INeuronResponse response = null;
+	public Response getUserList(@Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
 		try {
-			response = new INeuronResponse(securityService, httpHeader, debug); 
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug); 
 			LOGGER.info("user/list newApiToken=" + response.getApiToken());
 			List<User> users = userService.getUserList();
 			response.setValue(users);
-			response.setSuccess(true);
+			return Response.ok(response).build();
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
 			LOGGER.error(e.getMessage(), e);
-			response = new INeuronResponse();
-			response.setMessage(e.getMessage());
+			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		return response;
 	}
 	
 
 	@Path("/user")
 	@GET
 	@Timed
-	public INeuronResponse getUserByUsername(@QueryParam("username") String username) {
-		INeuronResponse response = null;
+	public Response getUserByUsername(@QueryParam("username") String username) {
+		
 		LOGGER.info("in userResource: getUserByUsername. username:" + username);
 		try {
-			response = new INeuronResponse(); 
+			INeuronResponse response = new INeuronResponse(); 
 			User user=userService.getUserByUsername(username);			
 			response.setValue(user);
-			response.setSuccess(true);
+			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			response.setMessage(e.getMessage());
 			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
-			response.setMessage(e.getMessage());
 			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} 
-		return response;
 	}
 
 	
 	@Path("/createrole")
 	@POST
 	@Timed
-	public INeuronResponse createRole(final Role role, @Context final UriInfo uriInfo, @Context HttpHeaders httpHeader) {
-		INeuronResponse response = null;
+	public Response createRole(final Role role, @Context final UriInfo uriInfo, @Context HttpHeaders httpHeader) {
 		try {
-			response = new INeuronResponse(securityService, httpHeader, false); 
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false); 
 			LOGGER.info("user/createrole newApiToken=" + response.getApiToken());
 			userService.createRole(role);
 			response.setValue(role);
-			response.setSuccess(true);
+			return Response.ok(response).build();
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			response = new INeuronResponse();
-			response.setMessage(e.getMessage());
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		return response;
 
 	}
 	
 	@Path("/updaterole")
 	@POST
 	@Timed
-	public INeuronResponse updateRole(final Role role, @Context final UriInfo uriInfo,  @Context HttpHeaders httpHeader) {
-		INeuronResponse response = null;
+	public Response updateRole(final Role role, @Context final UriInfo uriInfo,  @Context HttpHeaders httpHeader) {
+		
 		try {
-			response = new INeuronResponse(securityService, httpHeader, false); 
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false); 
 			LOGGER.info("user/updaterole newApiToken=" + response.getApiToken());
 			userService.updateRole(role);			
 			response.setValue(role);
-			response.setSuccess(true);
+			return Response.ok(response).build();
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
 			LOGGER.error(e.getMessage(), e);
-			response = new INeuronResponse();
-			response.setMessage(e.getMessage());
+			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		return response;
 
 	}
 	
 	@Path("/deleterole")
 	@POST
 	@Timed
-	public INeuronResponse deleteRole(final Role role, @Context final UriInfo uriInfo, @Context HttpHeaders httpHeader) {
-		INeuronResponse response = null;
+	public Response deleteRole(final Role role, @Context final UriInfo uriInfo, @Context HttpHeaders httpHeader) {
+		
 		try {
-			response = new INeuronResponse(securityService, httpHeader, false); 
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false); 
 			userService.deleteRole(role);			
-			response.setSuccess(true);
 			response.setValue(role);
+			return Response.ok(response).build();
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
 			LOGGER.error(e.getMessage(), e);
-			response = new INeuronResponse();
-			response.setMessage(e.getMessage());
+			return Response.status(Status.UNAUTHORIZED).build();
 		} 
-		return response;
 
 	}
 	
 	@Path("/rolelist")
 	@GET
 	@Timed
-	public INeuronResponse getRoleList(@Context HttpHeaders httpHeader) {
-		INeuronResponse response = null;
+	public Response getRoleList(@Context HttpHeaders httpHeader) {
+		
 		try {
-			response = new INeuronResponse(securityService, httpHeader, false); 
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false); 
 			List<Role> roles = userService.getRoleList();
 			response.setValue(roles);
-			response.setSuccess(true);		
+			return Response.ok(response).build();	
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
 			LOGGER.error(e.getMessage(), e);
-			response.setMessage(e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
 			LOGGER.error(e.getMessage(), e);
-			response = new INeuronResponse();
-			response.setMessage(e.getMessage());
+			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		return response;
 
 	}
 

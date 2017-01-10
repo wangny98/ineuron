@@ -194,13 +194,9 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					data : $scope.model.rows
 				}).success(function(data) {
 					validateApiToken(data, $cookies, $rootScope, $modal);
-					if(data.success == true){
-						ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
-						//$state.go("productList");
-					}
-					else{
-						ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
-					}
+					ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
+					//$state.go("productList");
+					
 				}).error(function(data) {
 					ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
 					console.log("error");

@@ -5,8 +5,17 @@ function validateApiToken(data, cookies, $rootScope, $modal) {
 				window.location.href = "/ineuron/user/index.html/#/login";
 			}
 		})		
-	}
-	
+	}	
+}
+
+function handleSessionOutOfDateError(status, $rootScope, $modal) {
+	if (status == 401) {
+		ineuronApp.confirm("提示", "会话已过期，请重新登录！", 'sm', $rootScope, $modal).result.then(function(clickok){
+			if(clickok){
+				window.location.href = "/ineuron/user/index.html/#/login";
+			}
+		})		
+	}	
 }
 
 /*

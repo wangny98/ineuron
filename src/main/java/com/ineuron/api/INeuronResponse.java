@@ -7,8 +7,6 @@ import com.ineuron.domain.user.service.SecurityService;
 
 public class INeuronResponse {
 	
-	boolean success = false;
-	String message;
 	String apiToken;
 	Object value;
 	
@@ -19,19 +17,6 @@ public class INeuronResponse {
 		if(apiToken == null){
 			throw new InvalidAPITokenException("Failed to validate And Update ApiToken!", null);
 		}
-	}
-	
-	public boolean isSuccess() {
-		return success;
-	}
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
-	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
 	}
 	
 	public String getApiToken() {

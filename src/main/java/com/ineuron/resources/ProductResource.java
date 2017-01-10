@@ -11,7 +11,6 @@ import com.ineuron.domain.product.valueobject.ProductCategory;
 import com.ineuron.domain.product.valueobject.AttributeCategory;
 import com.ineuron.domain.product.valueobject.Attribute;
 import com.ineuron.domain.product.valueobject.ManufacturingProcess;
-import com.ineuron.domain.product.valueobject.Material;
 import com.ineuron.domain.product.service.ProductService;
 import com.ineuron.domain.user.service.SecurityService;
 
@@ -23,6 +22,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,735 +31,557 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @Path("/product")
-@Produces(MediaType.APPLICATION_JSON+ ";charset=UTF-8") 
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class ProductResource {
 
 	@Inject
 	private ProductService productService;
-	
+
 	@Inject
 	private SecurityService securityService;
-			
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductResource.class);
 
 	public ProductResource() {
 		super();
 	}
 
-@Path("/createproductcategory")
-@POST
-@Timed
-public INeuronResponse createProductCategory(final ProductCategory productCategory, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.createProductCategory(productCategory);
-		response.setValue(productCategory);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/createproductcategory")
+	@POST
+	@Timed
+	public Response createProductCategory(final ProductCategory productCategory, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.createProductCategory(productCategory);
+			response.setValue(productCategory);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+
 	}
-	return response;
-}
 
-@Path("/updateproductcategory")
-@POST
-@Timed
-public INeuronResponse updateProductCategory(final ProductCategory productCategory, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.updateProductCategory(productCategory);
-		response.setValue(productCategory);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/updateproductcategory")
+	@POST
+	@Timed
+	public Response updateProductCategory(final ProductCategory productCategory, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.updateProductCategory(productCategory);
+			response.setValue(productCategory);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/getproductcategorybyname")
-@POST
-@Timed
-public INeuronResponse getProductCategoryByName(final String name, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		ProductCategory productCategory=productService.getProductCategoryByName(name);
-		response.setValue(productCategory);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/getproductcategorybyname")
+	@POST
+	@Timed
+	public Response getProductCategoryByName(final String name, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			ProductCategory productCategory = productService.getProductCategoryByName(name);
+			response.setValue(productCategory);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/getproductcategorybyid")
-@POST
-@Timed
-public INeuronResponse getProductCategoryById(final Integer id, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		ProductCategory productCategory=productService.getProductCategoryById(id);
-		response.setValue(productCategory);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/getproductcategorybyid")
+	@POST
+	@Timed
+	public Response getProductCategoryById(final Integer id, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			ProductCategory productCategory = productService.getProductCategoryById(id);
+			response.setValue(productCategory);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-@Path("/getproductcategorybycode")
-@POST
-@Timed
-public INeuronResponse getProductCategoryByCode(final String code, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		ProductCategory productCategory=productService.getProductCategoryByCode(code);
-		response.setValue(productCategory);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/getproductcategorybycode")
+	@POST
+	@Timed
+	public Response getProductCategoryByCode(final String code, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			ProductCategory productCategory = productService.getProductCategoryByCode(code);
+			response.setValue(productCategory);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-
-@Path("/productcategorylist")
-@GET
-@Timed
-public INeuronResponse productCategoryList( @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		List<ProductCategory> productCategories = productService.getProductCategoryList();
-		response.setValue(productCategories);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/productcategorylist")
+	@GET
+	@Timed
+	public Response productCategoryList(@Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			List<ProductCategory> productCategories = productService.getProductCategoryList();
+			response.setValue(productCategories);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/deleteproductcategory")
-@POST
-@Timed
-public INeuronResponse deleteProductCategory(final ProductCategory productCategory, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.deleteProductCategory(productCategory);
-		//response.setValue(productCategory);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/deleteproductcategory")
+	@POST
+	@Timed
+	public Response deleteProductCategory(final ProductCategory productCategory, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.deleteProductCategory(productCategory);
+			// response.setValue(productCategory);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-	
-@Path("/createproduct")
-@POST
-@Timed
-public INeuronResponse createProduct(final Product product, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.createProduct(product);
-		response.setValue(product);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e.getRootCause());
-		response.setMessage(e.getMessage());
-		response.setSuccess(false);
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e.getRootCause());
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
-		response.setSuccess(false);
+	@Path("/createproduct")
+	@POST
+	@Timed
+	public Response createProduct(final Product product, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.createProduct(product);
+			response.setValue(product);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-@Path("/deleteproduct")
-@POST
-@Timed
-public INeuronResponse deleteProduct(final Product product, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.deleteProduct(product);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/deleteproduct")
+	@POST
+	@Timed
+	public Response deleteProduct(final Product product, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.deleteProduct(product);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-@Path("/updateproduct")
-@POST
-@Timed
-public INeuronResponse updateProduct(final Product product, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.updateProduct(product);
-		response.setValue(product);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/updateproduct")
+	@POST
+	@Timed
+	public Response updateProduct(final Product product, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.updateProduct(product);
+			response.setValue(product);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-
-@Path("/productlist")
-@GET
-@Timed
-public INeuronResponse productList( @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		List<Product> products = productService.getProductList();
-		response.setValue(products);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/productlist")
+	@GET
+	@Timed
+	public Response productList(@Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			List<Product> products = productService.getProductList();
+			response.setValue(products);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/productlistbycategory")
-@POST
-@Timed
-public INeuronResponse productListByCategory(final Integer productCategoryId, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		List<Product> products = productService.getProductListByCategory(productCategoryId);
-		response.setValue(products);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/productlistbycategory")
+	@POST
+	@Timed
+	public Response productListByCategory(final Integer productCategoryId, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			List<Product> products = productService.getProductListByCategory(productCategoryId);
+			response.setValue(products);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/getproductbyname")
-@POST
-@Timed
-public INeuronResponse productByName(final String name, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		Product product = productService.getProductByName(name);
-		response.setValue(product);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/getproductbyname")
+	@POST
+	@Timed
+	public Response productByName(final String name, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			Product product = productService.getProductByName(name);
+			response.setValue(product);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/productbyid")
-@GET
-@Timed
-public INeuronResponse productById(@QueryParam("id") Integer productId, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, debug); 
-		Product product = productService.getProductById(productId);
-		response.setValue(product);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/productbyid")
+	@GET
+	@Timed
+	public Response productById(@QueryParam("id") Integer productId, @Context HttpHeaders httpHeader,
+			@QueryParam("debug") boolean debug) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
+			Product product = productService.getProductById(productId);
+			response.setValue(product);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-@Path("/attributecategorylist")
-@GET
-@Timed
-public INeuronResponse attributeCategoryList(@Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		List<AttributeCategory> attributeCategories =productService.getAttributeCategoryList();
-		response.setValue(attributeCategories);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/attributecategorylist")
+	@GET
+	@Timed
+	public Response attributeCategoryList(@Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			List<AttributeCategory> attributeCategories = productService.getAttributeCategoryList();
+			response.setValue(attributeCategories);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/attributelist")
-@GET
-@Timed
-public INeuronResponse attributeList(@Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		List<Attribute> attributes =productService.getAttributeList();
-		response.setValue(attributes);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/attributelist")
+	@GET
+	@Timed
+	public Response attributeList(@Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			List<Attribute> attributes = productService.getAttributeList();
+			response.setValue(attributes);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/attributesbycategoryid")
-@POST
-@Timed
-public INeuronResponse attributesByCategoryId(final Integer attributeCategoryId, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		List<Attribute> attributes =productService.getAttributesByCategoryId(attributeCategoryId);
-		response.setValue(attributes);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/attributesbycategoryid")
+	@POST
+	@Timed
+	public Response attributesByCategoryId(final Integer attributeCategoryId, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			List<Attribute> attributes = productService.getAttributesByCategoryId(attributeCategoryId);
+			response.setValue(attributes);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/getattributebyname")
-@POST
-@Timed
-public INeuronResponse attributeByName(final String name, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		Attribute attribute =productService.getAttributeByName(name);
-		response.setValue(attribute);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/getattributebyname")
+	@POST
+	@Timed
+	public Response attributeByName(final String name, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			Attribute attribute = productService.getAttributeByName(name);
+			response.setValue(attribute);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-@Path("/createattribute")
-@POST
-@Timed
-public INeuronResponse createAttribute(final Attribute attribute, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.createAttribute(attribute);
-		response.setValue(attribute);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/createattribute")
+	@POST
+	@Timed
+	public Response createAttribute(final Attribute attribute, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.createAttribute(attribute);
+			response.setValue(attribute);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-@Path("/updateattribute")
-@POST
-@Timed
-public INeuronResponse updateAttribute(final Attribute attribute, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.updateAttribute(attribute);
-		response.setValue(attribute);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/updateattribute")
+	@POST
+	@Timed
+	public Response updateAttribute(final Attribute attribute, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.updateAttribute(attribute);
+			response.setValue(attribute);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-@Path("/deleteattribute")
-@POST
-@Timed
-public INeuronResponse deleteAttribute(final Attribute attribute, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.deleteAttribute(attribute);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/deleteattribute")
+	@POST
+	@Timed
+	public Response deleteAttribute(final Attribute attribute, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.deleteAttribute(attribute);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-@Path("/saveprocesses")
-@POST
-@Timed
-public INeuronResponse saveProcesses(final List<ManufacturingProcess> processes,@QueryParam("hasformula") boolean hasFormula,  @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
-	
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, debug); 
-		productService.saveProcesses(processes, hasFormula);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/saveprocesses")
+	@POST
+	@Timed
+	public Response saveProcesses(final List<ManufacturingProcess> processes,
+			@QueryParam("hasformula") boolean hasFormula, @Context HttpHeaders httpHeader,
+			@QueryParam("debug") boolean debug) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
+			productService.saveProcesses(processes, hasFormula);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/formulas")
-@GET
-@Timed
-public INeuronResponse formulas(@Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, debug); 
-		List<Formula> formulas = productService.getFormulas();
-		response.setValue(formulas);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/formulas")
+	@GET
+	@Timed
+	public Response formulas(@Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
+			List<Formula> formulas = productService.getFormulas();
+			response.setValue(formulas);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/formulabyid")
-@GET
-@Timed
-public INeuronResponse formulaById(@QueryParam("id") String formulaId, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, debug); 
-		Formula formula = productService.getFormulaById(formulaId);
-		response.setValue(formula);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/formulabyid")
+	@GET
+	@Timed
+	public Response formulaById(@QueryParam("id") String formulaId, @Context HttpHeaders httpHeader,
+			@QueryParam("debug") boolean debug) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
+			Formula formula = productService.getFormulaById(formulaId);
+			response.setValue(formula);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/createformula")
-@POST
-@Timed
-public INeuronResponse createFormula(final Formula formula, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
-	
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, debug); 
-		productService.addFormula(formula);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/createformula")
+	@POST
+	@Timed
+	public Response createFormula(final Formula formula, @Context HttpHeaders httpHeader,
+			@QueryParam("debug") boolean debug) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
+			productService.addFormula(formula);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/updateformula")
-@POST
-@Timed
-public INeuronResponse updateFormula(final Formula formula, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
-	LOGGER.info("updateformula:" + formula);
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, debug); 
-		productService.updateFormula(formula);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/updateformula")
+	@POST
+	@Timed
+	public Response updateFormula(final Formula formula, @Context HttpHeaders httpHeader,
+			@QueryParam("debug") boolean debug) {
+		LOGGER.info("updateformula:" + formula);
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
+			productService.updateFormula(formula);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-@Path("/deleteformula")
-@POST
-@Timed
-public INeuronResponse deleteFormula(@QueryParam("id") String id, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
-	LOGGER.info("deleteformula:" + id);
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, debug); 
-		productService.deleteFormula(id);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	@Path("/deleteformula")
+	@POST
+	@Timed
+	public Response deleteFormula(@QueryParam("id") String id, @Context HttpHeaders httpHeader,
+			@QueryParam("debug") boolean debug) {
+		LOGGER.info("deleteformula:" + id);
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
+			productService.deleteFormula(id);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 	}
-	return response;
-}
 
-
-//Material
-
-@Path("/materiallist")
-@GET
-@Timed
-public INeuronResponse materialList(@Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		List<Material> materials =productService.getMaterials();
-		response.setValue(materials);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
+	/*
+	 * NLP based Search for Products
+	 */
+	@Path("/productsbynlpwords")
+	@GET
+	@Timed
+	public Response productsByNLPWords(@QueryParam("words") String words, @Context HttpHeaders httpHeader,
+			@QueryParam("debug") boolean debug) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
+			List<Product> products = productService.getProductsByNLPWords(words);
+			response.setValue(products);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
 	}
-	return response;
-}
-
-
-
-@Path("/materialbyname")
-@GET
-@Timed
-public INeuronResponse materialByName(@QueryParam("name") String name, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		Material material =productService.getMaterialByName(name);
-		response.setValue(material);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
-	}
-	return response;
-}
-
-
-@Path("/creatematerial")
-@POST
-@Timed
-public INeuronResponse createMaterial(final Material material, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.createMaterial(material);
-		response.setValue(material);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
-	}
-	return response;
-}
-
-
-@Path("/updatematerial")
-@POST
-@Timed
-public INeuronResponse updateMaterial(final Material material, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.updateMaterial(material);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
-	}
-	return response;
-}
-
-
-@Path("/deletematerial")
-@POST
-@Timed
-public INeuronResponse deleteMaterial(final Material material, @Context HttpHeaders httpHeader) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, false); 
-		productService.deleteMaterial(material);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
-	}
-	return response;
-}
-
-
-/*
- * NLP based Search for Products 
- */
-@Path("/productsbynlpwords")
-@GET
-@Timed
-public INeuronResponse productsByNLPWords(@QueryParam("words") String words, @Context HttpHeaders httpHeader, @QueryParam("debug") boolean debug) {
-	INeuronResponse response = null;
-	try {
-		response = new INeuronResponse(securityService, httpHeader, debug);
-		List<Product> products = productService.getProductsByNLPWords(words);
-		response.setValue(products);
-		response.setSuccess(true);
-	} catch (RepositoryException e) {
-		LOGGER.error(e.getMessage(), e);
-		response.setMessage(e.getMessage());
-	} catch (InvalidAPITokenException e) {
-		LOGGER.error(e.getMessage(), e);
-		response = new INeuronResponse();
-		response.setMessage(e.getMessage());
-	}
-	return response;
-}
 
 }

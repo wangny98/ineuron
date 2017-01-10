@@ -4,7 +4,7 @@ ineuronApp.controller('MaterialListController', ['$http', '$scope', '$stateParam
 	var vm = this;
 	
 	$http({
-		url : '/product/materiallist',
+		url : '/material/list',
 		method : 'GET'
 	}).success(function(data) {
 		validateApiToken(data, $cookies, $rootScope, $modal);
@@ -36,7 +36,7 @@ ineuronApp.controller('MaterialListController', ['$http', '$scope', '$stateParam
 		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $modal).result.then(function(clickok){  
 			if(clickok){
 				 $http({
-					url : '/product/deletematerial',
+					url : '/material/delete',
 					method : 'POST',
 					data : {
 						name : vm.materials[index].name
@@ -65,7 +65,7 @@ ineuronApp.controller('MaterialCreateController', ['$scope', '$stateParams', '$h
 $scope.CheckMaterialName=function(){
 	
 	$http({
-		url : '/product/materialbyname?name' + $scope.materialName,
+		url : '/material/materialbyname?name' + $scope.materialName,
 		method : 'GET'
 	}).success(function(data) {
 		//validateApiToken(data, $cookies, $rootScope, $modal);
@@ -83,7 +83,7 @@ vm.createMaterial = createMaterial;
 function createMaterial() {
 	
 	$http({
-		url : '/product/creatematerial',
+		url : '/material/create',
 		method : 'POST',
 		data : {
 			name : $scope.materialName,
@@ -118,7 +118,7 @@ ineuronApp.controller('MaterialUpdateController', ['$scope', '$stateParams', '$h
 	
 	$scope.CheckMaterialName=function(){
 		$http({
-			url : '/product/materialbyname?name' + $scope.materialName,
+			url : '/material/materialbyname?name' + $scope.materialName,
 			method : 'GET'
 		}).success(function(data) {
 			//validateApiToken(data, $cookies, $rootScope, $modal);
@@ -136,7 +136,7 @@ ineuronApp.controller('MaterialUpdateController', ['$scope', '$stateParams', '$h
 	function updateMaterial() {
 
 		$http({
-			url : '/product/updatematerial',
+			url : '/material/update',
 			method : 'POST',
 			data : {
 				id : material.id,
