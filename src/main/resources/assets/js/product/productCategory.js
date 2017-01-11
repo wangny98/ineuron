@@ -15,8 +15,8 @@ ineuronApp.controller('ProductCategoryCreateController', ['$scope', '$stateParam
 		data : 1
 	}).success(function(data) {
 		vm.attributeUsages=data.value;
-	}).error(function(data) {
-		// alert('error');
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $modal);
 		console.log("error in get attribute list");
   	});
 		
@@ -26,8 +26,8 @@ ineuronApp.controller('ProductCategoryCreateController', ['$scope', '$stateParam
 		data : 2
 	}).success(function(data) {
 		vm.attributeEmulsionTypes=data.value;
-	}).error(function(data) {
-		// alert('error');
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $modal);
 		console.log("error in get attribute list");
   	});
 
@@ -37,8 +37,8 @@ ineuronApp.controller('ProductCategoryCreateController', ['$scope', '$stateParam
 		data : 3
 	}).success(function(data) {
 		vm.attributeColors=data.value;
-	}).error(function(data) {
-		// alert('error');
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $modal);
 		console.log("error in get attribute list");
   	});
 
@@ -51,12 +51,12 @@ ineuronApp.controller('ProductCategoryCreateController', ['$scope', '$stateParam
 			method : 'POST',
 			data :  $scope.productCategoryName
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			var pc = data.value;
 			if(pc==null) $scope.existedProductCategoryName=false; 
 			 else $scope.existedProductCategoryName=true;
-		}).error(function(data) {
-			// alert('error');
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $modal);
 			console.log("error to get productcategory ");
 		});				
 	}
@@ -68,12 +68,12 @@ ineuronApp.controller('ProductCategoryCreateController', ['$scope', '$stateParam
 			method : 'POST',
 			data :  $scope.productCategoryCode
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			var pc = data.value;
 			if(pc==null) $scope.existedProductCategoryCode=false; 
 			 else $scope.existedProductCategoryCode=true;
-		}).error(function(data) {
-			// alert('error');
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $modal);
 			console.log("error to get productcategory ");
 		});			
 	}
@@ -95,11 +95,11 @@ ineuronApp.controller('ProductCategoryCreateController', ['$scope', '$stateParam
 				scope: $scope.productCategoryScope			
 			}
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			ineuronApp.confirm("提示","产品类添加成功！", 'sm', $rootScope, $modal);		
 			$state.go("productCategoryList");
-		}).error(function(data) {
-			alert('error');
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $modal);
 			console.log("error");
 	  		})
 	  	}
@@ -120,10 +120,10 @@ ineuronApp.controller('ProductCategoryListController', ['$http', '$scope', '$roo
 		url : '/product/productcategorylist',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.productCategories = data.value;
-	}).error(function(data) {
-		alert('error');
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $modal);
 		console.log("error");
 	});
 
@@ -185,13 +185,13 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 		method : 'POST',
 		data : 1
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.attributeUsages=data.value;
 		for (var i in vm.attributeUsages){
 			if(vm.attributeUsages[i].code==codeList[1]) vm.attributeUsages[i].ticked=true;
 		}
-	}).error(function(data) {
-		// alert('error');
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $modal);
 		console.log("error in get attribute list");
 	});
 
@@ -200,13 +200,13 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 		method : 'POST',
 		data : 2
 	}).success(function(data) {
-		//validateApiToken(data, $cookies, $rootScope, $modal);
+		//updateApiToken(data, $cookies);
 		vm.attributeEmulsionTypes=data.value;
 		for (var i in vm.attributeEmulsionTypes){
 			if(vm.attributeEmulsionTypes[i].code==codeList[2]) vm.attributeEmulsionTypes[i].ticked=true;
 		}
-	}).error(function(data) {
-		// alert('error');
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $modal);
 		console.log("error in get attribute list");
 	});
 
@@ -215,13 +215,13 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 		method : 'POST',
 		data : 3
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.attributeColors=data.value;
 		for (var i in vm.attributeColors){
 			if(vm.attributeColors[i].code==codeList[3]) vm.attributeColors[i].ticked=true;
 		}
-	}).error(function(data) {
-		// alert('error');
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $modal);
 		console.log("error in get attribute list");
 	});
 
@@ -239,8 +239,8 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 			if(pc==null) $scope.existedProductCategoryName=false; 
 			 else $scope.existedProductCategoryName=true;
 			}
-		}).error(function(data) {
-			// alert('error');
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $modal);
 			console.log("error to get productcategory ");
 		});				
 	}
@@ -261,8 +261,9 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 				 else $scope.existedProductCategoryCode=true;	
 			}
 			
-		}).error(function(data) {
-			ineuronApp.confirm("提示","失败！", 'sm', $rootScope, $modal);
+		}).error(function(data, status) {
+			//ineuronApp.confirm("提示","失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			console.log("error to get productcategory ");
 		});			
 	}
@@ -286,11 +287,12 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 						scope: $scope.productCategoryScope			
 					}
 				}).success(function(data) {
-					validateApiToken(data, $cookies, $rootScope, $modal);
+					updateApiToken(data, $cookies);
 					ineuronApp.confirm("提示","修改成功！", 'sm', $rootScope, $modal);		
 					$state.go("productCategoryList");
-				}).error(function(data) {
-					ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
+				}).error(function(data, status) {
+					//ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
+					handleError(status, $rootScope, $modal);
 					console.log("error");
 				})
 			}
@@ -310,10 +312,11 @@ ineuronApp.controller('ProductCategoryUpdateController', ['$scope', '$stateParam
 					}
 				}).success(function(data) {
 					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
-					validateApiToken(data, $cookies, $rootScope, $modal);
+					updateApiToken(data, $cookies);
 					$state.go("productCategoryList");
-				}).error(function(data) {
-					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal)
+				}).error(function(data, status) {
+					//ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
+					handleError(status, $rootScope, $modal);
 					console.log("error");
 				})
 			}

@@ -7,11 +7,12 @@ ineuronApp.controller('MaterialListController', ['$http', '$scope', '$stateParam
 		url : '/material/list',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.materials = data.value;
 		//alert(vm.materials[0].name+" "+vm.materials[0].name);
-	}).error(function(data) {
-		ineuronApp.confirm("提示","获取列表失败！", 'sm', $rootScope, $modal);
+	}).error(function(data, status) {
+		//ineuronApp.confirm("提示","获取列表失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		console.log("material list error");
 	});
 
@@ -43,10 +44,11 @@ ineuronApp.controller('MaterialListController', ['$http', '$scope', '$stateParam
 					}
 				}).success(function(data) {
 					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
-					validateApiToken(data, $cookies, $rootScope, $modal);
+					updateApiToken(data, $cookies);
 					$state.go("materialList", null, {reload:true});
-				}).error(function(data) {
-					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
+				}).error(function(data, status) {
+					//ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
+					handleError(status, $rootScope, $modal);
 					console.log("error");
 				})
 			}
@@ -68,12 +70,13 @@ $scope.CheckMaterialName=function(){
 		url : '/material/materialbyname?name' + $scope.materialName,
 		method : 'GET'
 	}).success(function(data) {
-		//validateApiToken(data, $cookies, $rootScope, $modal);
+		//updateApiToken(data, $cookies);
 		var a = data.value;
 		if(a==null) $scope.existedMaterialName=false; 
 		 else $scope.existedMaterialName=true;
-	}).error(function(data) {
-		ineuronApp.confirm("提示","依据名称调用失败！", 'sm', $rootScope, $modal);
+	}).error(function(data, status) {
+		//ineuronApp.confirm("提示","依据名称调用失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		console.log("error to get material ");
 	});				
 }
@@ -90,11 +93,12 @@ function createMaterial() {
 			description : $scope.materialDescription
 		}
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		ineuronApp.confirm("提示","原料添加成功！", 'sm', $rootScope, $modal);		
 		$state.go("materialList");
-	}).error(function(data) {
-		ineuronApp.confirm("提示","添加原料失败！", 'sm', $rootScope, $modal);
+	}).error(function(data, status) {
+		//ineuronApp.confirm("提示","添加原料失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		console.log("create material error");
   		})
   	}
@@ -121,12 +125,13 @@ ineuronApp.controller('MaterialUpdateController', ['$scope', '$stateParams', '$h
 			url : '/material/materialbyname?name' + $scope.materialName,
 			method : 'GET'
 		}).success(function(data) {
-			//validateApiToken(data, $cookies, $rootScope, $modal);
+			//updateApiToken(data, $cookies);
 			var a = data.value;
 			if(a==null) $scope.existedMaterialName=false; 
 			 else $scope.existedMaterialName=true;
-		}).error(function(data) {
-			ineuronApp.confirm("提示","依据名称调用失败！", 'sm', $rootScope, $modal);
+		}).error(function(data, status) {
+			//ineuronApp.confirm("提示","依据名称调用失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			console.log("error to get material ");
 		});				
 	}
@@ -144,11 +149,12 @@ ineuronApp.controller('MaterialUpdateController', ['$scope', '$stateParams', '$h
 				description : $scope.materialDescription
 			}
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			ineuronApp.confirm("提示","原料修改成功！", 'sm', $rootScope, $modal);		
 			$state.go("materialList");
-		}).error(function(data) {
-			ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
+		}).error(function(data, status) {
+			//ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			console.log("error");
 		})
 	}

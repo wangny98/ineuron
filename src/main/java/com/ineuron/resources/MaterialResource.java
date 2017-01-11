@@ -17,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -51,7 +52,7 @@ public class MaterialResource {
 			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
 			List<Material> materials = productService.getMaterials();
 			response.setValue(materials);
-			return Response.ok(response).build();
+			return Response.ok(response).cookie(new NewCookie("name", "Hello, world!")).build();
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e);
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();

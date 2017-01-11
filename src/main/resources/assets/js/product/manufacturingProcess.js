@@ -25,7 +25,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 				method : 'GET'
 			}).success(function(data) {
 				//alert(JSON.stringify(data));
-				validateApiToken(data, $cookies, $rootScope, $modal);
+				updateApiToken(data, $cookies);
 				var manufacturingProcesses = data.value.manufacturingProcesses
 				if(manufacturingProcesses == undefined){
 					manufacturingProcesses = {};
@@ -44,8 +44,9 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					$scope.materialSettings = data.value.formula.materialSettings;
 				}
 				
-			}).error(function(data) {
-				alert(JSON.stringify(data));
+			}).error(function(data, status) {
+				//ineuronApp.confirm("提示","获取产品工艺流程信息失败！", 'sm', $rootScope, $modal);
+				handleError(status, $rootScope, $modal);
 				console.log("error");
 			});
 
@@ -193,12 +194,13 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					method : 'POST',
 					data : $scope.model.rows
 				}).success(function(data) {
-					validateApiToken(data, $cookies, $rootScope, $modal);
+					updateApiToken(data, $cookies);
 					ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
 					//$state.go("productList");
 					
-				}).error(function(data) {
-					ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
+				}).error(function(data, status) {
+					//ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
+					handleError(status, $rootScope, $modal);
 					console.log("error");
 				})
 				

@@ -7,10 +7,10 @@ ineuronApp.controller('FormulaListController', ['$http', '$scope', '$rootScope',
 		url : '/product/formulas',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.formulas = data.value;
-	}).error(function(data) {
-		alert('error');
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $modal);
 		console.log("error");
 	});
 
@@ -38,8 +38,8 @@ ineuronApp.controller('FormulaListController', ['$http', '$scope', '$rootScope',
 				}).success(function(data) {
 					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
 					$state.go("formulaList", null, {reload:true});
-				}).error(function(data) {
-					alert('error');
+				}).error(function(data, status) {
+					handleError(status, $rootScope, $modal);
 					console.log("error");
 				});
 			}
@@ -74,15 +74,15 @@ ineuronApp.controller('UpdateFormulaController', [
 			method : 'GET'
 		}).success(function(data) {
 			//alert(JSON.stringify(data));
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			$scope.formula.materialSettings = data.value.materialSettings;
 			if($scope.formula.materialSettings == null){
 				$scope.formula.materialSettings = [];
 			}
 			$scope.materials = data.value.allMaterials;
 			$scope.formula.selected = {};
-		}).error(function(data) {
-			alert('error');
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $modal);
 			console.log("error");
 		});
 
@@ -143,11 +143,12 @@ ineuronApp.controller('UpdateFormulaController', [
 				method : 'POST',
 				data : formula
 			}).success(function(data) {
-				validateApiToken(data, $cookies, $rootScope, $modal);
+				updateApiToken(data, $cookies);
 				ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
 				$state.go("formulaList");
-			}).error(function(data) {
-				ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
+			}).error(function(data, status) {
+				//ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
+				handleError(status, $rootScope, $modal);
 				console.log("error");
 			})
 		}
@@ -250,11 +251,12 @@ ineuronApp.controller('CreateFormulaController', [
 				method : 'POST',
 				data : $scope.formula
 			}).success(function(data) {
-				validateApiToken(data, $cookies, $rootScope, $modal);
+				updateApiToken(data, $cookies);
 				ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
 				$state.go("formulaList");
-			}).error(function(data) {
-				ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
+			}).error(function(data, status) {
+				//ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
+				handleError(status, $rootScope, $modal);
 				console.log("error");
 			})
 		}

@@ -52,13 +52,14 @@ public class INeuronApplication extends Application<INeuronConfiguration> {
 	public void run(INeuronConfiguration configuration, Environment environment) {
 		try {
 			RolesCache.init();
+			LOGGER.info("RolesCache is initiallized...");
 			String nlpEnabled = configuration.getNlpEnabled();
 			System.out.println("nlpEnabled=" + nlpEnabled);
 			if("yes".equalsIgnoreCase(nlpEnabled)
 					|| "true".equalsIgnoreCase(nlpEnabled)){
 				NLPService.getInstance();
 			}
-			LOGGER.info("RolesCache is initiallized...");
+			
 		} catch (RepositoryException e) {
 			LOGGER.error("Failed to initiallize the RolesCache", e);
 		}

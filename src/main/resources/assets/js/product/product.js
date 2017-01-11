@@ -17,8 +17,8 @@ ineuronApp.controller('ProductCreateController', ['$scope', '$stateParams', '$ht
 			var pc = data.value;
 			if(pc==null) $scope.existedProductName=false; 
 			 else $scope.existedProductName=true;
-		}).error(function(data) {
-			// alert('error');
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $modal);
 			console.log("error to get product ");
 		});				
 	}
@@ -28,11 +28,12 @@ ineuronApp.controller('ProductCreateController', ['$scope', '$stateParams', '$ht
 		url : '/product/productcategorylist',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.productCategories = data.value;
 		// alert(vm.productCategories[0].name);
-	}).error(function(data) {
-		ineuronApp.confirm("提示","调用失败！", 'sm', $rootScope, $modal);
+	}).error(function(data, status) {
+		//ineuronApp.confirm("提示","调用失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		console.log("error");
 	});
 	
@@ -41,11 +42,12 @@ ineuronApp.controller('ProductCreateController', ['$scope', '$stateParams', '$ht
 		url : '/product/formulas',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.productFormulas = data.value;
 		// alert(vm.productFormulas[0].name);
-	}).error(function(data) {
-		ineuronApp.confirm("提示","调用失败！", 'sm', $rootScope, $modal);
+	}).error(function(data, status) {
+		//ineuronApp.confirm("提示","调用失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		console.log("error");
 	});
 	
@@ -70,12 +72,13 @@ ineuronApp.controller('ProductCreateController', ['$scope', '$stateParams', '$ht
 				description : $scope.productDescription
 			}
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			ineuronApp.confirm("提示","产品添加成功！", 'sm', $rootScope, $modal);		
 			$state.go("productList", {productCategoryStr: JSON.stringify($scope.selectedProductCategory[0])});
 		
-		}).error(function(data) {
-			ineuronApp.confirm("提示","产品添加失败！", 'sm', $rootScope, $modal);
+		}).error(function(data, status) {
+			//ineuronApp.confirm("提示","产品添加失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			console.log("error");
 		})
 	}
@@ -99,11 +102,11 @@ ineuronApp.controller('ProductListController', ['$http', '$scope', '$stateParams
 		method : 'POST',
 		data : productCategory.id
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.products = data.value;
         //alert(vm.products[0].productCategory.name);
-	}).error(function(data) {
-		// alert('error');
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $modal);
 		console.log("error");
 	});
 /*
@@ -156,7 +159,7 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 			method : 'POST',
 			data :  $scope.productName
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			var pc = data.value;
 			// did not change the name
 			if(product.name==$scope.productName)$scope.existedProductName=false; 
@@ -164,8 +167,9 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 				if(pc==null) $scope.existedProductName=false; 
 				else $scope.existedProductName=true;
 			}
-		}).error(function(data) {
-			ineuronApp.confirm("提示","依据产品名查询产品失败！", 'sm', $rootScope, $modal);
+		}).error(function(data, status) {
+			//ineuronApp.confirm("提示","依据产品名查询产品失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			console.log("error to get productbyname ");
 		});				
 	}
@@ -174,7 +178,7 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 		url : '/product/formulas',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.productFormulas = data.value;
 		for(var i in vm.productFormulas){
 			if(vm.productFormulas[i].id==product.formulaId) {
@@ -182,8 +186,9 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 				break;
 			}
 		}
-	}).error(function(data) {
-		ineuronApp.confirm("提示","查询配方列表失败！", 'sm', $rootScope, $modal);
+	}).error(function(data,status) {
+		//ineuronApp.confirm("提示","查询配方列表失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		console.log("error");
 	});
 
@@ -199,11 +204,12 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 				formulaId: $scope.selectedProductFormula[0].id
 			}
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			ineuronApp.confirm("提示","修改成功！", 'sm', $rootScope, $modal);		
 			$state.go("productList",{productCategoryStr: JSON.stringify(product.productCategory)});
-		}).error(function(data) {
-			ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
+		}).error(function(data, status) {
+			//ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			console.log("error");
 		})
 	}
@@ -220,10 +226,11 @@ ineuronApp.controller('ProductUpdateController', ['$scope', '$stateParams', '$ht
 					}
 				}).success(function(data) {
 					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
-					validateApiToken(data, $cookies, $rootScope, $modal);
+					updateApiToken(data, $cookies);
 					$state.go("allProductList");
-				}).error(function(data) {
-					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal)
+				}).error(function(data, status) {
+					//ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal)
+					handleError(status, $rootScope, $modal);
 					console.log("error");
 				})
 			}
@@ -245,11 +252,11 @@ ineuronApp.controller('AllProductListController', ['$http', '$scope', '$statePar
 		url : '/product/productlist',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.products = data.value;
 		//alert(vm.products[0].productCategory.name);
-	}).error(function(data) {
-		// alert('error');
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $modal);
 		console.log("error");
 	});
 	

@@ -9,13 +9,11 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 		url : '/product/attributelist',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.attributes = data.value;
-		// alert(vm.attributes[0].name+"
-		// "+vm.attributes[0].attributeCategory.name);
 	}).error(function(data, status) {
-		handleSessionOutOfDateError(status, $rootScope, $modal);
-		ineuronApp.confirm("提示","获取属性列表失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
+		//ineuronApp.confirm("提示","获取属性列表失败！", 'sm', $rootScope, $modal);
 		console.log("error");
 	});
 
@@ -47,11 +45,11 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 					}
 				}).success(function(data) {
 					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
-					validateApiToken(data, $cookies, $rootScope, $modal);
+					updateApiToken(data, $cookies);
 					$state.go("attributeList", null, {reload:true});
 				}).error(function(data,status) {
-					handleSessionOutOfDateError(status, $rootScope, $modal);
-					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
+					handleError(status, $rootScope, $modal);
+					//ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
 					console.log("error");
 				})
 			}
@@ -90,10 +88,10 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 			}
 		}
 		}
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 	}).error(function(data, status) {
-		handleSessionOutOfDateError(status, $rootScope, $modal);
-		ineuronApp.confirm("提示","调用属性类型列表失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
+		//ineuronApp.confirm("提示","调用属性类型列表失败！", 'sm', $rootScope, $modal);
 		console.log("error to get attribute category list ");
 	});				
 
@@ -104,7 +102,7 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 			method : 'POST',
 			data :  $scope.attributeName
 		}).success(function(data) {
-			// validateApiToken(data, $cookies, $rootScope, $modal);
+			// updateApiToken(data, $cookies);
 			var a = data.value;
 			if(forCreate){
 				if (a==null) $scope.existedAttributeName=false;
@@ -119,8 +117,8 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 			}
 			}
 		}).error(function(data, status) {
-			handleSessionOutOfDateError(status, $rootScope, $modal);
-			ineuronApp.confirm("提示","依据名称调用属性失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
+			//ineuronApp.confirm("提示","依据名称调用属性失败！", 'sm', $rootScope, $modal);
 			console.log("error to get attribute ");
 		});				
 	}
@@ -140,12 +138,12 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 					attributeCategoryId: $scope.selectedAttributeCategory[0].id
 				}
 			}).success(function(data) {
-				validateApiToken(data, $cookies, $rootScope, $modal);
+				updateApiToken(data, $cookies);
 				ineuronApp.confirm("提示","属性添加成功！", 'sm', $rootScope, $modal);		
 				$state.go("attributeList");
 			}).error(function(data,status) {
-				handleSessionOutOfDateError(status, $rootScope, $modal);
-				ineuronApp.confirm("提示","添加属性失败！", 'sm', $rootScope, $modal);
+				handleError(status, $rootScope, $modal);
+				//ineuronApp.confirm("提示","添加属性失败！", 'sm', $rootScope, $modal);
 				console.log("error");
 		  		})
 		}
@@ -161,12 +159,12 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 				attributeCategoryId: $scope.selectedAttributeCategory[0].id
 			}
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			ineuronApp.confirm("提示","属性修改成功！", 'sm', $rootScope, $modal);		
 			$state.go("attributeList");
 		}).error(function(data, status) {
-			handleSessionOutOfDateError(status, $rootScope, $modal);
-			ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
+			//ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
 			console.log("error");
 		})
 	  }
