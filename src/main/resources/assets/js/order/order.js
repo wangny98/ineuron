@@ -12,13 +12,14 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 		url : '/product/productsbynlpwords?words=' + $scope.productSearchText,
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.products = data.value;
 		if(vm.products==null){
 			$scope.notFoundProducts=true;
 		}	
-	}).error(function(data) {
-		ineuronApp.confirm("提示","查询产品失败！", 'sm', $rootScope, $modal);
+	}).error(function(data, status) {
+		//ineuronApp.confirm("提示","查询产品失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		console.log("error to get productbyname ");
 	});			
 }
@@ -45,10 +46,11 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 		url : '/product/orderlist',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.orders = data.value;
-	}).error(function(data) {
-		ineuronApp.confirm("提示","获取列表失败！", 'sm', $rootScope, $modal);
+	}).error(function(data, status) {
+		//ineuronApp.confirm("提示","获取列表失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		console.log("order list error");
 	});
 
@@ -82,10 +84,11 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 					}
 				}).success(function(data) {
 					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
-					validateApiToken(data, $cookies, $rootScope, $modal);
+					updateApiToken(data, $cookies);
 					$state.go("orderList", null, {reload:true});
-				}).error(function(data) {
-					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
+				}).error(function(data, status) {
+					//ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
+					handleError(status, $rootScope, $modal);
 					console.log("error");
 				})
 			}
@@ -107,12 +110,13 @@ $scope.CheckOrderName=function(){
 		url : '/product/orderbyname?name' + $scope.orderName,
 		method : 'GET'
 	}).success(function(data) {
-		// validateApiToken(data, $cookies, $rootScope, $modal);
+		// updateApiToken(data, $cookies);
 		var a = data.value;
 		if(a==null) $scope.existedOrderName=false; 
 		 else $scope.existedOrderName=true;
-	}).error(function(data) {
-		ineuronApp.confirm("提示","依据名称调用失败！", 'sm', $rootScope, $modal);
+	}).error(function(data, status) {
+		//ineuronApp.confirm("提示","依据名称调用失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		console.log("error to get order ");
 	});				
 }
@@ -129,11 +133,12 @@ function createOrder() {
 			description : $scope.orderDescription
 		}
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		ineuronApp.confirm("提示","添加成功！", 'sm', $rootScope, $modal);		
 		$state.go("orderList");
-	}).error(function(data) {
-		ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $modal);
+	}).error(function(data, status) {
+		//ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		console.log("create order error");
   		})
   	}
@@ -160,12 +165,13 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 			url : '/product/orderbyname?name' + $scope.orderName,
 			method : 'GET'
 		}).success(function(data) {
-			// validateApiToken(data, $cookies, $rootScope, $modal);
+			// updateApiToken(data, $cookies);
 			var a = data.value;
 			if(a==null) $scope.existedOrderName=false; 
 			 else $scope.existedOrderName=true;
-		}).error(function(data) {
-			ineuronApp.confirm("提示","依据名称调用失败！", 'sm', $rootScope, $modal);
+		}).error(function(data, status) {
+			//ineuronApp.confirm("提示","依据名称调用失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			console.log("error to get order ");
 		});				
 	}
@@ -183,11 +189,12 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 				description : $scope.orderDescription
 			}
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			ineuronApp.confirm("提示","修改成功！", 'sm', $rootScope, $modal);		
 			$state.go("orderList");
-		}).error(function(data) {
-			ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
+		}).error(function(data, status) {
+			//ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			console.log("error");
 		})
 	}

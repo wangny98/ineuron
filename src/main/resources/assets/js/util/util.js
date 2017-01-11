@@ -1,21 +1,18 @@
-function validateApiToken(data, cookies, $rootScope, $modal) {
-	if (data.apiToken == null) {
-		ineuronApp.confirm("提示", "会话已过期，请重新登录！", 'sm', $rootScope, $modal).result.then(function(clickok){
-			if(clickok){
-				window.location.href = "/ineuron/user/index.html/#/login";
-			}
-		})		
-	}	
+function updateApiToken(data, cookies) {	
+	cookies.put('INeuron-ApiToken', encodeURI(encodeURI(data.apiToken)), {path : "/" }); 
 }
 
-function handleSessionOutOfDateError(status, $rootScope, $modal) {
+function handleError(status, $rootScope, $modal) {
 	if (status == 401) {
 		ineuronApp.confirm("提示", "会话已过期，请重新登录！", 'sm', $rootScope, $modal).result.then(function(clickok){
 			if(clickok){
 				window.location.href = "/ineuron/user/index.html/#/login";
 			}
 		})		
-	}	
+	}else{
+		ineuronApp.confirm("提示", "操作失败！", 'sm', $rootScope, $modal);
+	}
+	
 }
 
 /*

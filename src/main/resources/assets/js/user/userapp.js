@@ -44,7 +44,7 @@ ineuronApp.controller('UserUpdateController', ['$scope', '$stateParams', '$http'
 		url : '/user/rolelist',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.roles = data.value;
 			
 		for (var i in vm.roles){
@@ -59,7 +59,7 @@ ineuronApp.controller('UserUpdateController', ['$scope', '$stateParams', '$http'
 			}
 		}
 	}).error(function(data,status) {
-		handleSessionOutOfDateError(status, $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		ineuronApp.confirm("提示","获取角色列表失败！", 'sm', $rootScope, $modal);
 		console.log("error:getrolelist");
 	});
@@ -99,10 +99,10 @@ ineuronApp.controller('UserUpdateController', ['$scope', '$stateParams', '$http'
 				permissions: strPer
 			}
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			$state.go("userManagement");
 		}).error(function(data,status) {
-			handleSessionOutOfDateError(status, $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			ineuronApp.confirm("提示","更新失败！", 'sm', $rootScope, $modal);
 			console.log("error");
 		})
@@ -119,10 +119,10 @@ ineuronApp.controller('UserUpdateController', ['$scope', '$stateParams', '$http'
 						username : $scope.updateUsername
 					}
 				}).success(function(data) {
-					validateApiToken(data, $cookies, $rootScope, $modal);
+					updateApiToken(data, $cookies);
 					$state.go("userManagement");
 				}).error(function(data,status) {
-					handleSessionOutOfDateError(status, $rootScope, $modal);
+					handleError(status, $rootScope, $modal);
 					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
 					console.log("error");
 				})
@@ -141,7 +141,7 @@ ineuronApp.controller('UserListController', ['$http', '$scope', '$location', '$c
 		url : '/user/list',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.users = data.value;
 		/*var usernameList=new Array();
 		for (var i in vm.users){
@@ -149,7 +149,7 @@ ineuronApp.controller('UserListController', ['$http', '$scope', '$location', '$c
 		}
 		$cookies.put('INeuron-UserNameList', usernameList, {path : "/"});*/
 	}).error(function(data,status) {
-		handleSessionOutOfDateError(status, $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		ineuronApp.confirm("提示","获取用户列表失败！", 'sm', $rootScope, $modal);
 		console.log("error");
 	});
@@ -189,7 +189,7 @@ ineuronApp.controller('UserCreateController', ['$scope', '$rootScope', '$modal',
 			if(user==null) $scope.existedUsername=false; 
 			 else $scope.existedUsername=true;
 		}).error(function(data,status) {
-			handleSessionOutOfDateError(status, $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			ineuronApp.confirm("提示","获取用户失败！", 'sm', $rootScope, $modal);
 			console.log("error to get user");
 		});				
@@ -218,7 +218,7 @@ ineuronApp.controller('UserCreateController', ['$scope', '$rootScope', '$modal',
 			console.log("success in User Create!");
 
 		}).error(function(data,status) {
-			handleSessionOutOfDateError(status, $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			ineuronApp.confirm("提示","注册用户失败！", 'sm', $rootScope, $modal);
 			
 			console.log("error");
@@ -235,10 +235,10 @@ ineuronApp.controller('RoleListController', ['$http', '$scope', '$location', '$c
 		url : '/user/rolelist',
 		method : 'GET'
 	}).success(function(data) {
-		validateApiToken(data, $cookies, $rootScope, $modal);
+		updateApiToken(data, $cookies);
 		vm.roles = data.value;
 	}).error(function(data,status) {
-		handleSessionOutOfDateError(status, $rootScope, $modal);
+		handleError(status, $rootScope, $modal);
 		ineuronApp.confirm("提示","获取角色列表失败！", 'sm', $rootScope, $modal);
 		console.log("error");
 	});
@@ -333,10 +333,10 @@ ineuronApp.controller('RoleUpdateController', ['$scope', '$stateParams', '$http'
 				permissions: strPer
 			}
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			$state.go("roleManagement");
 		}).error(function(data,status) {
-			handleSessionOutOfDateError(status, $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			ineuronApp.confirm("提示","更新失败！", 'sm', $rootScope, $modal);
 			console.log("error");
 		})
@@ -353,10 +353,10 @@ ineuronApp.controller('RoleUpdateController', ['$scope', '$stateParams', '$http'
 						id : selectedRole.id
 					}
 				}).success(function(data) {
-					validateApiToken(data, $cookies, $rootScope, $modal);
+					updateApiToken(data, $cookies);
 					$state.go("roleManagement");
 				}).error(function(data,status) {
-					handleSessionOutOfDateError(status, $rootScope, $modal);
+					handleError(status, $rootScope, $modal);
 					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
 					console.log("error");
 				})
@@ -399,10 +399,10 @@ ineuronApp.controller('RoleCreateController', ['$scope', '$stateParams', '$http'
 				permissions: strPer
 			}
 		}).success(function(data) {
-			validateApiToken(data, $cookies, $rootScope, $modal);
+			updateApiToken(data, $cookies);
 			$state.go("roleManagement");
 		}).error(function(data,status) {
-			handleSessionOutOfDateError(status, $rootScope, $modal);
+			handleError(status, $rootScope, $modal);
 			ineuronApp.confirm("提示","创建角色失败！", 'sm', $rootScope, $modal);
 			console.log("error");
 		})
