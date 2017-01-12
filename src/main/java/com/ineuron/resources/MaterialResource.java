@@ -54,10 +54,10 @@ public class MaterialResource {
 			response.setValue(materials);
 			return Response.ok(response).cookie(new NewCookie("name", "Hello, world!")).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -73,10 +73,10 @@ public class MaterialResource {
 			response.setValue(material);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -92,10 +92,10 @@ public class MaterialResource {
 			response.setValue(material);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -110,10 +110,10 @@ public class MaterialResource {
 			productService.updateMaterial(material);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 	}
@@ -127,10 +127,10 @@ public class MaterialResource {
 			productService.deleteMaterial(material);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 	}

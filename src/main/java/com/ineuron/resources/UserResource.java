@@ -82,10 +82,10 @@ public class UserResource {
 				return Response.status(Status.UNAUTHORIZED).build();
 			}
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 
@@ -99,7 +99,7 @@ public class UserResource {
 			userService.doRegister(user);
 			return Response.ok().build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 
@@ -117,10 +117,10 @@ public class UserResource {
 			response.setValue(user);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		} 
 
@@ -137,10 +137,10 @@ public class UserResource {
 			userService.deleteUser(user);			
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 
@@ -158,13 +158,13 @@ public class UserResource {
 			response.setValue(users);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 	}
@@ -182,10 +182,10 @@ public class UserResource {
 			response.setValue(user);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} 
 	}
@@ -202,13 +202,13 @@ public class UserResource {
 			response.setValue(role);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 
@@ -226,13 +226,13 @@ public class UserResource {
 			response.setValue(role);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 
@@ -249,13 +249,13 @@ public class UserResource {
 			response.setValue(role);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		} 
 
@@ -272,13 +272,13 @@ public class UserResource {
 			response.setValue(roles);
 			return Response.ok(response).build();	
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (INeuronException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 

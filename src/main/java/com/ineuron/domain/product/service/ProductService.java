@@ -309,27 +309,22 @@ public class ProductService {
 
 		// Get all the nlp'ed attribute words
 		List<String> attributeWords = new ArrayList<String>();
-		if (parsedResult.getScope() != null
-				&& parsedResult.getScope().length() > 0)
-			attributeWords.add(parsedResult.getScope());
-		if (parsedResult.getColor() != null
-				&& parsedResult.getColor().length() > 0)
-			attributeWords.add(parsedResult.getColor());
-		if (parsedResult.getForm() != null
-				&& parsedResult.getForm().length() > 0)
-			attributeWords.add(parsedResult.getForm());
+		if (parsedResult.getScopes() != null)
+			attributeWords.addAll(parsedResult.getScopes());
+		if (parsedResult.getColors() != null)
+			attributeWords.addAll(parsedResult.getColors());
+		if (parsedResult.getForms() != null)
+			attributeWords.addAll(parsedResult.getForms());
 
 		// productName; function; otherattr; quality
 		List<String> productWords = new ArrayList<String>();
 		if (parsedResult.getProductName() != null
 				&& parsedResult.getProductName().length() > 0)
 			productWords.add(parsedResult.getProductName());
-		if (parsedResult.getFunction() != null
-				&& parsedResult.getFunction().length() > 0)
-			productWords.add(parsedResult.getFunction());
-		if (parsedResult.getQuality() != null
-				&& parsedResult.getQuality().length() > 0)
-			productWords.add(parsedResult.getQuality());
+		if (parsedResult.getFunctions() != null)
+			productWords.addAll(parsedResult.getFunctions());
+		if (parsedResult.getQualities() != null)
+			productWords.addAll(parsedResult.getQualities());
 		if (parsedResult.getOtherAttributes() != null
 				&& parsedResult.getOtherAttributes().size() > 0)
 			productWords.addAll(parsedResult.getOtherAttributes());
