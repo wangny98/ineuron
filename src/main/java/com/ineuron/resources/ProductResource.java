@@ -56,10 +56,10 @@ public class ProductResource {
 			response.setValue(productCategory);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 
@@ -75,10 +75,10 @@ public class ProductResource {
 			response.setValue(productCategory);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -94,10 +94,10 @@ public class ProductResource {
 			response.setValue(productCategory);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -113,10 +113,10 @@ public class ProductResource {
 			response.setValue(productCategory);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -132,10 +132,10 @@ public class ProductResource {
 			response.setValue(productCategory);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -151,10 +151,10 @@ public class ProductResource {
 			response.setValue(productCategories);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -170,10 +170,10 @@ public class ProductResource {
 			// response.setValue(productCategory);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -207,10 +207,10 @@ public class ProductResource {
 			productService.deleteProduct(product);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -226,10 +226,10 @@ public class ProductResource {
 			response.setValue(product);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -245,10 +245,10 @@ public class ProductResource {
 			response.setValue(products);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -264,10 +264,10 @@ public class ProductResource {
 			response.setValue(products);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -283,10 +283,10 @@ public class ProductResource {
 			response.setValue(product);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -303,10 +303,10 @@ public class ProductResource {
 			response.setValue(product);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -322,10 +322,10 @@ public class ProductResource {
 			response.setValue(attributeCategories);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -341,10 +341,10 @@ public class ProductResource {
 			response.setValue(attributes);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -360,10 +360,10 @@ public class ProductResource {
 			response.setValue(attributes);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -379,10 +379,10 @@ public class ProductResource {
 			response.setValue(attribute);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -398,10 +398,10 @@ public class ProductResource {
 			response.setValue(attribute);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -417,10 +417,10 @@ public class ProductResource {
 			response.setValue(attribute);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -435,10 +435,10 @@ public class ProductResource {
 			productService.deleteAttribute(attribute);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -455,10 +455,10 @@ public class ProductResource {
 			productService.saveProcesses(processes, hasFormula);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -474,10 +474,10 @@ public class ProductResource {
 			response.setValue(formulas);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -494,10 +494,10 @@ public class ProductResource {
 			response.setValue(formula);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -513,10 +513,10 @@ public class ProductResource {
 			productService.addFormula(formula);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -533,10 +533,10 @@ public class ProductResource {
 			productService.updateFormula(formula);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -553,10 +553,10 @@ public class ProductResource {
 			productService.deleteFormula(id);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
@@ -576,10 +576,10 @@ public class ProductResource {
 			response.setValue(products);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 	}

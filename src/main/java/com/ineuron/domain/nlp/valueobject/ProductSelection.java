@@ -1,20 +1,21 @@
 package com.ineuron.domain.nlp.valueobject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductSelection {
 	//产品
 	private String productName;
 	//颜色
-	private String color;
+	private List<String> colors;
 	//形态
-	private String form;
+	private List<String> forms;
 	//功能
-	private String function;
+	private List<String> functions;
 	//用途
-	private String scope;	
+	private List<String> scopes;	
 	//品质
-	private String quality;
+	private List<String> qualities;
 	//其他属性
 	private List<String> otherAttributes;
 	
@@ -24,21 +25,47 @@ public class ProductSelection {
 		ps.append("productName = ")
 			.append(productName)
 			.append("\n")
-			.append("color = ")
-			.append(color)
-			.append("\n")
-			.append("form = ")
-			.append(form)
-			.append("\n")
-			.append("scope = ")
-			.append(scope)
-			.append("\n")
-			.append("function = ")
-			.append(function)
-			.append("\n")
-			.append("quality = ")
-			.append(quality)
-			.append("\n")
+			.append("color = ");
+		
+		if(colors != null){
+			for(String color : colors){
+				ps.append(color).append(",");
+			}
+		}
+
+		ps.append("\n")
+			.append("form = ");
+		if(forms != null){
+			for(String form : forms){
+				ps.append(form).append(",");
+			}
+		}	
+
+		ps.append("\n")
+			.append("scope = ");
+		if(scopes != null){
+			for(String scope : scopes){
+				ps.append(scope).append(",");
+			}
+		}
+		
+		ps.append("\n")
+			.append("function = ");	
+		if(functions != null){
+			for(String function : functions){
+				ps.append(function).append(",");
+			}
+		}
+		
+		ps.append("\n")
+			.append("quality = ");
+		if(qualities != null){
+			for(String quality : qualities){
+				ps.append(quality).append(",");
+			}
+		}
+		
+		ps.append("\n")
 			.append("otherAttributes = ");
 		
 		if(otherAttributes != null){
@@ -57,39 +84,62 @@ public class ProductSelection {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public String getColor() {
-		return color;
-	}
-	public void setColor(String color) {
-		this.color = color;
-	}
-	public String getForm() {
-		return form;
-	}
-	public void setForm(String form) {
-		this.form = form;
-	}
-	public String getScope() {
-		return scope;
-	}
-	public void setScope(String scope) {
-		this.scope = scope;
-	}
 	
-	public String getFunction() {
-		return function;
+	public List<String> getColors() {
+		return colors;
 	}
 
-	public void setFunction(String function) {
-		this.function = function;
+	public void addColor(String color) {
+		if(colors == null){
+			colors = new ArrayList<String>();
+		}
+		colors.add(color);
 	}
 
-	public String getQuality() {
-		return quality;
+	public List<String> getForms() {
+		return forms;
 	}
-	public void setQuality(String quality) {
-		this.quality = quality;
+
+	public void addForm(String form) {
+		if(forms == null){
+			forms = new ArrayList<String>();
+		}
+		forms.add(form);
 	}
+
+	public List<String> getFunctions() {
+		return functions;
+	}
+
+	public void addFunction(String function) {
+		if(functions == null){
+			functions = new ArrayList<String>();
+		}
+		functions.add(function);
+	}
+
+	public List<String> getScopes() {
+		return scopes;
+	}
+
+	public void addScope(String scope) {
+		if(scopes == null){
+			scopes = new ArrayList<String>();
+		}
+		scopes.add(scope);
+	}
+
+	public List<String> getQualities() {
+		return qualities;
+	}
+
+	public void addQuality(String quality) {
+		if(qualities == null){
+			qualities = new ArrayList<String>();
+		}
+		qualities.add(quality);
+	}
+
 	public List<String> getOtherAttributes() {
 		return otherAttributes;
 	}

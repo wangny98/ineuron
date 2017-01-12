@@ -64,19 +64,19 @@ public class NLPService {
         for (IndexedWord child : children)
         {
         	if(COLOR.equals(child.ner())){
-        		result.setColor(child.lemma());
+        		result.addColor(child.lemma());
         		continue;
         	}else if(TYPE_BY_FORM.equals(child.ner())){
-        		result.setForm(child.lemma());
+        		result.addForm(child.lemma());
         		continue;
         	}else if(QUALITY.equals(child.ner())){
-        		result.setQuality(child.lemma());
+        		result.addQuality(child.lemma());
         		continue;
         	}else if(TYPE_BY_SCOPE.equals(child.ner())){
-        		result.setScope(child.lemma());
+        		result.addScope(child.lemma());
         		continue;
         	}else if(TYPE_BY_FUNCTION.equals(child.ner())){
-        		result.setFunction(child.lemma());
+        		result.addFunction(child.lemma());
         		continue;
         	}else if(PAINT_NAMES.contains(child.ner())){
                 productName = child.lemma();
