@@ -1,7 +1,0 @@
-红色	COLOR
-橙色	COLOR
-黄色	COLOR
-绿色	COLOR
-蓝色	COLOR
-靛色	COLOR
-紫色	COLOR

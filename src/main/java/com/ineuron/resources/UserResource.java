@@ -77,6 +77,7 @@ public class UserResource {
 				LOGGER.info("user/authenticate newApiToken=" + apiToken);
 				response.setValue(foundUser);
 				response.setApiToken(apiToken);
+				System.out.println("return authenticate");
 				return Response.ok(response).build();
 			}else{
 				return Response.status(Status.UNAUTHORIZED).build();
