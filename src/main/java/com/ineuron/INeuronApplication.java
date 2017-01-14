@@ -1,12 +1,8 @@
 package com.ineuron;
 
-import javax.crypto.Cipher;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.domain.nlp.service.NLPService;
