@@ -68,16 +68,14 @@ public class UserResource {
 	@POST
 	@Timed
 	public Response login(final User user, @Context final UriInfo uriInfo) {
-		System.out.println("LOGGER.isDebugEnabled() = " + LOGGER.isDebugEnabled());
 		INeuronResponse response = new INeuronResponse();
 		try {
 			User foundUser=userService.doAuthenticate(user);
 			if(foundUser!=null){
 				String apiToken = securityService.createApiToken(user.getUsername());
-				LOGGER.info("user/authenticate newApiToken=" + apiToken);
+				LOGGER.info("user/authenticate user:" + user.getUsername() + " logined in... newApiToken=" + apiToken);
 				response.setValue(foundUser);
 				response.setApiToken(apiToken);
-				System.out.println("return authenticate");
 				return Response.ok(response).build();
 			}else{
 				return Response.status(Status.UNAUTHORIZED).build();
