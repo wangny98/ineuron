@@ -27,7 +27,7 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 
 vm.createOrder = createOrder;
 function createOrder() {
-	$state.go("createAndUpdateOrder");
+	$state.go("createOrder");
   	}
 
 vm.backward = backward;
@@ -98,7 +98,7 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 }]);
 
 
-ineuronApp.controller('OrderCreateAndUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal',
+ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal',
    function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
 
 	var vm = this;
@@ -114,6 +114,9 @@ ineuronApp.controller('OrderCreateAndUpdateController', ['$scope', '$stateParams
 	            };
 	            $scope.open1 = function () {
 	                $scope.popup1.opened = true;
+	            };
+	            $scope.dateOptions = {
+	                    showWeeks: false
 	            };
 	            
 $scope.CheckOrderName=function(){
