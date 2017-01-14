@@ -1,6 +1,6 @@
 
-ineuronApp.controller('AttributeListController', ['$http', '$scope', '$stateParams', '$rootScope', '$modal', '$location', '$cookies', '$state', 'DTOptionsBuilder', 'DTColumnDefBuilder',
-	function($http, $scope, $stateParams, $rootScope, $modal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder) {
+ineuronApp.controller('AttributeListController', ['$http', '$scope', '$stateParams', '$rootScope', '$uibModal', '$location', '$cookies', '$state', 'DTOptionsBuilder', 'DTColumnDefBuilder',
+	function($http, $scope, $stateParams, $rootScope, $uibModal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder) {
 	var vm = this;
 	// var selectedProductStr = $stateParams.productStr;
 	// var selectedProduct = eval('(' + selectedProductStr + ')');
@@ -12,8 +12,8 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 		updateApiToken(data, $cookies);
 		vm.attributes = data.value;
 	}).error(function(data, status) {
-		handleError(status, $rootScope, $modal);
-		//ineuronApp.confirm("提示","获取属性列表失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $uibModal);
+		//ineuronApp.confirm("提示","获取属性列表失败！", 'sm', $rootScope, $uibModal);
 		console.log("error");
 	});
 
@@ -35,7 +35,7 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 	
 	vm.deleteAttribute=deleteAttribute;
 	function deleteAttribute(index){
-		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $modal).result.then(function(clickok){  
+		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $uibModal).result.then(function(clickok){  
 			if(clickok){
 				 $http({
 					url : '/product/deleteattribute',
@@ -44,12 +44,12 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 						name : vm.attributes[index].name
 					}
 				}).success(function(data) {
-					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
+					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $uibModal);
 					updateApiToken(data, $cookies);
 					$state.go("attributeList", null, {reload:true});
 				}).error(function(data,status) {
-					handleError(status, $rootScope, $modal);
-					//ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
+					handleError(status, $rootScope, $uibModal);
+					//ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $uibModal);
 					console.log("error");
 				})
 			}
@@ -59,8 +59,8 @@ ineuronApp.controller('AttributeListController', ['$http', '$scope', '$statePara
 }]);
 
 
-ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$modal',
-  function($scope, $stateParams, $http, $state, $cookies, $rootScope, $modal) {
+ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal',
+  function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
 	var attribute = eval('(' + $stateParams.attributeStr + ')');
 	
 	var forCreate=true;
@@ -90,8 +90,8 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 		}
 		updateApiToken(data, $cookies);
 	}).error(function(data, status) {
-		handleError(status, $rootScope, $modal);
-		//ineuronApp.confirm("提示","调用属性类型列表失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $uibModal);
+		//ineuronApp.confirm("提示","调用属性类型列表失败！", 'sm', $rootScope, $uibModal);
 		console.log("error to get attribute category list ");
 	});				
 
@@ -117,8 +117,8 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 			}
 			}
 		}).error(function(data, status) {
-			handleError(status, $rootScope, $modal);
-			//ineuronApp.confirm("提示","依据名称调用属性失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $uibModal);
+			//ineuronApp.confirm("提示","依据名称调用属性失败！", 'sm', $rootScope, $uibModal);
 			console.log("error to get attribute ");
 		});				
 	}
@@ -139,11 +139,11 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 				}
 			}).success(function(data) {
 				updateApiToken(data, $cookies);
-				ineuronApp.confirm("提示","属性添加成功！", 'sm', $rootScope, $modal);		
+				ineuronApp.confirm("提示","属性添加成功！", 'sm', $rootScope, $uibModal);		
 				$state.go("attributeList");
 			}).error(function(data,status) {
-				handleError(status, $rootScope, $modal);
-				//ineuronApp.confirm("提示","添加属性失败！", 'sm', $rootScope, $modal);
+				handleError(status, $rootScope, $uibModal);
+				//ineuronApp.confirm("提示","添加属性失败！", 'sm', $rootScope, $uibModal);
 				console.log("error");
 		  		})
 		}
@@ -160,11 +160,11 @@ ineuronApp.controller('AttributeCreateAndUpdateController', ['$scope', '$statePa
 			}
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
-			ineuronApp.confirm("提示","属性修改成功！", 'sm', $rootScope, $modal);		
+			ineuronApp.confirm("提示","属性修改成功！", 'sm', $rootScope, $uibModal);		
 			$state.go("attributeList");
 		}).error(function(data, status) {
-			handleError(status, $rootScope, $modal);
-			//ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $uibModal);
+			//ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $uibModal);
 			console.log("error");
 		})
 	  }

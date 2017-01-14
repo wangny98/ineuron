@@ -27,8 +27,8 @@ ineuronApp.config(function($routeProvider) {
 
 });
 
-ineuronApp.controller('UserLoginController', ['$scope', '$http', '$location', '$cookies', '$rootScope', '$modal',
-	function($scope, $http, $location, $cookies,$rootScope,$modal) {
+ineuronApp.controller('UserLoginController', ['$scope', '$http', '$location', '$cookies', '$rootScope', '$uibModal',
+	function($scope, $http, $location, $cookies,$rootScope,$uibModal) {
 		$scope.invalidUserPwd=false;
 		
 		$scope.login = function(isValid) {
@@ -51,7 +51,7 @@ ineuronApp.controller('UserLoginController', ['$scope', '$http', '$location', '$
 					window.location.href = "/ineuron/main.html";
 
 				}).error(function(data) {
-					ineuronApp.confirm("提示","不正确的用户名或者密码！", 'sm', $rootScope, $modal);
+					ineuronApp.confirm("提示","不正确的用户名或者密码！", 'sm', $rootScope, $uibModal);
 					console.log("error");
 		})
 	};
@@ -59,8 +59,8 @@ ineuronApp.controller('UserLoginController', ['$scope', '$http', '$location', '$
 }]);
 
 
-ineuronApp.controller('UserRegisterCtrl', ['$scope', '$rootScope', '$modal', '$http', '$location', 
-	function($scope, $rootScope, $modal, $http, $location) {
+ineuronApp.controller('UserRegisterCtrl', ['$scope', '$rootScope', '$uibModal', '$http', '$location', 
+	function($scope, $rootScope, $uibModal, $http, $location) {
 
 	$scope.usernameCheck=function(){
 		//alert("checkusername");
@@ -93,7 +93,7 @@ ineuronApp.controller('UserRegisterCtrl', ['$scope', '$rootScope', '$modal', '$h
 				password : $scope.password
 			}
 		}).success(function(data) {
-			ineuronApp.confirm("提示","注册成功！请登录。", 'sm', $rootScope, $modal).result.then(function(clickok){  
+			ineuronApp.confirm("提示","注册成功！请登录。", 'sm', $rootScope, $uibModal).result.then(function(clickok){  
 				if(clickok){
 					$location.path("/login");
 					console.log("success!");

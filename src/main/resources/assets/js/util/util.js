@@ -2,15 +2,15 @@ function updateApiToken(data, cookies) {
 	cookies.put('INeuron-ApiToken', encodeURI(encodeURI(data.apiToken)), {path : "/" }); 
 }
 
-function handleError(status, $rootScope, $modal) {
+function handleError(status, $rootScope, $uibModal) {
 	if (status == 401) {
-		ineuronApp.confirm("提示", "会话已过期，请重新登录！", 'sm', $rootScope, $modal).result.then(function(clickok){
+		ineuronApp.confirm("提示", "会话已过期，请重新登录！", 'sm', $rootScope, $uibModal).result.then(function(clickok){
 			if(clickok){
 				window.location.href = "/ineuron/user/index.html/#/login";
 			}
 		})		
 	}else{
-		ineuronApp.confirm("提示", "操作失败！", 'sm', $rootScope, $modal);
+		ineuronApp.confirm("提示", "操作失败！", 'sm', $rootScope, $uibModal);
 	}
 	
 }
