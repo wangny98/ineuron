@@ -149,10 +149,10 @@ ineuronApp.config(function($stateProvider) {
 			templateUrl : '/ineuron/order/searchForOrder.html'
 		}
 	
-	var createAndUpdateOrderState = {
-			name : 'createAndUpdateOrder',
-			url : 'createAndUpdateOrder/',
-			templateUrl : '/ineuron/order/createAndUpdateOrder.html'
+	var createOrderState = {
+			name : 'createOrder',
+			url : 'createOrder/',
+			templateUrl : '/ineuron/order/createOrder.html'
 		}
 
 	//Material
@@ -202,7 +202,7 @@ ineuronApp.config(function($stateProvider) {
 	$stateProvider.state(updateMaterialState);
 	
 	$stateProvider.state(searchForOrderState);
-	$stateProvider.state(createAndUpdateOrderState);
+	$stateProvider.state(createOrderState);
 	
 	$stateProvider.state(aboutState);
 

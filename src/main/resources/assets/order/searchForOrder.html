@@ -7,25 +7,16 @@
 		<table id="table-style" style="float:left;">
 			<tbody>
 				<tr>
-					<th style="min-width: 100px;">查询产品</th>
 					<td><input class="input-block-level" type="text"
 						ng-model="productSearchText" required ng-required="true"
 						ng-minlength="1" style="min-width: 500px;" /></td>
-					<td style="color: red">*</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><button id="submitbutton"
+					<td>
+					<button id="submitbutton"
 							class="btn btn-large btn-primary"
 							ng-click="SearchForOrder.searchProducts()">
-							<span class="glyphicon glyphicon-upload"></span> 提交
-						</button>
-						<button id="submitbutton" class="btn btn-large btn-primary"
-								ng-click="SearchForOrder.backward()">
-								<span class="glyphicon glyphicon-arrow-left"></span> 返	回
-							</button>
+							<span class="glyphicon glyphicon-search"></span> 查询产品
+					</button>
 					</td>
-					<td></td>
 				</tr>
 			</tbody>
 		</table>
