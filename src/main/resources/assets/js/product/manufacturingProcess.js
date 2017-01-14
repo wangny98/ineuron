@@ -8,10 +8,10 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 		'$cookies',
 		'$state',
 		'$rootScope', 
-		'$modal',
+		'$uibModal',
 		'DTOptionsBuilder',
 		'DTColumnDefBuilder',
-		function($http, $stateParams, $scope, $location, $cookies, $state, $rootScope, $modal,
+		function($http, $stateParams, $scope, $location, $cookies, $state, $rootScope, $uibModal,
 				DTOptionsBuilder, DTColumnDefBuilder) {
 			var vm = this;
 
@@ -36,7 +36,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					}
 				$scope.operations = data.value.operations;
 				if(data.value.formula == undefined || data.value.formula.materials == undefined){
-					ineuronApp.confirm("提示","该产品尚未设置配方", 'sm', $rootScope, $modal);
+					ineuronApp.confirm("提示","该产品尚未设置配方", 'sm', $rootScope, $uibModal);
 					hasFormula = false;
 					$scope.materials = data.value.formula.allMaterials;
 				}else{
@@ -45,8 +45,8 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 				}
 				
 			}).error(function(data, status) {
-				//ineuronApp.confirm("提示","获取产品工艺流程信息失败！", 'sm', $rootScope, $modal);
-				handleError(status, $rootScope, $modal);
+				//ineuronApp.confirm("提示","获取产品工艺流程信息失败！", 'sm', $rootScope, $uibModal);
+				handleError(status, $rootScope, $uibModal);
 				console.log("error");
 			});
 
@@ -59,7 +59,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 						setDefaultValue(row);
 					}
 					if(isNaN(row.materialQuantity)){
-						ineuronApp.confirm("提示","该列只能输入数字！", 'sm', $rootScope, $modal);
+						ineuronApp.confirm("提示","该列只能输入数字！", 'sm', $rootScope, $uibModal);
 						row.materialQuantity = 0;
 					}
 					var operationId = $scope.model.selected.operationId;
@@ -176,7 +176,7 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 				if(message == undefined){
 					excuteSaveProcesses();
 				}else{
-					ineuronApp.confirm("确认", message, 'sm', $rootScope, $modal).result.then(function(clickok){  
+					ineuronApp.confirm("确认", message, 'sm', $rootScope, $uibModal).result.then(function(clickok){  
 						if(clickok){
 							hasFormula = false;
 							excuteSaveProcesses();
@@ -195,12 +195,12 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 					data : $scope.model.rows
 				}).success(function(data) {
 					updateApiToken(data, $cookies);
-					ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
+					ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $uibModal);
 					//$state.go("productList");
 					
 				}).error(function(data, status) {
-					//ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
-					handleError(status, $rootScope, $modal);
+					//ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $uibModal);
+					handleError(status, $rootScope, $uibModal);
 					console.log("error");
 				})
 				

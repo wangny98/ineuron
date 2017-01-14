@@ -1,7 +1,7 @@
 
 ineuronApp.clickok = false;
 
-ineuronApp.confirm = function(title, message, size, $rootScope, $modal){ 
+ineuronApp.confirm = function(title, message, size, $rootScope, $uibModal){ 
 	var vm = this;
 	var scope = $rootScope.$new();
 	scope.data = {
@@ -9,7 +9,7 @@ ineuronApp.confirm = function(title, message, size, $rootScope, $modal){
 			content:message
 	   }
 	
-	var modalInstance = $modal.open({
+	var modalInstance = $uibModal.open({
 		templateUrl : '/ineuron/modaltemplate.html',  
 		controller : 'ModalInstanceCtrl',
 		size : size, // default:middle; sm, lg
@@ -24,7 +24,7 @@ ineuronApp.confirm = function(title, message, size, $rootScope, $modal){
 }
 
 
-ineuronApp.controller('ModalInstanceCtrl',function($scope, $modalInstance, $modal, body){
+ineuronApp.controller('ModalInstanceCtrl',function($scope, $uibModalInstance, $uibModal, body){
 	$scope.title = $scope.data.title;
     $scope.content=$scope.data.content;
     //alert("title: "+$scope.data.title);
@@ -33,11 +33,11 @@ ineuronApp.controller('ModalInstanceCtrl',function($scope, $modalInstance, $moda
 
 	$scope.ok = function(){  
 		ineuronApp.clickok=true;
-		$modalInstance.close(ineuronApp.clickok); 
+		$uibModalInstance.close(ineuronApp.clickok); 
 	};
 	$scope.cancel = function(){
 		ineuronApp.clickok=false;
-		$modalInstance.close(ineuronApp.clickok); 
+		$uibModalInstance.close(ineuronApp.clickok); 
 	}
 });
 

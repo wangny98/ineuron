@@ -1,6 +1,6 @@
 
-ineuronApp.controller('FormulaListController', ['$http', '$scope', '$rootScope', '$modal', '$location', '$cookies', '$state', 'DTOptionsBuilder', 'DTColumnDefBuilder',
-	function($http, $scope, $rootScope, $modal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder) {
+ineuronApp.controller('FormulaListController', ['$http', '$scope', '$rootScope', '$uibModal', '$location', '$cookies', '$state', 'DTOptionsBuilder', 'DTColumnDefBuilder',
+	function($http, $scope, $rootScope, $uibModal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder) {
 	var vm = this;
 	
 	$http({
@@ -10,7 +10,7 @@ ineuronApp.controller('FormulaListController', ['$http', '$scope', '$rootScope',
 		updateApiToken(data, $cookies);
 		vm.formulas = data.value;
 	}).error(function(data, status) {
-		handleError(status, $rootScope, $modal);
+		handleError(status, $rootScope, $uibModal);
 		console.log("error");
 	});
 
@@ -30,16 +30,16 @@ ineuronApp.controller('FormulaListController', ['$http', '$scope', '$rootScope',
 		$state.go("createFormula");
 	}
 	function deleteFormula(index){
-		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $modal).result.then(function(clickok){  
+		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $uibModal).result.then(function(clickok){  
 			if(clickok){
 				$http({
 					url : '/product/deleteformula?id=' + vm.formulas[index].id,
 					method : 'POST'
 				}).success(function(data) {
-					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $modal);
+					ineuronApp.confirm("提示","删除成功！", 'sm', $rootScope, $uibModal);
 					$state.go("formulaList", null, {reload:true});
 				}).error(function(data, status) {
-					handleError(status, $rootScope, $modal);
+					handleError(status, $rootScope, $uibModal);
 					console.log("error");
 				});
 			}
@@ -55,10 +55,10 @@ ineuronApp.controller('UpdateFormulaController', [
 	'$cookies',
 	'$state',
 	'$rootScope', 
-	'$modal',
+	'$uibModal',
 	'DTOptionsBuilder',
 	'DTColumnDefBuilder',
-	function($http, $stateParams, $scope, $location, $cookies, $state, $rootScope, $modal,
+	function($http, $stateParams, $scope, $location, $cookies, $state, $rootScope, $uibModal,
 			DTOptionsBuilder, DTColumnDefBuilder) {
 		var vm = this;
 		$scope.formula = {};
@@ -82,7 +82,7 @@ ineuronApp.controller('UpdateFormulaController', [
 			$scope.materials = data.value.allMaterials;
 			$scope.formula.selected = {};
 		}).error(function(data, status) {
-			handleError(status, $rootScope, $modal);
+			handleError(status, $rootScope, $uibModal);
 			console.log("error");
 		});
 
@@ -144,11 +144,11 @@ ineuronApp.controller('UpdateFormulaController', [
 				data : formula
 			}).success(function(data) {
 				updateApiToken(data, $cookies);
-				ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
+				ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $uibModal);
 				$state.go("formulaList");
 			}).error(function(data, status) {
-				//ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
-				handleError(status, $rootScope, $modal);
+				//ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $uibModal);
+				handleError(status, $rootScope, $uibModal);
 				console.log("error");
 			})
 		}
@@ -198,18 +198,18 @@ ineuronApp.controller('UpdateFormulaController', [
 				var materialQuantity = formula.materialSettings[index].materialQuantity;
 				var materialId = formula.materialSettings[index].materialId;
 				if(isNaN(materialQuantity)){
-					ineuronApp.confirm("提示","原料的比例应为数字。", 'sm', $rootScope, $modal);
+					ineuronApp.confirm("提示","原料的比例应为数字。", 'sm', $rootScope, $uibModal);
 					return false;
 				}
 				if(materialId == 0){
-					ineuronApp.confirm("提示","原料不能为空。", 'sm', $rootScope, $modal);
+					ineuronApp.confirm("提示","原料不能为空。", 'sm', $rootScope, $uibModal);
 					return false;
 				}
 				for(var index2 in formula.materialSettings){
 					if(index != index2){
 						var materialId2 = formula.materialSettings[index2].materialId;
 						if(materialId2 == materialId){
-							ineuronApp.confirm("提示","原料不能重复。", 'sm', $rootScope, $modal);
+							ineuronApp.confirm("提示","原料不能重复。", 'sm', $rootScope, $uibModal);
 							return false;
 						}
 					}
@@ -234,8 +234,8 @@ ineuronApp.controller('CreateFormulaController', [
 	'$cookies',
 	'$state',
 	'$rootScope', 
-	'$modal',
-	function($http, $stateParams, $scope, $location, $cookies, $state, $rootScope, $modal) {
+	'$uibModal',
+	function($http, $stateParams, $scope, $location, $cookies, $state, $rootScope, $uibModal) {
 		var vm = this;
 		$scope.formula = {};
 	
@@ -243,7 +243,7 @@ ineuronApp.controller('CreateFormulaController', [
 		
 		function createFormula(){
 			if($scope.formula.name == null){
-				ineuronApp.confirm("提示","请输入配方名称", 'sm', $rootScope, $modal);
+				ineuronApp.confirm("提示","请输入配方名称", 'sm', $rootScope, $uibModal);
 				return;
 			}
 			$http({
@@ -252,11 +252,11 @@ ineuronApp.controller('CreateFormulaController', [
 				data : $scope.formula
 			}).success(function(data) {
 				updateApiToken(data, $cookies);
-				ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $modal);
+				ineuronApp.confirm("提示","保存成功！", 'sm', $rootScope, $uibModal);
 				$state.go("formulaList");
 			}).error(function(data, status) {
-				//ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $modal);
-				handleError(status, $rootScope, $modal);
+				//ineuronApp.confirm("提示","保存失败！", 'sm', $rootScope, $uibModal);
+				handleError(status, $rootScope, $uibModal);
 				console.log("error");
 			})
 		}

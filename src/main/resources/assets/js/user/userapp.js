@@ -1,7 +1,7 @@
 
 
-ineuronApp.controller('UserUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$modal', 
-	function($scope, $stateParams, $http, $state, $cookies, $rootScope, $modal) {
+ineuronApp.controller('UserUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal', 
+	function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
 	var selectedUserStr = $stateParams.userStr;
 	// alert(selectedUserStr);  
 	var selectedUser = eval('(' + selectedUserStr + ')');
@@ -59,8 +59,8 @@ ineuronApp.controller('UserUpdateController', ['$scope', '$stateParams', '$http'
 			}
 		}
 	}).error(function(data,status) {
-		handleError(status, $rootScope, $modal);
-		ineuronApp.confirm("提示","获取角色列表失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $uibModal);
+		ineuronApp.confirm("提示","获取角色列表失败！", 'sm', $rootScope, $uibModal);
 		console.log("error:getrolelist");
 	});
 
@@ -102,15 +102,15 @@ ineuronApp.controller('UserUpdateController', ['$scope', '$stateParams', '$http'
 			updateApiToken(data, $cookies);
 			$state.go("userManagement");
 		}).error(function(data,status) {
-			handleError(status, $rootScope, $modal);
-			ineuronApp.confirm("提示","更新失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $uibModal);
+			ineuronApp.confirm("提示","更新失败！", 'sm', $rootScope, $uibModal);
 			console.log("error");
 		})
 	}
 	
 	vm.deleteUserModal=deleteUserModal;   
 	function deleteUserModal(){ 
-		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $modal).result.then(function(clickok){  
+		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $uibModal).result.then(function(clickok){  
 			if(clickok){
 				 $http({
 					url : '/user/delete',
@@ -122,8 +122,8 @@ ineuronApp.controller('UserUpdateController', ['$scope', '$stateParams', '$http'
 					updateApiToken(data, $cookies);
 					$state.go("userManagement");
 				}).error(function(data,status) {
-					handleError(status, $rootScope, $modal);
-					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
+					handleError(status, $rootScope, $uibModal);
+					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $uibModal);
 					console.log("error");
 				})
 			}
@@ -133,8 +133,8 @@ ineuronApp.controller('UserUpdateController', ['$scope', '$stateParams', '$http'
 
 }]); // end of controller
 
-ineuronApp.controller('UserListController', ['$http', '$scope', '$location', '$cookies', '$state', '$rootScope', '$modal', 'DTOptionsBuilder', 'DTColumnDefBuilder',
-	function($http, $scope, $location, $cookies, $state, $rootScope, $modal, DTOptionsBuilder, DTColumnDefBuilder) {
+ineuronApp.controller('UserListController', ['$http', '$scope', '$location', '$cookies', '$state', '$rootScope', '$uibModal', 'DTOptionsBuilder', 'DTColumnDefBuilder',
+	function($http, $scope, $location, $cookies, $state, $rootScope, $uibModal, DTOptionsBuilder, DTColumnDefBuilder) {
 	var vm = this;
 	
 	$http({
@@ -149,8 +149,8 @@ ineuronApp.controller('UserListController', ['$http', '$scope', '$location', '$c
 		}
 		$cookies.put('INeuron-UserNameList', usernameList, {path : "/"});*/
 	}).error(function(data,status) {
-		handleError(status, $rootScope, $modal);
-		ineuronApp.confirm("提示","获取用户列表失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $uibModal);
+		ineuronApp.confirm("提示","获取用户列表失败！", 'sm', $rootScope, $uibModal);
 		console.log("error");
 	});
 
@@ -174,8 +174,8 @@ ineuronApp.controller('UserListController', ['$http', '$scope', '$location', '$c
 }]);
 
 
-ineuronApp.controller('UserCreateController', ['$scope', '$rootScope', '$modal', '$stateParams', '$http', '$state', '$cookies',
-	function($scope, $rootScope, $modal, $stateParams, $http, $state, $cookies) {
+ineuronApp.controller('UserCreateController', ['$scope', '$rootScope', '$uibModal', '$stateParams', '$http', '$state', '$cookies',
+	function($scope, $rootScope, $uibModal, $stateParams, $http, $state, $cookies) {
 
 	var vm = this;
 	
@@ -189,8 +189,8 @@ ineuronApp.controller('UserCreateController', ['$scope', '$rootScope', '$modal',
 			if(user==null) $scope.existedUsername=false; 
 			 else $scope.existedUsername=true;
 		}).error(function(data,status) {
-			handleError(status, $rootScope, $modal);
-			ineuronApp.confirm("提示","获取用户失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $uibModal);
+			ineuronApp.confirm("提示","获取用户失败！", 'sm', $rootScope, $uibModal);
 			console.log("error to get user");
 		});				
 	}
@@ -213,13 +213,13 @@ ineuronApp.controller('UserCreateController', ['$scope', '$rootScope', '$modal',
 				password : $scope.createUserPassword				
 			}
 		}).success(function(data) {
-			ineuronApp.confirm("提示","新用户已添加！", 'sm', $rootScope, $modal);		
+			ineuronApp.confirm("提示","新用户已添加！", 'sm', $rootScope, $uibModal);		
 			$state.go("userManagement");
 			console.log("success in User Create!");
 
 		}).error(function(data,status) {
-			handleError(status, $rootScope, $modal);
-			ineuronApp.confirm("提示","注册用户失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $uibModal);
+			ineuronApp.confirm("提示","注册用户失败！", 'sm', $rootScope, $uibModal);
 			
 			console.log("error");
 		})
@@ -228,8 +228,8 @@ ineuronApp.controller('UserCreateController', ['$scope', '$rootScope', '$modal',
 }]);
 
 
-ineuronApp.controller('RoleListController', ['$http', '$scope', '$location', '$cookies', '$state', '$rootScope', '$modal', 'DTOptionsBuilder', 'DTColumnDefBuilder',
-	function($http, $scope, $location, $cookies, $state, $rootScope, $modal, DTOptionsBuilder, DTColumnDefBuilder) {
+ineuronApp.controller('RoleListController', ['$http', '$scope', '$location', '$cookies', '$state', '$rootScope', '$uibModal', 'DTOptionsBuilder', 'DTColumnDefBuilder',
+	function($http, $scope, $location, $cookies, $state, $rootScope, $uibModal, DTOptionsBuilder, DTColumnDefBuilder) {
 	var vm = this;
 	$http({
 		url : '/user/rolelist',
@@ -238,8 +238,8 @@ ineuronApp.controller('RoleListController', ['$http', '$scope', '$location', '$c
 		updateApiToken(data, $cookies);
 		vm.roles = data.value;
 	}).error(function(data,status) {
-		handleError(status, $rootScope, $modal);
-		ineuronApp.confirm("提示","获取角色列表失败！", 'sm', $rootScope, $modal);
+		handleError(status, $rootScope, $uibModal);
+		ineuronApp.confirm("提示","获取角色列表失败！", 'sm', $rootScope, $uibModal);
 		console.log("error");
 	});
 
@@ -269,8 +269,8 @@ ineuronApp.controller('RoleListController', ['$http', '$scope', '$location', '$c
 	}
 }]);
 
-ineuronApp.controller('RoleUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$modal',
-	function($scope, $stateParams, $http, $state, $cookies, $rootScope, $modal) {
+ineuronApp.controller('RoleUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal',
+	function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
 	var roleStr = $stateParams.roleStr;
 	var selectedRole = eval('(' + roleStr + ')');
 		
@@ -336,15 +336,15 @@ ineuronApp.controller('RoleUpdateController', ['$scope', '$stateParams', '$http'
 			updateApiToken(data, $cookies);
 			$state.go("roleManagement");
 		}).error(function(data,status) {
-			handleError(status, $rootScope, $modal);
-			ineuronApp.confirm("提示","更新失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $uibModal);
+			ineuronApp.confirm("提示","更新失败！", 'sm', $rootScope, $uibModal);
 			console.log("error");
 		})
 	}
 		
 	vm.deleteRole=deleteRole;
 	function deleteRole() {
-		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $modal).result.then(function(clickok){  
+		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $uibModal).result.then(function(clickok){  
 			if(clickok){
 				$http({
 					url : '/user/deleterole',
@@ -356,8 +356,8 @@ ineuronApp.controller('RoleUpdateController', ['$scope', '$stateParams', '$http'
 					updateApiToken(data, $cookies);
 					$state.go("roleManagement");
 				}).error(function(data,status) {
-					handleError(status, $rootScope, $modal);
-					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $modal);
+					handleError(status, $rootScope, $uibModal);
+					ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $uibModal);
 					console.log("error");
 				})
 			}
@@ -367,8 +367,8 @@ ineuronApp.controller('RoleUpdateController', ['$scope', '$stateParams', '$http'
 }]);
 
 
-ineuronApp.controller('RoleCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$modal', 
-	function($scope, $stateParams, $http, $state, $cookies, $rootScope, $modal) {
+ineuronApp.controller('RoleCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal', 
+	function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
 
 	var vm = this;
 	
@@ -402,8 +402,8 @@ ineuronApp.controller('RoleCreateController', ['$scope', '$stateParams', '$http'
 			updateApiToken(data, $cookies);
 			$state.go("roleManagement");
 		}).error(function(data,status) {
-			handleError(status, $rootScope, $modal);
-			ineuronApp.confirm("提示","创建角色失败！", 'sm', $rootScope, $modal);
+			handleError(status, $rootScope, $uibModal);
+			ineuronApp.confirm("提示","创建角色失败！", 'sm', $rootScope, $uibModal);
 			console.log("error");
 		})
 	}

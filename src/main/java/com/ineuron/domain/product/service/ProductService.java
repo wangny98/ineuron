@@ -382,6 +382,17 @@ public class ProductService {
 			}
 		}
 
+		//search in product name/descriptions with attribute words for double check
+		for (int i = 0; i < attributeWords.size(); i++) {
+			List<Product> productList = repository.select(
+					"getProductsByNLPWord", "%" + attributeWords.get(i) + "%");
+			for (int k = 0; k < productList.size(); k++) {
+				Product p = allProducts.get(k);
+				if (productsResult.indexOf(p) == -1)
+					productsResult.add(p);
+			}
+		}
+			
 		for (int i = 0; i < productsResult.size(); i++) {
 			productsResult.get(i).initForProductCategory(repository);
 		}
