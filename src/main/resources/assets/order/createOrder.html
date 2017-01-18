@@ -15,7 +15,7 @@
 					<tr>
 						<th class="labelformat">用户名</th>
 						<td><input class="input-block-level" type="text"
-							ng-model="userName" required /></td>
+							ng-model="userName" readonly="true" /></td>
 						<td></td>
 					</tr>
 					<tr>
@@ -27,42 +27,51 @@
 					<tr>
 						<th class="labelformat">单价</th>
 						<td><input class="input-block-level" type="text"
-							ng-model="price" required /></td>
+							ng-model="price" readonly="true" /></td>
 						<td></td>
 					</tr>
 					<tr>
 						<th class="labelformat">数量</th>
-						<td><input class="input-block-level" type="text"
-							ng-model="amount" required /></td>
+						<td>
+						<input type="number" ng-model="amount" style="height:30px;" ng-change="calculateTotal()" required />
+						</td>
 						<td style="color: red">*</td>
 					</tr>
 					<tr>
 						<th class="labelformat">总价</th>
-						<td><input class="input-block-level" type="text"
-							ng-model="total" required /></td>
+						<td>
+						<input type="text" ng-model="total" style="height:30px; width:220px;" readonly="true" />
+						<label class="right-align" style="padding-top:5px; padding-right:5px;">元</label>
+						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th class="labelformat">付款</th>
-						<td><input class="input-block-level" type="text"
-							ng-model="payment" required /></td>
+						<td>
+						<input type="number" ng-model="payment" style="height:30px; width:220px;" required />
+						<label class="right-align" style="padding-top:5px; padding-right:5px;">元</label>
+						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th class="labelformat">交付日期</th>
 						<td> 
-						<input type="text" uib-datepicker-popup="{{format}}" ng-model="dat" is-open="popup1.opened" ng-required="true" close-text="关闭"
+						<div style="float:left;">
+						<input style="width:210px; height:34px;" type="text" uib-datepicker-popup="{{format}}" ng-model="deliveryDate" is-open="popup1.opened" ng-required="true" close-text="关闭"
                        clear-text="清空" current-text="今天" alt-input-formats="altInputFormats" datepicker-options="dateOptions"/>
+                       </div>
+                       <div style="float:left;">
                     	<span>
                     	<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
-                    	</span>						
+                    	</span>	
+                    	</div>					
 					    </td>
 						<td style="color: red">*</td>
 					</tr>
 					<tr>
 						<th class="labelformat">定制化信息</th>
 						<td>
-						<textarea style="min-height: 60px"
+						<textarea style="min-width:250px; min-height: 60px"
 								class="input-block-level" type="text"
 								ng-model="customizedInfo" />
 						</td>

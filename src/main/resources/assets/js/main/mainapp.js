@@ -96,6 +96,12 @@ ineuronApp.config(function($stateProvider) {
 			templateUrl : '/ineuron/product/updateProduct.html'
 		}
 	
+	var updateProductPriceState = {
+			name : 'updateProductPrice',
+			url : 'updateProductPrice/:productStr',
+			templateUrl : '/ineuron/product/updateProductPrice.html'
+		}
+	
 	
 	var attributeManagementState = {
 			name : 'attributeList',
@@ -151,7 +157,7 @@ ineuronApp.config(function($stateProvider) {
 	
 	var createOrderState = {
 			name : 'createOrder',
-			url : 'createOrder/',
+			url : 'createOrder/:productStr',
 			templateUrl : '/ineuron/order/createOrder.html'
 		}
 
@@ -185,6 +191,7 @@ ineuronApp.config(function($stateProvider) {
 	$stateProvider.state(createProductCategoryState);
 	$stateProvider.state(updateProductCategoryState);
 	$stateProvider.state(updateProductState);
+	$stateProvider.state(updateProductPriceState);
 	$stateProvider.state(productManagementState);
 	$stateProvider.state(allProductManagementState);
 	$stateProvider.state(createProductState);

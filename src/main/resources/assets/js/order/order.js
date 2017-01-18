@@ -26,8 +26,8 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 
 
 vm.createOrder = createOrder;
-function createOrder() {
-	$state.go("createOrder");
+function createOrder(index) {
+	$state.go("createOrder",{productStr: JSON.stringify(vm.products[index])});
   	}
 
 vm.backward = backward;
@@ -101,11 +101,13 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal',
    function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
 
-	var vm = this;
-	$scope.existedOrderName=false;		
-
-
-	 $scope.dat = new Date();
+	var vm = this;	
+	var product = eval('(' + $stateParams.productStr + ')');
+	$scope.userName=$cookies.get('INeuron-UserName');
+    $scope.productName=product.name;
+    $scope.price=product.productPrice.price;
+    
+	$scope.deliveryDate = new Date();
 	            $scope.format = "yyyy/MM/dd";
 	            $scope.altInputFormats = ['yyyy/M!/d!'];
 
@@ -119,33 +121,26 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	                    showWeeks: false
 	            };
 	            
-$scope.CheckOrderName=function(){
+	$scope.calculateTotal=function(){ 
+	    $scope.total=$scope.amount*$scope.price;
+	}
+
+    vm.createOrder = createOrder;
+    function createOrder() {
+
+	var userId=	$cookies.get('INeuron-UserId');
 	
 	$http({
-		url : '/product/orderbyname?name' + $scope.orderName,
-		method : 'GET'
-	}).success(function(data) {
-		// updateApiToken(data, $cookies);
-		var a = data.value;
-		if(a==null) $scope.existedOrderName=false; 
-		 else $scope.existedOrderName=true;
-	}).error(function(data, status) {
-		//ineuronApp.confirm("提示","依据名称调用失败！", 'sm', $rootScope, $uibModal);
-		handleError(status, $rootScope, $uibModal);
-		console.log("error to get order ");
-	});				
-}
-
-
-vm.createOrder = createOrder;
-function createOrder() {
-	
-	$http({
-		url : '/product/createorder',
+		url : '/order/create',
 		method : 'POST',
 		data : {
-			name : $scope.orderName,
-			description : $scope.orderDescription
+			productId : product.id,
+			userId: userId,
+			customer:$scope.customerName,
+			amount:$scope.amount,
+			payment:$scope.payment,
+			deliveryDate : $scope.deliveryDate,
+			customizedInfo:$scope.customizedInfo
 		}
 	}).success(function(data) {
 		updateApiToken(data, $cookies);
@@ -153,6 +148,7 @@ function createOrder() {
 		$state.go("orderList");
 	}).error(function(data, status) {
 		//ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
+		alert(status);
 		handleError(status, $rootScope, $uibModal);
 		console.log("create order error");
   		})

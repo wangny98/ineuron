@@ -15,38 +15,46 @@
 			dt-column-defs="AllProductList.dtColumnDefs" id="table-style">
 			<thead>
 				<tr>
-					<th style="width: 40px">序号</th>
-					<th>产品名称</th>
-					<th>产品编号</th>
-					<th>产品类名称</th>
-					<th>产品描述</th>
-					<th style="width: 100px">查看/修改</th>
-					<th style="width: 100px">配方</th>
-					<th style="width: 100px">生产工艺</th>
+					<th style="width:40px">序号</th>
+					<th style="width:16%;">产品名称</th>
+					<th style="width:15%;">产品编号</th>
+					<th style="width:16%;">产品类名称</th>
+					<th style="width:22%;">产品描述</th>
+					<th  style="width:8%;">查看/修改</th>
+					<th style="width:6%">定价</th>
+					<th style="width:6%">配方</th>
+					<th style="width:8%">生产工艺</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="product in AllProductList.products">
-					<td style="max-width:50px;text-align: center;">{{ $index+1}}</td>
-					<td style="width:16%;">{{product.name}}</td>
-					<td style="width:16%;">{{product.code}}</td>
-					<td style="width:16%;">{{product.productCategory.name}}</td>
-					<td style="width:22%;">{{product.description}}</td>
-					<td style="width:9%;">
+					<td style="text-align: center;">{{ $index+1}}</td>
+					<td>{{product.name}}</td>
+					<td>{{product.code}}</td>
+					<td>{{product.productCategory.name}}</td>
+					<td>{{product.description}}</td>
+					<td>
 						<button type="button"
 							ng-click="AllProductList.updateProduct($index)"
 							class="btn btn-warning">
 							<i class="fa fa-edit"></i>
 						</button>
 					</td>
-					<td style="width:7%;">
+					<td>
+						<button type="button"
+							ng-click="AllProductList.updateProductPrice($index)"
+							class="btn btn-warning">
+							<i class="fa fa-usd"></i>
+						</button>
+					</td>
+					<td>
 						<button type="button"
 							ng-click="AllProductList.updateFormula($index)"
 							class="btn btn-warning">
 							<i class="fa fa-list"></i>
 						</button>
 					</td>
-					<td style="width:9%;">
+					<td>
 						<button type="button"
 							ng-click="AllProductList.updateManufacturingProcess($index)"
 							class="btn btn-warning">

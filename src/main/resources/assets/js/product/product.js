@@ -122,6 +122,12 @@ ineuronApp.controller('ProductListController', ['$http', '$scope', '$stateParams
 		//alert(vm.products[index].productCategory);
 		$state.go("updateProduct", {productStr: JSON.stringify(vm.products[index])});		
 	}
+	
+	vm.updateProductPrice=updateProductPrice;
+	function updateProductPrice(index){
+		//alert(vm.products[index].productCategory);
+		$state.go("updateProductPrice", {productStr: JSON.stringify(vm.products[index])});		
+	}
 
 	vm.productCreate=productCreate;
 	function productCreate(){
@@ -254,7 +260,7 @@ ineuronApp.controller('AllProductListController', ['$http', '$scope', '$statePar
 	}).success(function(data) {
 		updateApiToken(data, $cookies);
 		vm.products = data.value;
-		//alert(vm.products[0].productCategory.name);
+		//alert(vm.products[0].productPrice.price);
 	}).error(function(data, status) {
 		handleError(status, $rootScope, $uibModal);
 		console.log("error");
@@ -264,6 +270,12 @@ ineuronApp.controller('AllProductListController', ['$http', '$scope', '$statePar
 	function updateProduct(index){
 		//alert(vm.products[index].productCategory);
 		$state.go("updateProduct", {productStr: JSON.stringify(vm.products[index])});		
+	}
+	
+	vm.updateProductPrice=updateProductPrice;
+	function updateProductPrice(index){
+		//alert(vm.products[index].productCategory);
+		$state.go("updateProductPrice", {productStr: JSON.stringify(vm.products[index])});		
 	}
 
 	vm.productCreate=productCreate;
@@ -281,5 +293,58 @@ ineuronApp.controller('AllProductListController', ['$http', '$scope', '$statePar
 	vm.updateManufacturingProcess=updateManufacturingProcess;
 	function updateManufacturingProcess(index) {
 		$state.go("productManufacturingProcess", {productStr: JSON.stringify(vm.products[index])});
+	}
+}]);
+
+
+ineuronApp.controller('ProductPriceUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal',
+                                                       function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
+
+	var product = eval('(' + $stateParams.productStr + ')');
+	$scope.productName=product.name;
+	
+	var vm = this;
+	vm.units = [
+	            { name: "升" },
+	            { name: "毫升" },
+	            { name: "克" },
+	            { name: "千克" },
+	            { name: "吨" }
+	            ]; 
+	
+	if(product.productPrice!=null){
+		$scope.price=product.productPrice.price;
+		for (var i in vm.units){
+			//alert(product.productPrice.unit+" vm unit name:"+vm.units[i].name);
+			if(vm.units[i].name==product.productPrice.unit) {
+				vm.units[i].ticked=true;
+				break;
+			}
+		}
+	}
+
+	vm.updateProductPrice = updateProductPrice;
+	function updateProductPrice() {
+		$http({
+			url : '/product/updateproductprice',
+			method : 'POST',
+			data : {
+				productId : product.id,
+				price: $scope.price,
+				unit: $scope.selectedUnit[0].name
+			}
+		}).success(function(data) {
+			updateApiToken(data, $cookies);
+			ineuronApp.confirm("提示","产品价格更新成功！", 'sm', $rootScope, $uibModal);		
+			$state.go("allProductList");
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $uibModal);
+			console.log("产品价格更新失败");
+		})
+	}
+
+	vm.backward = backward;
+	function backward() {
+		$state.go("allProductList");
 	}
 }]);

@@ -9,6 +9,7 @@ import com.ineuron.domain.product.valueobject.ManufacturingProcess;
 import com.ineuron.domain.product.valueobject.Operation;
 import com.ineuron.domain.product.valueobject.OperationType;
 import com.ineuron.domain.product.valueobject.ProductCategory;
+import com.ineuron.domain.product.valueobject.ProductPrice;
 
 public class Product {
 
@@ -25,6 +26,7 @@ public class Product {
 	private List<ManufacturingProcess> manufacturingProcesses;
 	private List<Operation> operations;
 	private List<OperationType> operationTypes;
+	private ProductPrice productPrice;
 
 	//private static final Logger LOGGER = LoggerFactory.getLogger("Product");
 
@@ -41,7 +43,6 @@ public class Product {
 	}
 	
 	public void init(INeuronRepository repository) throws RepositoryException{
-		
 		if(formulaId != null){
 			formula = repository.selectOne("getFormulaById", formulaId.toString());
 			if(formula == null){
@@ -53,17 +54,25 @@ public class Product {
 		}
 		
 		formula.init(repository);
-		
-		productCategory=repository.selectOne("getProductCategoryById", productCategoryId.toString());
+		productCategory=repository.selectOne("getProductCategoryById", productCategoryId.toString());	
 		operations = repository.select("getOperations", null);
 		manufacturingProcesses = repository.select("getProcesses", id);
 		operationTypes = repository.select("getOperationTypes", null);
+		
+		//System.out.println("before get product price by id");
+		productPrice=repository.selectOne("getProductPriceByProductId", id);
 		
 	}
 	
 	public void initForProductCategory(INeuronRepository repository) throws RepositoryException{
 	
 		productCategory=repository.selectOne("getProductCategoryById", productCategoryId.toString());
+		
+	}
+	
+	public void initForProductPrice(INeuronRepository repository) throws RepositoryException{
+		
+		productPrice=repository.selectOne("getProductPriceByProductId", id);
 		
 	}
 	
@@ -161,6 +170,14 @@ public class Product {
 
 	public void setOperationTypes(List<OperationType> operationTypes) {
 		this.operationTypes = operationTypes;
+	}
+
+	public ProductPrice getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(ProductPrice productPrice) {
+		this.productPrice = productPrice;
 	}
 	
 	

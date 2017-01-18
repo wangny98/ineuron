@@ -21,6 +21,7 @@ import com.ineuron.domain.product.repository.ProductRepository;
 import com.ineuron.domain.product.valueobject.ManufacturingProcess;
 import com.ineuron.domain.product.valueobject.Material;
 import com.ineuron.domain.product.valueobject.Operation;
+import com.ineuron.domain.product.valueobject.ProductPrice;
 import com.ineuron.domain.nlp.service.NLPService;
 import com.ineuron.domain.nlp.valueobject.ProductSelection;
 
@@ -127,7 +128,8 @@ public class ProductService {
 
 	public Product getProductByName(String name) throws RepositoryException {
 		Product product = repository.selectOne("getProductByName", name);
-		product.init(repository);
+		//System.out.println("get product by name in service: success");
+		if(product!=null) product.init(repository);
 		return product;
 	}
 
@@ -293,6 +295,27 @@ public class ProductService {
 		return material;
 	}
 
+	// ProductPrice
+
+		public ProductPrice createProductPrice(ProductPrice productPrice)
+				throws RepositoryException {
+			repository.add("addProductPrice", productPrice);
+			return productPrice;
+		}
+
+		public void updateProductPrice(ProductPrice productPrice) throws RepositoryException {
+			ProductPrice pPrice = repository.selectOne("getProductPriceByProductId", productPrice.getProductId());
+			if(pPrice==null)
+				repository.add("addProductPrice", productPrice);
+			else 	
+				repository.update("updateProductPrice", productPrice);
+		}
+		
+		public ProductPrice getProductPriceByProductId(Integer productId) throws RepositoryException {
+			ProductPrice productPrice = repository.selectOne("getProductPriceByProductId", productId);
+			return productPrice;
+		}
+
 	/*
 	 * NLP based Search for Products
 	 */
@@ -395,6 +418,7 @@ public class ProductService {
 			
 		for (int i = 0; i < productsResult.size(); i++) {
 			productsResult.get(i).initForProductCategory(repository);
+			productsResult.get(i).initForProductPrice(repository);
 		}
 		return productsResult;
 	}
