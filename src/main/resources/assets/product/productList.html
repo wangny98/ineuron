@@ -5,7 +5,7 @@
 		<table>
 			<tbody>
 				<tr>
-					<td style="width:90%">
+					<td style="width:95%">
 						<table id="table-style">
 							<tr>
 								<th>产品类名</th>
@@ -29,36 +29,44 @@
 			dt-column-defs="productList.dtColumnDefs" id="table-style">
 			<thead>
 				<tr>
-				    <th style="width:40px">序号</th>
-					<th>产品名称</th>
-					<th>产品编号</th>
-					<th>产品描述</th>
-					<th style="width: 100px">查看/修改</th>
-					<th style="width: 100px">配方</th>
-					<th style="width: 100px">生产工艺</th>
+					<th style="width:40px">序号</th>
+					<th style="width:20%;">产品名称</th>
+					<th style="width:20%;">产品编号</th>
+					<th style="width:26%;">产品描述</th>
+					<th  style="width:8%;">查看/修改</th>
+					<th style="width:7%">定价</th>
+					<th style="width:7%">配方</th>
+					<th style="width:8%">生产工艺</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="product in productList.products">
-				<td>{{$index+1}}</td>	
+				<td style="text-align: center;">{{$index+1}}</td>	
 				<td>{{product.name}}</td> 
 				<td>{{product.code}}</td>
 				<td>{{product.description}}</td>
 				
-					<td>
+					<td style="text-align: center;">
 						<button type="button" ng-click="productList.updateProduct($index)"
 							class="btn btn-warning">
 							<i class="fa fa-edit"></i>
 						</button>
 					</td>
-					<td>
+					<td style="text-align: center;">
+						<button type="button"
+							ng-click="productList.updateProductPrice($index)"
+							class="btn btn-warning">
+							<i class="fa fa-usd"></i>
+						</button>
+					</td>
+					<td style="text-align: center;">
 						<button type="button"
 							ng-click="productList.updateFormula($index)"
 							class="btn btn-warning">
 							<i class="fa fa-list"></i>
 						</button>
 					</td>
-					<td>
+					<td style="text-align: center;">
 						<button type="button"
 							ng-click="productList.updateManufacturingProcess($index)"
 							class="btn btn-warning">

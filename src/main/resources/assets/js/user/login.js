@@ -42,6 +42,7 @@ ineuronApp.controller('UserLoginController', ['$scope', '$http', '$location', '$
 			}).success(
 				function(data) {
 					$cookies.put('INeuron-UserName', $scope.username, {path : "/"});
+					$cookies.put('INeuron-UserId', data.value.id, {path : "/"});
 					$cookies.put('INeuron-ApiToken',encodeURI(encodeURI(data.apiToken)), {path : "/"});
 					
 					var allPermissions = JSON.stringify(data.value.allPermissions); 

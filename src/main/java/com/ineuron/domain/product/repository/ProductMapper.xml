@@ -218,6 +218,26 @@
          </foreach>  
 	</select>
 	
+	<!-- ProductPrices -->
+
+	<select id="getProductPrices" resultType="com.ineuron.domain.product.valueobject.ProductPrice">
+		select * from ProductPrices
+	</select>
+	
+	<select id="getProductPriceByProductId" resultType="com.ineuron.domain.product.valueobject.ProductPrice">
+		select * from ProductPrices where productId = #{productId}
+	</select>
+
+	<insert id="addProductPrice">
+		insert into ProductPrices (productId,price,unit) values(#{productId},#{price},#{unit})
+	</insert>
+
+	<update id="updateProductPrice">
+		update ProductPrices set price = #{price}, unit = #{unit} where productId = #{productId}
+	</update>
+
+	
+	
 	<!-- For NLP Search -->
 
 	<select id="getAttributesByNLPWord" resultType="com.ineuron.domain.product.valueobject.Attribute">

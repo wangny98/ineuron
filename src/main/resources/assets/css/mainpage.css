@@ -81,9 +81,14 @@ color: #fff;
 	text-align: center;  
 }
 
+.labelformat {
+	min-width:80px;
+}
+
 .right-align{
 	font-weight:bold;
-	font-size:medium;
+	font-size:large;
+	float:right;
 }
 
 .custombutton{
