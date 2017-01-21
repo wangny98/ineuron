@@ -4,6 +4,9 @@ import java.util.Date;
 
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.INeuronRepository;
+import com.ineuron.domain.order.valueobject.OrderStatus;
+import com.ineuron.domain.product.entity.Product;
+import com.ineuron.domain.user.entity.User;
 
 public class Order {
 
@@ -14,34 +17,52 @@ public class Order {
 	private Integer userId;
 	private Integer productionPeriod;
 	private float amount;
-	private String status;
+	private float total;
+	private Integer statusId;
 	private String customizedInfo;
-	private String orderDate;
+	private Date orderDate;
 	private Date orderDateTime;
-	private String deliveryDate;
+	private Date deliveryDate;
 	private String customer;
 	private float payment;
 	private Integer validFlag;
 
-	//private static final Logger LOGGER = LoggerFactory.getLogger("Product");
+	private Product product;
+	private User user;
+	private OrderStatus orderStatus;
 
-	public void addOrder(INeuronRepository repository) throws RepositoryException {
+	// private static final Logger LOGGER = LoggerFactory.getLogger("Product");
+
+	public void addOrder(INeuronRepository repository)
+			throws RepositoryException {
 		repository.add("addOrder", this);
-		
+
 	}
 
-	public void updateOrder(INeuronRepository repository) throws RepositoryException {
+	public void updateOrder(INeuronRepository repository)
+			throws RepositoryException {
 		repository.update("updateOrder", this);
 	}
 
-	
-	public void deleteAttibute(INeuronRepository repository) throws RepositoryException {
+	public void deleteAttibute(INeuronRepository repository)
+			throws RepositoryException {
 		repository.delete("deleteOrder", this);
-		
+
 	}
-	
-	public void init(INeuronRepository repository) throws RepositoryException{	
-	
+
+	public void init(INeuronRepository repository) throws RepositoryException {
+		if (productId != null) {
+			product = repository.selectOne("getProductById", productId);
+			if (product != null) {
+				product.initForProductPrice(repository);
+			}
+		}
+
+		if (userId != null)
+			user = repository.selectOne("getUserById", userId);
+
+		if (statusId != null)
+			orderStatus=repository.selectOne("getOrderStatusById", statusId);
 	}
 
 	public Integer getId() {
@@ -100,14 +121,6 @@ public class Order {
 		this.amount = amount;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	public String getCustomizedInfo() {
 		return customizedInfo;
 	}
@@ -116,19 +129,19 @@ public class Order {
 		this.customizedInfo = customizedInfo;
 	}
 
-	public String getOrderDate() {
+	public Date getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrderDate(String orderDate) {
+	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
 	}
 
-	public String getDeliveryDate() {
+	public Date getDeliveryDate() {
 		return deliveryDate;
 	}
 
-	public void setDeliveryDate(String deliveryDate) {
+	public void setDeliveryDate(Date deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 
@@ -163,6 +176,45 @@ public class Order {
 	public void setOrderDateTime(Date orderDateTime) {
 		this.orderDateTime = orderDateTime;
 	}
-	
-	
+
+	public float getTotal() {
+		return total;
+	}
+
+	public void setTotal(float total) {
+		this.total = total;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Integer getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId(Integer statusId) {
+		this.statusId = statusId;
+	}
+
+	public OrderStatus getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
 }

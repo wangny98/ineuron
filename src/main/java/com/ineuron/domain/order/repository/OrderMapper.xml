@@ -8,8 +8,8 @@
 	<!-- Order -->
 	
 	<insert id="addOrder">
-		insert into Orders (serialNumber,orderNumber,productId,userId,productionPeriod,amount,status,customizedInfo,orderDate,orderDateTime,deliveryDate,customer,payment,validFlag)
-		values(#{serialNumber},#{orderNumber},#{productId},#{userId},#{productionPeriod},#{amount},#{status},#{customizedInfo},#{orderDate},#{orderDateTime},#{deliveryDate},#{customer},#{payment},#{validFlag})
+		insert into Orders (serialNumber,orderNumber,productId,userId,productionPeriod,amount,total,statusId,customizedInfo,orderDate,orderDateTime,deliveryDate,customer,payment,validFlag)
+		values(#{serialNumber},#{orderNumber},#{productId},#{userId},#{productionPeriod},#{amount},#{total},#{statusId},#{customizedInfo},#{orderDate},#{orderDateTime},#{deliveryDate},#{customer},#{payment},#{validFlag})
 	</insert>
 	
 	<select id="getOrders" resultType="com.ineuron.domain.order.entity.Order">
@@ -26,12 +26,26 @@
 	</select>
 
 	<update id="updateOrder">
-		update Orders set status = #{status} where id = #{id}
+		update Orders set amount=#{amount}, customer=#{customer}, total=#{total}, payment=#{payment},
+		 deliveryDate=#{deliveryDate}, customizedInfo=#{customizedInfo}, statusId = #{statusId} where id = #{id}
+	</update>
+	
+	<update id="updateOrderForStatus">
+		update Orders set statusId = #{statusId} where id = #{id}
 	</update>
 
 	<update id="deleteOrder">
 		update Orders set validFlag = -1 where id = #{id}
 	</update>
-
 	
+	
+	<!-- OrderStatus -->
+	
+	<select id="getOrderStatus" resultType="com.ineuron.domain.order.valueobject.OrderStatus">
+		select * from OrderStatus
+	</select>
+	
+	<select id="getOrderStatusById" resultType="com.ineuron.domain.order.valueobject.OrderStatus">
+		select * from OrderStatus where id=#{id}
+	</select>
 </mapper>

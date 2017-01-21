@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ineuron.dataaccess.db.mappers.CustomerMapper">
+
+
+	<!-- Customer -->
+	
+	<insert id="addCustomer">
+		insert into Customers (name,size,location)
+		values(#{name},#{size},#{location})
+	</insert>
+	
+	<select id="getCustomers" resultType="com.ineuron.domain.customer.entity.Customer">
+		select * from Customers
+	</select>
+	
+	<select id="getCustomerById" resultType="com.ineuron.domain.customer.entity.Customer">
+		select * from Customers where id=#{id}
+	</select>
+
+	<update id="updateCustomer">
+		update Customers set name = #{name}, size=#{size}, location=#{location} where id = #{id}
+	</update>
+
+	<delete id="deleteCustomer">
+		delete from Customers where name = #{name}
+	</delete>
+
+	
+</mapper>

@@ -7,6 +7,8 @@ import com.ineuron.common.exception.InvalidAPITokenException;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.domain.order.entity.Order;
 import com.ineuron.domain.order.service.OrderService;
+import com.ineuron.domain.order.valueobject.OrderStatus;
+import com.ineuron.domain.product.entity.Product;
 import com.ineuron.domain.user.service.SecurityService;
 
 import javax.ws.rs.GET;
@@ -41,8 +43,6 @@ public class OrderResource {
 	public OrderResource() {
 		super();
 	}
-
-	// Material
 
 	@Path("/list")
 	@GET
@@ -80,6 +80,63 @@ public class OrderResource {
 			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
+	}
+	
+	
+	@Path("/update")
+	@POST
+	@Timed
+	public Response updateOrder(final Order order, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			orderService.updateOrder(order);
+			response.setValue(order);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}	
+	}
+	
+	
+	@Path("/updateorderforstatus")
+	@POST
+	@Timed
+	public Response updateOrderForStatus(final Order order, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			orderService.updateOrderForStatus(order);
+			response.setValue(order);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}	
+	}
+	
+	
+	@Path("/orderstatuslist")
+	@GET
+	@Timed
+	public Response orderStatusList(@Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			List<OrderStatus> orderStatusList = orderService.getOrderStatusList();
+			response.setValue(orderStatusList);
+			return Response.ok(response).cookie(new NewCookie("name", "Hello, world!")).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}		
 	}
 
 }

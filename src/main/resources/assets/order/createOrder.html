@@ -4,6 +4,7 @@
 	ng-controller="OrderCreateController as OrderCreate">
 	<div class="message">订单</div>
 	<div>
+		<form ng-submit="OrderCreate.createOrder()">
 			<table id="table-style" style="margin: 50px auto">
 				<tbody>
 					<tr>
@@ -21,7 +22,7 @@
 					<tr>
 						<th class="labelformat">客户名</th>
 						<td><input class="input-block-level" type="text"
-							ng-model="customerName" required /></td>
+							ng-model="customerName" /></td>
 						<td></td>
 					</tr>
 					<tr>
@@ -40,15 +41,15 @@
 					<tr>
 						<th class="labelformat">总价</th>
 						<td>
-						<input type="text" ng-model="total" style="height:30px; width:220px;" readonly="true" />
+						<input type="text" ng-model="total" style="height:30px; width:220px;" required/>
 						<label class="right-align" style="padding-top:5px; padding-right:5px;">元</label>
 						</td>
-						<td></td>
+						<td style="color: red">*</td>
 					</tr>
 					<tr>
 						<th class="labelformat">付款</th>
 						<td>
-						<input type="number" ng-model="payment" style="height:30px; width:220px;" required />
+						<input type="number" ng-model="payment" style="height:30px; width:220px;" />
 						<label class="right-align" style="padding-top:5px; padding-right:5px;">元</label>
 						</td>
 						<td></td>
@@ -58,7 +59,7 @@
 						<td> 
 						<div style="float:left;">
 						<input style="width:210px; height:34px;" type="text" uib-datepicker-popup="{{format}}" ng-model="deliveryDate" is-open="popup1.opened" ng-required="true" close-text="关闭"
-                       clear-text="清空" current-text="今天" alt-input-formats="altInputFormats" datepicker-options="dateOptions"/>
+                       clear-text="清空" current-text="今天" alt-input-formats="altInputFormats" datepicker-options="dateOptions" required/>
                        </div>
                        <div style="float:left;">
                     	<span>
@@ -79,8 +80,7 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td><button class="btn btn-large btn-primary"
-								ng-click="OrderCreate.createOrder()">
+						<td><button class="btn btn-large btn-primary">
 								<span class="glyphicon glyphicon-upload"></span> 提交
 							</button>
 							<button class="btn btn-large btn-primary"
@@ -92,5 +92,6 @@
 					</tr>
 				</tbody>
 			</table>
+		</form>
 	</div>
 </div>
