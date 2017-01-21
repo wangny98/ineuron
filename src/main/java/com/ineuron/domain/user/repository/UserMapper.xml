@@ -22,6 +22,10 @@
     select * from Users where username = #{username}
   </select>
   
+  <select id="getUserById" resultType="com.ineuron.domain.user.entity.User">
+    select * from Users where id = #{id}
+  </select>
+  
   <select id="getUsers" resultType="com.ineuron.domain.user.entity.User">
     select id, username, lastname, firstname, roles, permissions from Users;
   </select>

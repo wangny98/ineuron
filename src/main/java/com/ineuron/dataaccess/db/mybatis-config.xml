@@ -22,5 +22,6 @@
 		<mapper resource="com/ineuron/domain/user/repository/UserMapper.xml" />
 		<mapper resource="com/ineuron/domain/product/repository/ProductMapper.xml" />
 		<mapper resource="com/ineuron/domain/order/repository/OrderMapper.xml" />
+		<mapper resource="com/ineuron/domain/customer/repository/CustomerMapper.xml" />
 	</mappers>
 </configuration>

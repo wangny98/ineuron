@@ -1,6 +1,6 @@
 
 environment: dev
-nlpEnabled: yes
+nlpEnabled: no
 
 logging:
 

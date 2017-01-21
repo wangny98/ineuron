@@ -1,20 +1,18 @@
 package com.ineuron.domain.order.service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.INeuronRepository;
-import com.ineuron.domain.nlp.service.NLPService;
 import com.ineuron.domain.order.entity.Order;
+import com.ineuron.domain.order.valueobject.OrderStatus;
 
 public class OrderService {
 
@@ -32,10 +30,11 @@ public class OrderService {
 		Date today=new Date();
 		order.setOrderDateTime(today);
 		
-		SimpleDateFormat dateFormat=new SimpleDateFormat("yyyyMMdd");
-		String todayDate = dateFormat.format(today); 
-		order.setOrderDate(todayDate);		
-		Order o = repository.selectOne("getLatestOrderByDate", todayDate);
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_MONTH,0);
+		java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		order.setOrderDate(today);		
+		Order o = repository.selectOne("getLatestOrderByDate", format.format(Calendar.getInstance().getTime()));
 		
 		int newOrderSN = 0;
 		if (o != null)
@@ -44,10 +43,14 @@ public class OrderService {
 			newOrderSN = 1;
 		order.setSerialNumber(newOrderSN);
 		
-		//Order number format: SO-[todayDate]-xxxx. currently set the max number per day is 9999
-	    order.setOrderNumber(prefix+"-"+todayDate+"-"+String.format("%04d", newOrderSN));	
+		//Order number format: SO-[yyyymmdd]-xxxx. currently set the max number per day is 9999
+		SimpleDateFormat dateFormat=new SimpleDateFormat("yyyyMMdd");
+		String todayDateforNumber = dateFormat.format(today);
+	    order.setOrderNumber(prefix+"-"+todayDateforNumber+"-"+String.format("%04d", newOrderSN));	
 		
-	    order.setStatus("init");
+	    //set the status to init (id=1)
+	    order.setStatusId(1);
+	    
 	    //valid order is 1; deleted order is -1;
 	    order.setValidFlag(1);
 	    
@@ -58,6 +61,11 @@ public class OrderService {
 	public Order updateOrder(Order order) throws RepositoryException {
 		order.updateOrder(repository);
 		return order;
+	}
+	
+
+	public void updateOrderForStatus(Order order) throws RepositoryException {
+		repository.update("updateOrderForStatus", order);
 	}
 
 	public void deleteOrder(Order order) throws RepositoryException {
@@ -86,6 +94,13 @@ public class OrderService {
 		//System.out.println("get order by name in service: success");
 		if(order!=null) order.init(repository);
 		return order;
+	}
+	
+	
+	public List<OrderStatus> getOrderStatusList() throws RepositoryException {
+		List<OrderStatus> orderStatusList = repository.select("getOrderStatus", null);
+		
+		return orderStatusList;
 	}
 
 

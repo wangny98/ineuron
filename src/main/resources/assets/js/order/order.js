@@ -4,6 +4,7 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 	var vm = this;
 	$scope.searchSubmitted=false;	
 	$scope.notFoundProducts=false;	
+	$scope.isCollapsed = true;
 
 	vm.searchProducts=searchProducts;
 	function searchProducts(){
@@ -41,37 +42,34 @@ function backward() {
 ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams', '$rootScope', '$uibModal', '$location', '$cookies', '$state', 'DTOptionsBuilder', 'DTColumnDefBuilder',
 	function($http, $scope, $stateParams, $rootScope, $uibModal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder) {
 	var vm = this;
+	$scope.format = "yyyy/MM/dd";
 	
 	$http({
-		url : '/product/orderlist',
+		url : '/order/list',
 		method : 'GET'
 	}).success(function(data) {
 		updateApiToken(data, $cookies);
 		vm.orders = data.value;
 	}).error(function(data, status) {
-		//ineuronApp.confirm("提示","获取列表失败！", 'sm', $rootScope, $uibModal);
 		handleError(status, $rootScope, $uibModal);
 		console.log("order list error");
 	});
 
 	vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType(
 			'full_numbers');
-	/*
-	 * vm.dtColumnDefs = [ DTColumnDefBuilder.newColumnDef(0),
-	 * DTColumnDefBuilder.newColumnDef(1).notSortable() ];
-	 */
-	
+		
 	vm.updateOrder=updateOrder;
 	function updateOrder(index){
 		$state.go("updateOrder", {orderStr: JSON.stringify(vm.orders[index])});
 	}
 	
+	/*
 	vm.createOrder=createOrder;
 	function createOrder(){
 		// alert("index: "+index);
-		$state.go("createAndUpdateOrder");
+		$state.go("createOrder");
 	}
-	
+	*/
 	vm.deleteOrder=deleteOrder;
 	function deleteOrder(index){
 		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $uibModal).result.then(function(clickok){  
@@ -105,21 +103,25 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	var product = eval('(' + $stateParams.productStr + ')');
 	$scope.userName=$cookies.get('INeuron-UserName');
     $scope.productName=product.name;
-    $scope.price=product.productPrice.price;
+    if(product.productPrice==null){
+    	ineuronApp.confirm("提示","产品还未定价，请先给此产品设定价格！", 'sm', $rootScope, $uibModal);		
+		$state.go("updateProductPrice",{productStr: $stateParams.productStr});
+    }
+    else $scope.price=product.productPrice.price;
     
 	$scope.deliveryDate = new Date();
-	            $scope.format = "yyyy/MM/dd";
-	            $scope.altInputFormats = ['yyyy/M!/d!'];
+	$scope.format = "yyyy/MM/dd";
+	$scope.altInputFormats = ['yyyy/M!/d!'];
 
-	            $scope.popup1 = {
-	                opened: false
-	            };
-	            $scope.open1 = function () {
-	                $scope.popup1.opened = true;
-	            };
-	            $scope.dateOptions = {
-	                    showWeeks: false
-	            };
+	$scope.popup1 = {
+			opened: false
+	};
+	$scope.open1 = function () {
+		$scope.popup1.opened = true;
+	};
+	$scope.dateOptions = {
+			showWeeks: false
+	};
 	            
 	$scope.calculateTotal=function(){ 
 	    $scope.total=$scope.amount*$scope.price;
@@ -129,6 +131,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
     function createOrder() {
 
 	var userId=	$cookies.get('INeuron-UserId');
+	//var deliveryDateStr=$scope.deliveryDate.toFomatorString("YYYY-MM-DD");
 	
 	$http({
 		url : '/order/create',
@@ -136,11 +139,12 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		data : {
 			productId : product.id,
 			userId: userId,
-			customer:$scope.customerName,
-			amount:$scope.amount,
+			customer: $scope.customerName,
+			amount: $scope.amount,
+			total: $scope.total,
 			payment:$scope.payment,
-			deliveryDate : $scope.deliveryDate,
-			customizedInfo:$scope.customizedInfo
+			deliveryDate: $scope.deliveryDate,
+			customizedInfo: $scope.customizedInfo
 		}
 	}).success(function(data) {
 		updateApiToken(data, $cookies);
@@ -167,37 +171,66 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	var order = eval('(' + $stateParams.orderStr + ')');
 	var vm = this;
 	
-	$scope.existedOrderName=false;
-	$scope.orderName=order.name;
-	$scope.orderDescription=order.description;
+	$scope.orderNumber=order.orderNumber;
+	$scope.customer=order.customer;
+	$scope.amount=order.amount;
+	$scope.total=order.total;
+	$scope.payment=order.payment;
+	$scope.customizedInfo=order.customizedInfo;
+	$scope.price=order.product.productPrice.price;
 	
-	$scope.CheckOrderName=function(){
-		$http({
-			url : '/product/orderbyname?name' + $scope.orderName,
-			method : 'GET'
-		}).success(function(data) {
-			// updateApiToken(data, $cookies);
-			var a = data.value;
-			if(a==null) $scope.existedOrderName=false; 
-			 else $scope.existedOrderName=true;
-		}).error(function(data, status) {
-			//ineuronApp.confirm("提示","依据名称调用失败！", 'sm', $rootScope, $uibModal);
-			handleError(status, $rootScope, $uibModal);
-			console.log("error to get order ");
-		});				
+    //alert("deliveryDate: "+order.deliveryDate);
+	$scope.deliveryDate=order.deliveryDate;
+	$scope.format = "yyyy/MM/dd";
+	$scope.altInputFormats = ['yyyy/M!/d!'];
+	$scope.popup1 = {
+			opened: false
+			};
+	$scope.open1 = function () {
+		$scope.popup1.opened = true;
+		};
+	$scope.dateOptions = {
+			showWeeks: false
+		};
+	
+	//get orderStatus list
+	$http({
+		url : '/order/orderstatuslist',
+		method : 'GET'
+	}).success(function(data) {
+		// updateApiToken(data, $cookies);
+		vm.orderStatus = data.value;
+		for (var i in vm.orderStatus){
+			if(vm.orderStatus[i].name==order.orderStatus.name) {
+				vm.orderStatus[i].ticked=true;
+				break;
+			}
+		}
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $uibModal);
+		console.log("error to get orderstatus ");
+	});		
+	
+	
+	$scope.calculateTotal=function(){ 
+	    $scope.total=$scope.amount*$scope.price;
 	}
-
-
+	
 	vm.updateOrder = updateOrder;
 	function updateOrder() {
-
+		
 		$http({
-			url : '/product/updateorder',
+			url : '/order/update',
 			method : 'POST',
 			data : {
-				id : order.id,
-				name : $scope.orderName,
-				description : $scope.orderDescription
+				id:order.id,
+				customer: $scope.customer,
+				amount: $scope.amount,
+				total: $scope.total,
+				payment:$scope.payment,
+				statusId: $scope.selectedOrderStatus[0].id,
+				deliveryDate: $scope.deliveryDate,
+				customizedInfo: $scope.customizedInfo
 			}
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
