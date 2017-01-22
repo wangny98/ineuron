@@ -81,7 +81,13 @@ public class NLPService {
         	}else if(PAINT_NAMES.contains(child.ner())){
                 productName = child.lemma();
                 continue;
-            }else if(!"VV".equals(child.tag()) && !"DEC".equals(child.tag())){
+            }else if(!"VV".equals(child.tag()) 
+            		&& !"DEC".equals(child.tag())
+            		&& !"DEG".equals(child.tag())
+            		&& !"DER".equals(child.tag())
+            		&& !"DEV".equals(child.tag())
+            		&& !"DT".equals(child.tag())
+            		&& !"ETC".equals(child.tag())){
             	otherAttrs.add(child.lemma());
             }
         	
