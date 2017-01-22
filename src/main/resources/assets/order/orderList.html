@@ -10,16 +10,17 @@
 		</button>
 	</div>
 	-->
-	<table datatable="ng" dt-options="OrderList.dtOptions"
+	<table datatable="" dt-options="OrderList.dtOptions"
 		dt-column-defs="OrderList.dtColumnDefs" class="row-border hover" id="table-style">
 		<thead>
 			<tr>
+			    <th></th>
 			    <th style="width:25%">订单号</th>
 				<th style="width: 18%;">产品名</th>
 				<th style="width: 18%;">客户</th>
-				<th style="width: 7%;">金额</th>				
+				<th style="width: 9%;">金额</th>				
 				<th style="width: 10%;">状态</th>
-				<th style="width: 7%;">付款</th>
+				<th style="width: 9%;">付款</th>
 				<th style="">提交日期</th>
 				<th style="">交付日期</th>
 				<th style="width: 6%;">更新</th>
@@ -28,6 +29,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="order in OrderList.orders">
+			   <td style="center;">{{ $index+1}}</td>
 			   <td>{{order.orderNumber}}</td>
 			   <td>{{order.product.name}}</td>
 			   <td>{{order.customer}}</td>
@@ -39,7 +41,7 @@
 			     style="border-style:none; background:none; width:100px" disabled />
 			   </td>
 			   <td><input type="text" uib-datepicker-popup="{{format}}" ng-model="order.deliveryDate" 
-			     style="border-style:none; background:none;"disabled />
+			     style="border-style:none; background:none;  width:100px"disabled />
 			   </td>
 				<td>
 					<button type="button"

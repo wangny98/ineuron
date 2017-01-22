@@ -1,40 +1,101 @@
-ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal',
-   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
+ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal', 'DTOptionsBuilder', 'DTColumnDefBuilder',
+   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, DTOptionsBuilder, DTColumnDefBuilder) {
 
 	var vm = this;
-	$scope.searchSubmitted=false;	
-	$scope.notFoundProducts=false;	
-	$scope.isCollapsed = true;
+	// $scope.searchSubmitted=false;
+	// $scope.notFoundProducts=false;
+	// $scope.isCollapsed = true;
 
-	vm.searchProducts=searchProducts;
-	function searchProducts(){
-	$scope.searchSubmitted=true;
-	$http({
-		url : '/product/productsbynlpwords?words=' + $scope.productSearchText,
-		method : 'GET'
-	}).success(function(data) {
-		updateApiToken(data, $cookies);
-		vm.products = data.value;
-		if(vm.products==null){
-			$scope.notFoundProducts=true;
-		}	
-	}).error(function(data, status) {
-		//ineuronApp.confirm("提示","查询产品失败！", 'sm', $rootScope, $uibModal);
-		handleError(status, $rootScope, $uibModal);
-		console.log("error to get productbyname ");
-	});			
-}
+	$scope.searchObj = {
+			productSearchText:''
+	};
+	
+	if ($.fn.dataTable.isDataTable('ng') ) {
+	    table = $('ng').DataTable();
+	}
+	else {
+		vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers').withOption('responsive', true);
+		vm.dtColumnDefs = [ 
+		                    DTColumnDefBuilder.newColumnDef(0),
+		                    DTColumnDefBuilder.newColumnDef(1),
+		                    DTColumnDefBuilder.newColumnDef(2),
+		                    DTColumnDefBuilder.newColumnDef(3),
+		                    DTColumnDefBuilder.newColumnDef(4),
+		                    DTColumnDefBuilder.newColumnDef(5).withClass('none'),
+		                    DTColumnDefBuilder.newColumnDef(6).withClass('none'),
+		                    DTColumnDefBuilder.newColumnDef(7).withClass('none'),
+		                    DTColumnDefBuilder.newColumnDef(8).withClass('none'),
+		                    DTColumnDefBuilder.newColumnDef(9)];
+	};
+	
+	
+	// reload the searched result when back from order create
+	$scope.searchObj.productSearchText=$cookies.get('INeuron-ProductSearchText');
+	if($scope.searchObj.productSearchText!=null){
+		$http({
+			url : '/product/productsbynlpwords?words=' + $scope.searchObj.productSearchText,
+			method : 'GET'
+		}).success(function(data) {
+			updateApiToken(data, $cookies);
+			vm.products = data.value;
+			/*
+			 * if(vm.products==null){ $scope.notFoundProducts=true; }
+			 */
+		}).error(function(data, status) {
+			// ineuronApp.confirm("提示","查询产品失败！", 'sm', $rootScope, $uibModal);
+			handleError(status, $rootScope, $uibModal);
+			console.log("error to get productbyname ");
+		});			
+	}
+	
+	
+	//vm.searchProducts=searchProducts;
+	//function searchProducts(){
+	$scope.searchProducts=function(){
+	// $scope.searchSubmitted=true;
+		//alert("$scope.productSearchText: "+$scope.searchObj.productSearchText);
+		$cookies.put('INeuron-ProductSearchText', $scope.searchObj.productSearchText, {path : "/"});
+
+		$http({
+			url : '/product/productsbynlpwords?words=' + $scope.searchObj.productSearchText,
+			method : 'GET'
+		}).success(function(data) {
+			updateApiToken(data, $cookies);
+			vm.products = data.value;
+			/*
+			 * if(vm.products==null){ $scope.notFoundProducts=true; }
+			 */
+		}).error(function(data, status) {
+			// ineuronApp.confirm("提示","查询产品失败！", 'sm', $rootScope, $uibModal);
+			handleError(status, $rootScope, $uibModal);
+			console.log("error to get productbyname ");
+		});			
+	}
+    
+	$scope.showAllProducts=function(){
+		$http({
+			url : '/product/productlist',
+			method : 'GET'
+		}).success(function(data) {
+			updateApiToken(data, $cookies);
+			vm.products = data.value;
+			//alert(vm.products[0].productPrice.price);
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $uibModal);
+			console.log("error in get all products");
+		});
+	}
 
 
-vm.createOrder = createOrder;
-function createOrder(index) {
-	$state.go("createOrder",{productStr: JSON.stringify(vm.products[index])});
-  	}
+	vm.createOrder = createOrder;
+	function createOrder(index) {
+		$state.go("createOrder",{productStr: JSON.stringify(vm.products[index])});
+	}
 
-vm.backward = backward;
-function backward() {
-	$state.go("orderList");
-}
+	vm.backward = backward;
+	function backward() {
+		$state.go("orderList");
+	}
 
 }]);
 
@@ -53,10 +114,7 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	}).error(function(data, status) {
 		handleError(status, $rootScope, $uibModal);
 		console.log("order list error");
-	});
-
-	vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType(
-			'full_numbers');
+	});	
 		
 	vm.updateOrder=updateOrder;
 	function updateOrder(index){
@@ -64,12 +122,9 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	}
 	
 	/*
-	vm.createOrder=createOrder;
-	function createOrder(){
-		// alert("index: "+index);
-		$state.go("createOrder");
-	}
-	*/
+	 * vm.createOrder=createOrder; function createOrder(){ // alert("index:
+	 * "+index); $state.go("createOrder"); }
+	 */
 	vm.deleteOrder=deleteOrder;
 	function deleteOrder(index){
 		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $uibModal).result.then(function(clickok){  
@@ -85,7 +140,8 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 					updateApiToken(data, $cookies);
 					$state.go("orderList", null, {reload:true});
 				}).error(function(data, status) {
-					//ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope, $uibModal);
+					// ineuronApp.confirm("提示","删除失败！", 'sm', $rootScope,
+					// $uibModal);
 					handleError(status, $rootScope, $uibModal);
 					console.log("error");
 				})
@@ -131,7 +187,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
     function createOrder() {
 
 	var userId=	$cookies.get('INeuron-UserId');
-	//var deliveryDateStr=$scope.deliveryDate.toFomatorString("YYYY-MM-DD");
+	// var deliveryDateStr=$scope.deliveryDate.toFomatorString("YYYY-MM-DD");
 	
 	$http({
 		url : '/order/create',
@@ -151,7 +207,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		ineuronApp.confirm("提示","添加成功！", 'sm', $rootScope, $uibModal);		
 		$state.go("orderList");
 	}).error(function(data, status) {
-		//ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
+		// ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
 		alert(status);
 		handleError(status, $rootScope, $uibModal);
 		console.log("create order error");
@@ -160,7 +216,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 
 vm.backward = backward;
 function backward() {
-	$state.go("orderList");
+	$state.go("searchForOrder");
 }
 
 }]);
@@ -179,7 +235,7 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	$scope.customizedInfo=order.customizedInfo;
 	$scope.price=order.product.productPrice.price;
 	
-    //alert("deliveryDate: "+order.deliveryDate);
+    // alert("deliveryDate: "+order.deliveryDate);
 	$scope.deliveryDate=order.deliveryDate;
 	$scope.format = "yyyy/MM/dd";
 	$scope.altInputFormats = ['yyyy/M!/d!'];
@@ -193,7 +249,7 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 			showWeeks: false
 		};
 	
-	//get orderStatus list
+	// get orderStatus list
 	$http({
 		url : '/order/orderstatuslist',
 		method : 'GET'
@@ -237,7 +293,7 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 			ineuronApp.confirm("提示","修改成功！", 'sm', $rootScope, $uibModal);		
 			$state.go("orderList");
 		}).error(function(data, status) {
-			//ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $uibModal);
+			// ineuronApp.confirm("提示","修改失败！", 'sm', $rootScope, $uibModal);
 			handleError(status, $rootScope, $uibModal);
 			console.log("error");
 		})

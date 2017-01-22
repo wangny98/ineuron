@@ -1,52 +1,55 @@
 <meta charset="utf-8">
 <head></head>
 <div ng-controller="SearchForOrderController as SearchForOrder">
-	<div class="message">下订单</div>
+	<!-- <div class="message">下订单</div> -->
+	<uib-tabset active="active" type="tabs"> 
+	<uib-tab index="0" heading="查询下单" style="font-weight:bold;">
 	<div>
-	   <form ng-submit="SearchForOrder.searchProducts()">
-		<table id="table-style" style="float:left;">
-			<tbody>
-				<tr>
-					<td><input class="input-block-level" type="text"
-						ng-model="productSearchText" required ng-required="true"
-						ng-minlength="1" style="min-width: 500px;" /></td>
-					<td>
-					<button id="submitbutton"
-							class="btn btn-large btn-primary">
-							<span class="glyphicon glyphicon-search"></span> 查询产品
-					</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<form ng-submit="searchProducts()">
+			<table id="table-style" style="float: left;">
+				<tbody>
+					<tr>
+						<td><input class="input-block-level" type="text"
+							ng-model="searchObj.productSearchText" required ng-required="true"
+							ng-minlength="1" style="min-width: 500px;" /></td>
+						<td>
+							<button id="submitbutton" class="btn btn-large btn-primary">
+								<span class="glyphicon glyphicon-search"></span> 查询产品
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</form>
-	</div>
-
-	<div ng-show="searchSubmitted">
-		<table id="table-style" style="width:100%; float:left;">
+		<table datatable="ng" dt-options="SearchForOrder.dtOptions"
+			dt-column-defs="SearchForOrder.dtColumnDefs" class="row-border hover"
+			id="table-style" style="width: 100%; float: left;">
 			<thead>
 				<tr>
-					<td><label ng-show="notFoundProducts"
-						style="text-align: center; font-weight: bold; color: red">没有找到匹配的产品，请重新输入查询条件。</label>
-					</td>
-				</tr>
-				<tr>
-					<th style="max-width: 50px">序号</th>
+					<th style="width: 50px">序号</th>
 					<th>产品名称</th>
-					<th>产品编号</th>					
+					<th>产品编号</th>
 					<th>产品类名称</th>
-					<th>产品描述</th>
+					<th>产品 简介</th>
+					<th>产品类特点</th>
+					<th>产品类使用范围</th>
+					<th>产品类技术参数</th>
+					<th>产品类简介</th>
 					<th style="width: 100px">下订单</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="product in SearchForOrder.products">
-					<td style="max-width:50px;text-align: center;">{{ $index+1}}</td>
-					<td style="width:20%;">{{product.name}}</td>
-					<td style="width:20%;">{{product.code}}</td>
-					<td style="width:20%;">{{product.productCategory.name}}</td>
-					<td style="width:25%;">{{product.description}}</td>
-					<td style="width:10%;">
+					<td style="text-align: center; width: 80px">{{ $index+1}}</td>
+					<td style="width: 20%">{{product.name}}</td>
+					<td style="width: 20%">{{product.code}}</td>
+					<td style="width: 20%">{{product.productCategory.name}}</td>
+					<td style="width: 25%">{{product.description}}</td>
+					<td style="">{{product.productCategory.characters}}</td>
+					<td style="">{{product.productCategory.scope}}</td>
+					<td style="">{{product.productCategory.techParameters}}</td>
+					<td style="">{{product.productCategory.description}}</td>
+					<td style="width: 10%">
 						<button type="button"
 							ng-click="SearchForOrder.createOrder($index)"
 							class="btn btn-success">
@@ -57,4 +60,48 @@
 			</tbody>
 		</table>
 	</div>
+	</uib-tab> 
+	<uib-tab index="1" heading="全部产品" style="font-weight:bold;" select="showAllProducts()">
+	<div>
+		<table datatable="ng" dt-options="SearchForOrder.dtOptions"
+			dt-column-defs="SearchForOrder.dtColumnDefs" class="row-border hover"
+			id="table-style" style="width: 100%; float: left;">
+			<thead>
+				<tr>
+					<th style="width: 50px">序号</th>
+					<th>产品名称</th>
+					<th>产品编号</th>
+					<th>产品类名称</th>
+					<th>产品 简介</th>
+					<th>产品类特点</th>
+					<th>产品类使用范围</th>
+					<th>产品类技术参数</th>
+					<th>产品类简介</th>
+					<th style="width: 100px">下订单</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="product in SearchForOrder.products">
+					<td style="text-align: center; width: 80px">{{ $index+1}}</td>
+					<td style="width: 20%">{{product.name}}</td>
+					<td style="width: 20%">{{product.code}}</td>
+					<td style="width: 20%">{{product.productCategory.name}}</td>
+					<td style="width: 25%">{{product.description}}</td>
+					<td style="">{{product.productCategory.characters}}</td>
+					<td style="">{{product.productCategory.scope}}</td>
+					<td style="">{{product.productCategory.techParameters}}</td>
+					<td style="">{{product.productCategory.description}}</td>
+					<td style="width: 7%">
+						<button type="button"
+							ng-click="SearchForOrder.createOrder($index)"
+							class="btn btn-success">
+							<i class="fa fa-shopping-cart"></i>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	</uib-tab>
+	</uib-tabset>
 </div>

@@ -242,6 +242,11 @@ ineuronApp.controller('LogoutController', ['$scope', '$cookies', function($scope
 	
 	$scope.logout = function() {
 		$cookies.remove("INeuron-ApiToken", {path : "/"});
+		$cookies.remove("INeuron-ProductSearchText", {path : "/"});
+		$cookies.remove("INeuron-UserId", {path : "/"});
+		$cookies.remove("INeuron-UserName", {path : "/"});
+		$cookies.remove("INeuron-allPermissions", {path : "/"});
+		$cookies.remove("INeuron-roleList", {path : "/"});
 		window.location.href = "/ineuron/user/index.html/#/login";
 	}
 	
