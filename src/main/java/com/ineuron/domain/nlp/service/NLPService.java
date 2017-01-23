@@ -81,13 +81,18 @@ public class NLPService {
         	}else if(PAINT_NAMES.contains(child.ner())){
                 productName = child.lemma();
                 continue;
-            }else if(!"VV".equals(child.tag()) 
-            		&& !"DEC".equals(child.tag())
-            		&& !"DEG".equals(child.tag())
-            		&& !"DER".equals(child.tag())
-            		&& !"DEV".equals(child.tag())
-            		&& !"DT".equals(child.tag())
-            		&& !"ETC".equals(child.tag())){
+            }
+        	
+        	//VA Predicative adjective
+        	//NN Common nouns
+        	//NR Proper nouns
+        	//NP Noun phrase
+        	//ADJP Adjective phrase
+        	else if("VA".equals(child.tag()) 
+            		|| "NN".equals(child.tag())
+            		|| "NR".equals(child.tag())
+            		|| "NP".equals(child.tag())
+            		|| "ADJP".equals(child.tag())){
             	otherAttrs.add(child.lemma());
             }
         	
@@ -100,6 +105,9 @@ public class NLPService {
 		    }
 		}
         result.setProductName(productName);
+        if(productName != null && productName.lastIndexOf("漆") != -1){
+        	otherAttrs.add(productName.substring(0, productName.length()-1));
+        }
         result.setOtherAttributes(otherAttrs);
 		
 		System.out.println(dependencies.toString());
