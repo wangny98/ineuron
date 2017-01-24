@@ -84,11 +84,13 @@ public class NLPService {
             }
         	
         	//VA Predicative adjective
+        	//JJ Noun-modifier other than nouns
         	//NN Common nouns
         	//NR Proper nouns
         	//NP Noun phrase
         	//ADJP Adjective phrase
         	else if("VA".equals(child.tag()) 
+        			|| "JJ".equals(child.tag())
             		|| "NN".equals(child.tag())
             		|| "NR".equals(child.tag())
             		|| "NP".equals(child.tag())
