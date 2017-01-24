@@ -394,14 +394,18 @@ public class ProductService {
 			}
 		}
 
-		// get all the matched products
+		// search all the products by nlp'ed terms (product name, functions, qualities, other attributes) stored in productWords 
 		for (int i = 0; i < productWords.size(); i++) {
 			List<Product> productList = repository.select(
 					"getProductsByNLPWord", "%" + productWords.get(i) + "%");
-			for (int k = 0; k < productList.size(); k++) {
-				Product p = allProducts.get(k);
-				if (productsResult.indexOf(p) == -1)
-					productsResult.add(p);
+			for (int j = 0; j < productList.size(); j++) {
+				for (int k=0; k<allProducts.size();k++){
+					Product p = allProducts.get(k);
+					if (productList.get(j).getId()==p.getId()){
+						if (productsResult.indexOf(p) == -1)
+						 productsResult.add(p);	
+					}
+				}
 			}
 		}
 
@@ -409,10 +413,14 @@ public class ProductService {
 		for (int i = 0; i < attributeWords.size(); i++) {
 			List<Product> productList = repository.select(
 					"getProductsByNLPWord", "%" + attributeWords.get(i) + "%");
-			for (int k = 0; k < productList.size(); k++) {
-				Product p = allProducts.get(k);
-				if (productsResult.indexOf(p) == -1)
-					productsResult.add(p);
+			for (int j = 0; j < productList.size(); j++) {
+				for (int k=0; k<allProducts.size();k++){
+					Product p = allProducts.get(k);
+					if (productList.get(j).getId()==p.getId()){
+						if (productsResult.indexOf(p) == -1)
+						 productsResult.add(p);	
+					}
+				}
 			}
 		}
 			
