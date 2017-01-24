@@ -78,7 +78,7 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 			method : 'GET'
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
-			vm.products = data.value;
+			vm.allProducts = data.value;
 			//alert(vm.products[0].productPrice.price);
 		}).error(function(data, status) {
 			handleError(status, $rootScope, $uibModal);
