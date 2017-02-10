@@ -13,6 +13,9 @@ import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.domain.order.entity.Order;
 import com.ineuron.domain.order.valueobject.OrderStatus;
+import com.ineuron.domain.production.entity.Production;
+import com.ineuron.domain.device.entity.Device;
+
 
 public class OrderService {
 
@@ -54,10 +57,23 @@ public class OrderService {
 	    //valid order is 1; deleted order is -1;
 	    order.setValidFlag(1);
 	    
-		order.addOrder(repository);;
+	    //deprecated
+	    //TO-DO: calculate the production period based on productionTicket's total period of this productId
+	    //1. calculate the total production period of that productId in productionTicket table 
+	    //2. compare this order's amount to specific device (type='production')'s volume; 
+	    //if btw min and max, then use the total production period (add orders together
+	    //if below min, use the total; if beyond max, use the mod
+	    //3. set the productionperiod value of Order object
+	    
+		order.addOrder(repository);
 		return order;
 	}
 
+	/*public Integer getOrderProductionPeriod(Integer productId) throws RepositoryException{
+				
+	}*/
+	
+	
 	public Order updateOrder(Order order) throws RepositoryException {
 		order.updateOrder(repository);
 		return order;
