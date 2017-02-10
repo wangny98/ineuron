@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ineuron.dataaccess.db.mappers.ProductionMapper">
+
+	<!-- Production -->
+	
+	<insert id="addProduction">
+		insert into Productions (name,productCategoryId,serialNumber,code,formulaId,description)
+		values(#{name},#{productCategoryId},#{serialNumber},#{code},#{formulaId},#{description})
+	</insert>
+
+	<select id="getProductions" resultType="com.ineuron.domain.production.entity.Production">
+		select * from Productions
+	</select>
+	
+	
+	<select id="getProductionPeriodsByProductId" resultType="com.ineuron.domain.production.valueobject.ProductionPeriod">
+		select * from ProductionPeriods where productId=#{productId} 
+	</select>
+	
+	<select id="getProductionDeviceByProductId" resultType="com.ineuron.domain.production.entity.Production">
+		select * from Productions where productId=#{productId} and 
+		 orderId=(select max(orderId) from Productions where productId=#{productId})
+	</select>
+	
+	
+	<update id="updateProduction">
+		update Productions set name = #{name}, formulaId =
+		#{formulaId}, description=#{description} where id = #{id}
+	</update>
+
+	<delete id="deleteProduction">
+		delete from Productions where name = #{name}
+	</delete>
+
+	
+		
+</mapper>

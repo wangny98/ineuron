@@ -91,6 +91,12 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 	function createOrder(index) {
 		$state.go("createOrder",{productStr: JSON.stringify(vm.products[index])});
 	}
+	
+	vm.createOrderForAllProducts = createOrderForAllProducts;
+	function createOrderForAllProducts(index) {
+		$state.go("createOrder",{productStr: JSON.stringify(vm.allProducts[index])});
+	}
+	
 
 	vm.backward = backward;
 	function backward() {
@@ -104,6 +110,20 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	function($http, $scope, $stateParams, $rootScope, $uibModal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder) {
 	var vm = this;
 	$scope.format = "yyyy/MM/dd";
+	
+/*	
+		vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+		vm.dtColumnDefs = [ 
+		                    DTColumnDefBuilder.newColumnDef(0),
+		                    DTColumnDefBuilder.newColumnDef(1),
+		                    DTColumnDefBuilder.newColumnDef(2),
+		                    DTColumnDefBuilder.newColumnDef(3),
+		                    DTColumnDefBuilder.newColumnDef(4),
+		                    DTColumnDefBuilder.newColumnDef(5),
+		                    DTColumnDefBuilder.newColumnDef(6),
+		                    DTColumnDefBuilder.newColumnDef(7),
+		                    DTColumnDefBuilder.newColumnDef(8),
+	*/
 	
 	$http({
 		url : '/order/list',
@@ -165,6 +185,19 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
     }
     else $scope.price=product.productPrice.price;
     
+    //get product's ProductionPeriod
+    $http({
+		url : '/production/periodsbyproductid?productId='+product.id,
+		method : 'GET'
+	}).success(function(data) {
+		updateApiToken(data, $cookies);
+		vm.productPeriods = data.value;
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $uibModal);
+		console.log("get product's production periods error");
+	});	
+    
+    
 	$scope.deliveryDate = new Date();
 	$scope.format = "yyyy/MM/dd";
 	$scope.altInputFormats = ['yyyy/M!/d!'];
@@ -179,8 +212,19 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			showWeeks: false
 	};
 	            
-	$scope.calculateTotal=function(){ 
+	$scope.calculateTotalAndPeriod=function(){ 
+		
+		//calculate the total price
 	    $scope.total=$scope.amount*$scope.price;
+	    
+	    //get production period
+	    for (var i in vm.productPeriods){
+			if(($scope.amount>=vm.productPeriods[i].productionMinVolume)&&($scope.amount<=vm.productPeriods[i].productionMaxVolume)) {
+				//return value by unit as "day"
+				$scope.productionPeriod=Math.ceil(vm.productPeriods[i].productionPeriod/3600/8);				
+				break;
+			}
+		}   
 	}
 
     vm.createOrder = createOrder;
@@ -198,6 +242,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			customer: $scope.customerName,
 			amount: $scope.amount,
 			total: $scope.total,
+			productionPeriod:$scope.productionPeriod,
 			payment:$scope.payment,
 			deliveryDate: $scope.deliveryDate,
 			customizedInfo: $scope.customizedInfo

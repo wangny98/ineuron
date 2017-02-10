@@ -2,7 +2,7 @@
 <html>
 <meta charset="UTF-8">
 <div ng-controller="OrderListController as OrderList">
-  	<!-- 
+	<!-- 
 	<div class="right-align">
 		<button class="btn btn-large btn-primary" style="float: right;"
 			ng-click="OrderList.orderCreate()">
@@ -10,15 +10,16 @@
 		</button>
 	</div>
 	-->
-	<table datatable="" dt-options="OrderList.dtOptions"
-		dt-column-defs="OrderList.dtColumnDefs" class="row-border hover" id="table-style">
+	<table datatable="ng" dt-options="OrderList.dtOptions"
+		dt-column-defs="OrderList.dtColumnDefs" class="row-border hover"
+		id="table-style">
 		<thead>
 			<tr>
-			    <th></th>
-			    <th style="width:25%">订单号</th>
+				<th>No.</th>
+				<th style="width: 25%">订单号</th>
 				<th style="width: 18%;">产品名</th>
 				<th style="width: 18%;">客户</th>
-				<th style="width: 9%;">金额</th>				
+				<th style="width: 9%;">金额</th>
 				<th style="width: 10%;">状态</th>
 				<th style="width: 9%;">付款</th>
 				<th style="">提交日期</th>
@@ -29,33 +30,32 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="order in OrderList.orders">
-			   <td style="center;">{{ $index+1}}</td>
-			   <td>{{order.orderNumber}}</td>
-			   <td>{{order.product.name}}</td>
-			   <td>{{order.customer}}</td>
-			   <td>{{order.total}}</td>
-			   <td>{{order.orderStatus.name}}</td>
-			   <td>{{order.payment}}</td>
-			   <td>
-			   <input type="text" uib-datepicker-popup="{{format}}" ng-model="order.orderDate" 
-			     style="border-style:none; background:none; width:100px" disabled />
-			   </td>
-			   <td><input type="text" uib-datepicker-popup="{{format}}" ng-model="order.deliveryDate" 
-			     style="border-style:none; background:none;  width:100px"disabled />
-			   </td>
+				<td style="text-align: center;">{{ $index+1}}</td>
+				<td>{{order.orderNumber}}</td>
+				<td>{{order.product.name}}</td>
+				<td>{{order.customer}}</td>
+				<td>{{order.total}}</td>
+				<td>{{order.orderStatus.name}}</td>
+				<td>{{order.payment}}</td>
+				<td><input type="text" uib-datepicker-popup="{{format}}"
+					ng-model="order.orderDate"
+					style="border-style: none; background: none; width: 100px" disabled />
+				</td>
+				<td><input type="text" uib-datepicker-popup="{{format}}"
+					ng-model="order.deliveryDate"
+					style="border-style: none; background: none; width: 100px" disabled />
+				</td>
 				<td>
-					<button type="button"
-						ng-click="OrderList.updateOrder($index)"
+					<button type="button" ng-click="OrderList.updateOrder($index)"
 						class="btn btn-warning">
 						<i class="fa fa-edit"></i>
 					</button>
 				</td>
 				<td>
-					<button type="button"
-						ng-click="OrderList.deleteOrder($index)"
+					<button type="button" ng-click="OrderList.deleteOrder($index)"
 						class="btn btn-danger">
 						<i class="fa fa-times"></i>
-					</button>					
+					</button>
 				</td>
 			</tr>
 		</tbody>

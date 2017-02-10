@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ineuron.dataaccess.db.mappers.DeviceMapper">
+
+	<!-- Device -->
+	
+	<insert id="addDevice">
+		insert into Devices (name,productCategoryId,serialNumber,code,formulaId,description)
+		values(#{name},#{productCategoryId},#{serialNumber},#{code},#{formulaId},#{description})
+	</insert>
+
+	<select id="getDevices" resultType="com.ineuron.domain.device.entity.Device">
+		select * from Devices
+	</select>
+	
+	<select id="getDeviceById" resultType="com.ineuron.domain.device.entity.Device">
+		select * from Devices where deviceId={deviceId}
+	</select>
+		
+	<update id="updateDevice">
+		update Devices set name = #{name}, formulaId =
+		#{formulaId}, description=#{description} where id = #{id}
+	</update>
+
+	<delete id="deleteDevice">
+		delete from Devices where name = #{name}
+	</delete>
+
+	
+		
+</mapper>

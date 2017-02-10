@@ -70,8 +70,7 @@ public class INeuronRepository {
 			if(session != null){
 				session.close();
 			}
-		}
-		
+		}		
 	}
 	
 	public <E> List<E>  select(String mapperName, Object obj) throws RepositoryException{
@@ -83,10 +82,9 @@ public class INeuronRepository {
 				return session.selectList(mapperName, obj);
 			}else{
 				return session.selectList(mapperName);
-			}
-			
+			}			
 		} catch(RuntimeException e){
-			throw new RepositoryException("failed to excute select sql: " + mapperName + "!", e);
+			throw new RepositoryException("failed to execute select sql: " + mapperName + "!", e);
 		} catch (RepositoryException e) {
 			throw new RepositoryException("failed to create SqlSession!", e);
 		} finally {
