@@ -1,6 +1,6 @@
 //define the package as ineuronApp
 var ineuronApp = angular.module('ineuronApp', [ 'ui.router', 'ngCookies',
-		'datatables', 'isteven-multi-select','ui.bootstrap','ui.sortable' ]);
+		'datatables', 'isteven-multi-select','ui.bootstrap','ui.sortable','ngFileUpload']);
 
 ineuronApp.config(function($stateProvider) {
 
@@ -239,6 +239,8 @@ ineuronApp.controller('NavMenuController', ['$scope', function($scope) {
 }]);
 
 ineuronApp.controller('LogoutController', ['$scope', '$cookies', function($scope, $cookies) {
+	
+	$scope.displayUsername=$cookies.get("INeuron-UserName", {path : "/"});
 	
 	$scope.logout = function() {
 		$cookies.remove("INeuron-ApiToken", {path : "/"});

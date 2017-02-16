@@ -8,8 +8,8 @@
 	<!-- Order -->
 	
 	<insert id="addOrder">
-		insert into Orders (serialNumber,orderNumber,productId,userId,productionPeriod,amount,total,statusId,customizedInfo,orderDate,orderDateTime,deliveryDate,customer,payment,validFlag)
-		values(#{serialNumber},#{orderNumber},#{productId},#{userId},#{productionPeriod},#{amount},#{total},#{statusId},#{customizedInfo},#{orderDate},#{orderDateTime},#{deliveryDate},#{customer},#{payment},#{validFlag})
+		insert into Orders (serialNumber,orderNumber,productId,userId,productionPeriod,amount,total,statusId,customizedInfo,orderDate,orderDateTime,deliveryDate,customer,payment,picFile,validFlag)
+		values(#{serialNumber},#{orderNumber},#{productId},#{userId},#{productionPeriod},#{amount},#{total},#{statusId},#{customizedInfo},#{orderDate},#{orderDateTime},#{deliveryDate},#{customer},#{payment},#{picFile},#{validFlag})
 	</insert>
 	
 	<select id="getOrders" resultType="com.ineuron.domain.order.entity.Order">

@@ -1,5 +1,5 @@
 
-var ineuronApp = angular.module('ineuronApp', [ 'ngRoute', 'ngCookies','ui.bootstrap' ]);
+var ineuronApp = angular.module('ineuronApp', [ 'ngRoute', 'ngCookies','ui.bootstrap']);
 
 ineuronApp.config(function($routeProvider) {
 
@@ -32,12 +32,14 @@ ineuronApp.controller('UserLoginController', ['$scope', '$http', '$location', '$
 		$scope.invalidUserPwd=false;
 		
 		$scope.login = function(isValid) {
+			var md5PasswordHash = md5($scope.password);
+			//alert("pwd: "+$scope.password+"md5: "+md5PasswordHash);
 			$http({
 				url : '/user/authenticate',
 				method : 'POST',
 				data : {
 					username : $scope.username,
-					password : $scope.password
+					password : md5PasswordHash
 				}
 			}).success(
 				function(data) {
@@ -49,6 +51,10 @@ ineuronApp.controller('UserLoginController', ['$scope', '$http', '$location', '$
 					var roleList = JSON.stringify(data.value.roleList);  
 					$cookies.put('INeuron-roleList', roleList, {path : "/"});
 					$cookies.put('INeuron-allPermissions', allPermissions, {path : "/"});
+					
+					//init search text
+					$cookies.remove("INeuron-ProductSearchText", {path : "/"});
+					
 					window.location.href = "/ineuron/main.html";
 
 				}).error(function(data) {
@@ -84,6 +90,8 @@ ineuronApp.controller('UserRegisterCtrl', ['$scope', '$rootScope', '$uibModal', 
 	}
 	
 	$scope.submitReg = function() {
+		var md5PasswordHash = md5($scope.password);
+		//alert("pwd: "+$scope.password+"md5: "+md5PasswordHash);
 		$http({
 			url : '/user/register',
 			method : 'POST',
@@ -91,7 +99,7 @@ ineuronApp.controller('UserRegisterCtrl', ['$scope', '$rootScope', '$uibModal', 
 				username : $scope.username,
 				firstname : $scope.firstname,
 				lastname : $scope.lastname,
-				password : $scope.password
+				password : md5PasswordHash
 			}
 		}).success(function(data) {
 			ineuronApp.confirm("提示","注册成功！请登录。", 'sm', $rootScope, $uibModal).result.then(function(clickok){  

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>主页</title>
-<link rel="stylesheet" href="/ineuron/css/mainpage.css" >
-<link rel="stylesheet" href="/ineuron/css/table-style.css" >
+<link rel="stylesheet" href="/ineuron/css/mainpage.css">
+<link rel="stylesheet" href="/ineuron/css/table-style.css">
 <link rel="stylesheet" href="/ineuron/css/lib/isteven-multi-select.css">
 <link rel="stylesheet" href="/ineuron/css/lib/bootstrap.min.css">
 
@@ -43,6 +43,9 @@
 <script src="/ineuron/js/lib/sortable.js"></script>
 <script src="/ineuron/js/lib/ui-bootstrap-tpls-1.3.2.js"></script>
 <script src="/ineuron/js/lib/angular-locale_zh-cn.js"></script>
+<script src="/ineuron/js/lib/ng-file-upload.min.js"></script>
+<script src="/ineuron/js/lib/ng-file-upload-shim.min.js"></script>
+<script src="/ineuron/js/lib/md5.min.js"></script>
 <!-- <script src="/ineuron/js/lib/layout.border.js"></script> -->
 
 
@@ -62,108 +65,112 @@
 </head>
 
 <body>
-		<div class="navbar navbar-duomi navbar-static-top" role="navigation">
-			<div class="navbar-header" ng-controller="LogoutController">
-				<table width="100%">
-					<tbody>
-						<tr>
-							<td><img alt="" src="/ineuron/images/logo.png"></td>
-							<td width="80%"	style="vertical-align: middle; text-align: center;">
-							<label style="margin-top:10px;" class="title">琥崧智能工厂运营与控制系统</label></td>
-							<td width="10%"	class="right-align" style="padding-top:10px; padding-right:90px;">
-								<button class="btn btn-large btn-primary" 
-								 style="background-color:#06909b;" ng-click="logout()">
-									<span class="glyphicon glyphicon-log-out"></span> 退出
+	<div class="navbar navbar-duomi navbar-static-top" role="navigation">
+		<div class="navbar-header" ng-controller="LogoutController">
+			<table width="100%">
+				<tbody>
+					<tr>
+						<td><img alt="" src="/ineuron/images/logo.png"></td>
+						<td width="80%"
+							style="vertical-align: middle; text-align: center;"><label
+							style="margin-top: 10px;" class="title">琥崧智能工厂运营与控制系统</label></td>
+						<td width="10%" class="right-align"
+							style="padding-top: 10px; padding-right: 110px;">
+							<div uib-dropdown>
+								<button id="settings-button" type="button" style="background-color: #06909b;"
+									class="btn btn-primary" uib-dropdown-toggle>
+									你好，{{displayUsername}} <span class="caret"></span>
 								</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+								<ul class="dropdown-menu" uib-dropdown-menu>
+									<li><a href="#">修改密码</a></li>
+									<li><a href="#" ng-click="logout()">退出</a></li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2" style="margin-left: -10px;"
+				ng-controller="NavMenuController">
+				<ul id="main-nav" class="nav nav-tabs nav-stacked" style="">
+					<li class="active"><a href="#"> <i
+							class="glyphicon glyphicon-th-large"></i> 首页
+					</a></li>
+					<li><a href="#systemSetting" class="nav-header"
+						data-toggle="collapse"> <i class="glyphicon glyphicon-cog"></i>
+							系统管理 <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+					</a>
+						<ul id="systemSetting" class="nav nav-list collapse secondmenu"
+							style="height: 0px;">
+							<li><a ui-sref="userManagement" class="secondmenu-position"
+								ui-sref-active="active" ng-show="hasPermission('1')"> <i
+									class="glyphicon glyphicon-user"></i>用户管理
+							</a></li>
+							<li><a ui-sref="roleManagement" class="secondmenu-position"
+								ui-sref-active="active" ng-show="hasPermission('2')"> <i
+									class="glyphicon glyphicon-asterisk"></i>角色管理
+							</a></li>
+						</ul></li>
+					<li><a href="#productManagement" class="nav-header"
+						data-toggle="collapse"><i class="glyphicon glyphicon-list"></i>
+							产品管理 <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+					</a>
+						<ul id="productManagement"
+							class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li><a ui-sref="productCategoryList"
+								class="secondmenu-position" ui-sref-active="active"
+								ng-show="hasPermission('11')"> <i
+									class="glyphicon glyphicon-list"></i>产品类管理
+							</a></li>
+							<li><a ui-sref="allProductList" class="secondmenu-position"
+								ui-sref-active="active" ng-show="hasPermission('11')"> <i
+									class="glyphicon glyphicon-list"></i>产品管理
+							</a></li>
+							<li><a ui-sref="attributeList" class="secondmenu-position"
+								ui-sref-active="active" ng-show="hasPermission('12')"> <i
+									class="glyphicon glyphicon-list"></i>属性管理
+							</a></li>
+							<li><a ui-sref="formulaList" class="secondmenu-position"
+								ui-sref-active="active" ng-show="hasPermission('13')"> <i
+									class="glyphicon glyphicon-list"></i>配方管理
+							</a></li>
+							<li><a ui-sref="materialList" class="secondmenu-position"
+								ui-sref-active="active"> <i class="glyphicon glyphicon-list"></i>原料管理
+							</a></li>
+						</ul></li>
+					<li><a href="#orderManagement" class="nav-header"
+						data-toggle="collapse"><i
+							class="glyphicon glyphicon-shopping-cart"></i> 销售管理 <span
+							class="pull-right glyphicon glyphicon-chevron-down"></span> </a>
+						<ul id="orderManagement" class="nav nav-list collapse secondmenu"
+							style="height: 0px;">
+							<li><a ui-sref="searchForOrder" class="secondmenu-position"
+								ui-sref-active="active" ng-show="hasPermission('21')"> <i
+									class="glyphicon glyphicon-shopping-cart"></i>在线下单
+							</a></li>
+							<li><a ui-sref="orderList" class="secondmenu-position"
+								ui-sref-active="active"> <i class="glyphicon glyphicon-list"></i>订单管理
+							</a></li>
+						</ul></li>
+					<li><a href="#" class="nav-header"
+						data-toggle="collapse"><i class="glyphicon glyphicon-wrench"></i>
+							生产管理 </a></li>
+					<li><a ui-sref="about" ui-sref-active="active" class="nav-header"
+						data-toggle="collapse"> <i
+							class="glyphicon glyphicon-fire"></i> 关于系统
+					</a></li>
+				</ul>
+			</div>
+			<div class="col-md-10" style="margin-left: -10px;">
+				<ui-view></ui-view>
 			</div>
 		</div>
+	</div>
 
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-md-2" style="margin-left:-10px;" ng-controller="NavMenuController">
-						<ul id="main-nav" class="nav nav-tabs nav-stacked" style="">
-							<li class="active"><a href="#"> <i
-									class="glyphicon glyphicon-th-large"></i> 首页
-							</a></li>
-							<li><a href="#systemSetting" class="nav-header collapsed"
-								data-toggle="collapse"> <i class="glyphicon glyphicon-cog"></i>
-									系统管理 <span class="pull-right glyphicon glyphicon-chevron-down"></span>
-							</a>
-								<ul id="systemSetting" class="nav nav-list collapse secondmenu"
-									style="height: 0px;">
-									<li><a ui-sref="userManagement" 
-										class="secondmenu-position" ui-sref-active="active"
-										ng-show="hasPermission('1')"> <i
-											class="glyphicon glyphicon-user"></i>用户管理
-									</a></li>
-									<li><a ui-sref="roleManagement"
-										class="secondmenu-position" ui-sref-active="active"
-										ng-show="hasPermission('2')"> <i
-											class="glyphicon glyphicon-asterisk"></i>角色管理
-									</a></li>
-								</ul></li>
-							<li><a href="#productManagement"
-								class="nav-header collapsed" data-toggle="collapse"><i
-									class="glyphicon glyphicon-list"></i> 产品管理 <span
-									class="pull-right glyphicon glyphicon-chevron-down"></span> </a>
-								<ul id="productManagement"
-									class="nav nav-list collapse secondmenu" style="height: 0px;">
-									<li><a ui-sref="productCategoryList"
-										class="secondmenu-position" ui-sref-active="active"
-										ng-show="hasPermission('11')"> <i
-											class="glyphicon glyphicon-list"></i>产品类管理
-									</a></li>
-									<li><a ui-sref="allProductList"
-										class="secondmenu-position" ui-sref-active="active"
-										ng-show="hasPermission('11')"> <i
-											class="glyphicon glyphicon-list"></i>产品管理
-									</a></li>
-									<li><a ui-sref="attributeList" class="secondmenu-position"
-										ui-sref-active="active" ng-show="hasPermission('12')"> <i
-											class="glyphicon glyphicon-list"></i>属性管理
-									</a></li>
-									<li><a ui-sref="formulaList" class="secondmenu-position"
-										ui-sref-active="active" ng-show="hasPermission('13')"> <i
-											class="glyphicon glyphicon-list"></i>配方管理
-									</a></li>
-									<li><a ui-sref="materialList" class="secondmenu-position"
-										ui-sref-active="active" > <i
-											class="glyphicon glyphicon-list"></i>原料管理
-									</a></li>
-								</ul></li>
-							<li><a href="#orderManagement"
-								class="nav-header collapsed" data-toggle="collapse"><i
-									class="glyphicon glyphicon-shopping-cart"></i> 销售管理 <span
-									class="pull-right glyphicon glyphicon-chevron-down"></span> </a>
-								<ul id="orderManagement"
-									class="nav nav-list collapse secondmenu" style="height: 0px;">
-									<li><a ui-sref="searchForOrder"
-										class="secondmenu-position" ui-sref-active="active"
-										ng-show="hasPermission('21')"> <i
-											class="glyphicon glyphicon-shopping-cart"></i>在线下单
-									</a></li>
-									<li><a ui-sref="orderList"
-										class="secondmenu-position" ui-sref-active="active"
-										> <i
-											class="glyphicon glyphicon-list"></i>订单管理
-									</a></li>									
-								</ul></li>
-							<li><a href="#"><i class="glyphicon glyphicon-wrench"></i>
-									生产管理 </a></li>
-							<li><a ui-sref="about" ui-sref-active="active"> <i
-									class="glyphicon glyphicon-fire"></i> 关于系统
-							</a></li>
-						</ul>
-					</div>
-					<div class="col-md-10" style="margin-left:-10px;">
-						<ui-view></ui-view>
-					</div>
-				</div>
-			</div>
-	
 </body>
 </html>

@@ -202,7 +202,8 @@ ineuronApp.controller('UserCreateController', ['$scope', '$rootScope', '$uibModa
 	
 	vm.createUser = createUser;
 	function createUser() {	
-		
+
+		var md5PasswordHash = md5($scope.createUserPassword); 
 		$http({
 			url : '/user/register',
 			method : 'POST',
@@ -210,7 +211,7 @@ ineuronApp.controller('UserCreateController', ['$scope', '$rootScope', '$uibModa
 				username : $scope.createUsername,
 				firstname : $scope.createUserFirstname,
 				lastname : $scope.createUserLastname,
-				password : $scope.createUserPassword				
+				password : md5PasswordHash				
 			}
 		}).success(function(data) {
 			ineuronApp.confirm("提示","新用户已添加！", 'sm', $rootScope, $uibModal);		

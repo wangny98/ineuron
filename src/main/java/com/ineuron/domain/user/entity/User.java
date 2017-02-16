@@ -54,12 +54,12 @@ public class User {
 		User foundUser = repository.selectOne("getUserByUsername", username);
 		if (foundUser != null) {
 			validUser = this.getPassword().equals(foundUser.getPassword());
-			System.out.println("select user by using getUserByUsername!"
-					+ "Hi " + foundUser.getUsername() + "  role: "
-					+ foundUser.getRoles());
 		}
-		if (validUser)
+		if (validUser){
+			System.out.println("Hi " + foundUser.getUsername() + "  role: "
+					+ foundUser.getRoles());
 			return foundUser;
+		}
 		else
 			return null;
 
