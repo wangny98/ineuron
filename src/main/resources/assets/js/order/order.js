@@ -49,11 +49,12 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 	}
 	
 	
-	//vm.searchProducts=searchProducts;
-	//function searchProducts(){
+	// vm.searchProducts=searchProducts;
+	// function searchProducts(){
 	$scope.searchProducts=function(){
 	// $scope.searchSubmitted=true;
-		//alert("$scope.productSearchText: "+$scope.searchObj.productSearchText);
+		// alert("$scope.productSearchText:
+		// "+$scope.searchObj.productSearchText);
 		$cookies.put('INeuron-ProductSearchText', $scope.searchObj.productSearchText, {path : "/"});
 
 		$http({
@@ -79,7 +80,7 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
 			vm.allProducts = data.value;
-			//alert(vm.products[0].productPrice.price);
+			// alert(vm.products[0].productPrice.price);
 		}).error(function(data, status) {
 			handleError(status, $rootScope, $uibModal);
 			console.log("error in get all products");
@@ -111,19 +112,6 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	var vm = this;
 	$scope.format = "yyyy/MM/dd";
 	
-/*	
-		vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
-		vm.dtColumnDefs = [ 
-		                    DTColumnDefBuilder.newColumnDef(0),
-		                    DTColumnDefBuilder.newColumnDef(1),
-		                    DTColumnDefBuilder.newColumnDef(2),
-		                    DTColumnDefBuilder.newColumnDef(3),
-		                    DTColumnDefBuilder.newColumnDef(4),
-		                    DTColumnDefBuilder.newColumnDef(5),
-		                    DTColumnDefBuilder.newColumnDef(6),
-		                    DTColumnDefBuilder.newColumnDef(7),
-		                    DTColumnDefBuilder.newColumnDef(8),
-	*/
 	
 	$http({
 		url : '/order/list',
@@ -172,8 +160,8 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 }]);
 
 
-ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal',
-   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
+ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal', 'Upload', '$timeout',
+   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, Upload, $timeout) {
 
 	var vm = this;	
 	var product = eval('(' + $stateParams.productStr + ')');
@@ -185,7 +173,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
     }
     else $scope.price=product.productPrice.price;
     
-    //get product's ProductionPeriod
+    // get product's ProductionPeriod
     $http({
 		url : '/production/periodsbyproductid?productId='+product.id,
 		method : 'GET'
@@ -214,13 +202,13 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	            
 	$scope.calculateTotalAndPeriod=function(){ 
 		
-		//calculate the total price
+		// calculate the total price
 	    $scope.total=$scope.amount*$scope.price;
 	    
-	    //get production period
+	    // get production period
 	    for (var i in vm.productPeriods){
 			if(($scope.amount>=vm.productPeriods[i].productionMinVolume)&&($scope.amount<=vm.productPeriods[i].productionMaxVolume)) {
-				//return value by unit as "day"
+				// return value by unit as "day"
 				$scope.productionPeriod=Math.ceil(vm.productPeriods[i].productionPeriod/3600/8);				
 				break;
 			}
@@ -228,12 +216,12 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	}
 
     vm.createOrder = createOrder;
-    function createOrder() {
-
-	var userId=	$cookies.get('INeuron-UserId');
-	// var deliveryDateStr=$scope.deliveryDate.toFomatorString("YYYY-MM-DD");
+    function createOrder(file) {
+      var userId=$cookies.get('INeuron-UserId');
+      picFileName=$scope.deliveryDate.getTime();
+      //alert($scope.picFile+picFileSuffix);
 	
-	$http({
+      $http({
 		url : '/order/create',
 		method : 'POST',
 		data : {
@@ -245,24 +233,44 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			productionPeriod:$scope.productionPeriod,
 			payment:$scope.payment,
 			deliveryDate: $scope.deliveryDate,
-			customizedInfo: $scope.customizedInfo
-		}
-	}).success(function(data) {
+			customizedInfo: $scope.customizedInfo,
+			picFile: picFileName
+	 	}
+	 }).success(function(data) {
 		updateApiToken(data, $cookies);
 		ineuronApp.confirm("提示","添加成功！", 'sm', $rootScope, $uibModal);		
 		$state.go("orderList");
-	}).error(function(data, status) {
+    }).error(function(data, status) {
 		// ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
 		alert(status);
 		handleError(status, $rootScope, $uibModal);
 		console.log("create order error");
-  		})
+  	})
+  	
+	//upload pic to the file server	
+  	file.upload = Upload.upload({
+  		url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+  		data: {file:  Upload.rename(file, picFileName)},
+  	});
+
+	file.upload.then(function (response) {
+		$timeout(function () {
+			file.result = response.data;
+		});
+	}, function (response) {
+		if (response.status > 0)
+			$scope.errorMsg = response.status + ': ' + response.data;
+	}, function (evt) {
+		// Math.min is to fix IE which reports 200% sometimes
+		file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+	});
+  	    
   	}
 
-vm.backward = backward;
-function backward() {
-	$state.go("searchForOrder");
-}
+    vm.backward = backward;
+    function backward() {
+    	$state.go("searchForOrder");
+    }
 
 }]);
 

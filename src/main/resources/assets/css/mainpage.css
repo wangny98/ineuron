@@ -41,6 +41,9 @@ color: #FFF;
 #main-nav.nav-tabs.nav-stacked > li {
 margin-bottom: 4px;
 }
+.nav-header{
+text-indent: 20px;
+}
 /*定义二级菜单样式*/
 .secondmenu a {
 font-size: 12px;
@@ -126,4 +129,28 @@ body{
     background-size: cover;
     background:url(../images/bgcube.jpg);
 	background-repeat: no-repeat;
+}
+
+.thumb {
+    width: 200px;
+    height: 80px;
+    float: none;
+    position: relative;
+}
+
+form .progress {
+    line-height: 15px;
+}
+}
+
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
 }

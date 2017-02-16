@@ -25,6 +25,7 @@ public class Order {
 	private Date deliveryDate;
 	private String customer;
 	private float payment;
+	private String picFile;
 	private Integer validFlag;
 
 	private Product product;
@@ -215,6 +216,14 @@ public class Order {
 
 	public void setOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
+	}
+
+	public String getPicFile() {
+		return picFile;
+	}
+
+	public void setPicFile(String picFile) {
+		this.picFile = picFile;
 	}
 
 }
