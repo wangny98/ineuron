@@ -9,8 +9,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +34,10 @@ public class UploadResource {
 	        @FormDataParam("file") InputStream uploadedInputStream,
 	        @FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException {
 
-		String uploadedFileLocation = "C:/uploads/" + fileDetail.getFileName();
-
+		String path = System.getProperty("user.dir");
+		
+		String uploadedFileLocation = path + "/ineuron-nginx/data/images/" + fileDetail.getFileName();
+		LOGGER.info("uploading " + uploadedFileLocation);
 	    // save it
 	    writeToFile(uploadedInputStream, uploadedFileLocation);
 	    String output = "File uploaded to : " + uploadedFileLocation;
