@@ -218,7 +218,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
     vm.createOrder = createOrder;
     function createOrder(file) {
       var userId=$cookies.get('INeuron-UserId');
-      picFileName=$scope.deliveryDate.getTime();
+      picFileName = userId + "-" + $scope.deliveryDate.getTime();
       //alert($scope.picFile+picFileSuffix);
 	
       $http({
@@ -249,7 +249,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
   	
 	//upload pic to the file server	
   	file.upload = Upload.upload({
-  		url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+  		url: '/upload',
   		data: {file:  Upload.rename(file, picFileName)},
   	});
 
