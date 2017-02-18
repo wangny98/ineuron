@@ -1,5 +1,6 @@
 package com.ineuron;
 
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +9,7 @@ import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.domain.nlp.service.NLPService;
 import com.ineuron.domain.user.util.DesUtil;
 import com.ineuron.domain.user.valueobject.RolesCache;
+import com.ineuron.resources.UploadResource;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -50,6 +52,7 @@ public class INeuronApplication extends Application<INeuronConfiguration> {
 	@Override
 	public void run(INeuronConfiguration configuration, Environment environment) {
 		try {
+			environment.jersey().register(MultiPartFeature.class);
 			RolesCache.init();
 			LOGGER.info("RolesCache is initiallized...");
 			
