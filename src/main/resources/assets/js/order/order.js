@@ -289,36 +289,45 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			payment:$scope.payment,
 			deliveryDate: $scope.deliveryDate,
 			customizedInfo: $scope.customizedInfo,
-			picFile: picFileName
+			picFile: picFileName+"."+picSuffix
 	 	}
 	 }).success(function(data) {
 		updateApiToken(data, $cookies);
-		ineuronApp.confirm("提示","添加成功！", 'sm', $rootScope, $uibModal);		
+		
+		//upload pic to the file server	
+		var filename=file.name;
+		var filenameSections=filename.split('.');
+		var picSuffix=filenameSections[filenameSections.length-1];
+		
+	  	file.upload = Upload.upload({
+	  		url: '/upload',
+	  		data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
+	  	});
+
+		file.upload.then(function (response) {
+			$timeout(function () {
+				file.result = response.data;
+			});
+		}, function (response) {
+			if (response.status > 0)
+				//$scope.errorMsg = response.status + ': ' + response.data;
+				ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
+		}, function (evt) {
+			// Math.min is to fix IE which reports 200% sometimes
+			file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+		});
+		
+		ineuronApp.confirm("提示","订单添加成功！", 'sm', $rootScope, $uibModal);
+		
 		$state.go("orderList");
     }).error(function(data, status) {
-		// ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
-		alert(status);
+		ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
+		//alert(status);
 		handleError(status, $rootScope, $uibModal);
 		console.log("create order error");
   	})
   	
-	//upload pic to the file server	
-  	file.upload = Upload.upload({
-  		url: '/upload',
-  		data: {file:  Upload.rename(file, picFileName)},
-  	});
-
-	file.upload.then(function (response) {
-		$timeout(function () {
-			file.result = response.data;
-		});
-	}, function (response) {
-		if (response.status > 0)
-			$scope.errorMsg = response.status + ': ' + response.data;
-	}, function (evt) {
-		// Math.min is to fix IE which reports 200% sometimes
-		file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	});
+	
   	    
   	}
 
