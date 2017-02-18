@@ -9,10 +9,10 @@
 			<span class="glyphicon glyphicon-plus"></span> 新增订单
 		</button>
 	</div>
-	-->
-	<table datatable="ng" dt-options="OrderList.dtOptions"
-		dt-column-defs="OrderList.dtColumnDefs" class="row-border hover"
-		id="table-style">
+	-->	
+	<uib-tabset active="active" type="tabs"> 
+	<uib-tab index="0" heading="订单列表" style="font-weight:bold;">
+	<table id="table-style">
 		<thead>
 			<tr>
 				<th>No.</th>
@@ -60,4 +60,12 @@
 			</tr>
 		</tbody>
 	</table>
+	<tm-pagination conf="paginationConf"></tm-pagination>
+    </uib-tab> 
+	<uib-tab index="1" heading="报表分析" style="font-weight:bold;" select="showReport()">
+	 <div style="width:100%">
+		 <nvd3 options='options' data='data' ></nvd3>
+	 </div>
+	</uib-tab>
+	</uib-tabset>
 </div>

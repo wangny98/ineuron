@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/ineuron/css/table-style.css">
 <link rel="stylesheet" href="/ineuron/css/lib/isteven-multi-select.css">
 <link rel="stylesheet" href="/ineuron/css/lib/bootstrap.min.css">
+<link rel="stylesheet" href="/ineuron/css/lib/nv.d3.min.css">
 
 <!-- for DataTable -->
 <link rel="stylesheet" href="/ineuron/css/lib/bootstrap.min.css">
@@ -48,6 +49,11 @@
 <script src="/ineuron/js/lib/md5.min.js"></script>
 <!-- <script src="/ineuron/js/lib/layout.border.js"></script> -->
 
+<script src="/ineuron/js/lib/d3.min.js"></script>
+<script src="/ineuron/js/lib/nv.d3.min.js"></script>
+<script src="/ineuron/js/lib/angular-nvd3.min.js"></script>
+
+<script src="/ineuron/js/lib/tm.pagination.js"></script>
 
 <script src="/ineuron/js/main/functions.js"></script>
 <script src="/ineuron/js/main/mainapp.js"></script>
@@ -82,7 +88,7 @@
 									你好，{{displayUsername}} <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" uib-dropdown-menu>
-									<li><a href="#">修改密码</a></li>
+									<!-- <li><a href="#">修改密码</a></li>  -->
 									<li><a href="#" ng-click="logout()">退出</a></li>
 								</ul>
 							</div>

@@ -1,6 +1,6 @@
 //define the package as ineuronApp
 var ineuronApp = angular.module('ineuronApp', [ 'ui.router', 'ngCookies',
-		'datatables', 'isteven-multi-select','ui.bootstrap','ui.sortable','ngFileUpload']);
+		'datatables', 'isteven-multi-select','ui.bootstrap','ui.sortable','ngFileUpload','nvd3','tm.pagination']);
 
 ineuronApp.config(function($stateProvider) {
 

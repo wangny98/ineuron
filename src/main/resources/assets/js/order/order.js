@@ -107,11 +107,11 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 }]);
 
 
-ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams', '$rootScope', '$uibModal', '$location', '$cookies', '$state', 'DTOptionsBuilder', 'DTColumnDefBuilder',
-	function($http, $scope, $stateParams, $rootScope, $uibModal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder) {
+ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams', '$rootScope', '$uibModal', '$location', '$cookies', '$state', 
+                                              'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder',
+	function($http, $scope, $stateParams, $rootScope, $uibModal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder) {
 	var vm = this;
 	$scope.format = "yyyy/MM/dd";
-	
 	
 	$http({
 		url : '/order/list',
@@ -124,9 +124,64 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 		console.log("order list error");
 	});	
 		
+	$scope.paginationConf = {
+            currentPage: 1,
+            itemsPerPage: 15,
+            totalItems: 100,
+            perPageOptions: [10,15]
+        };
+
 	vm.updateOrder=updateOrder;
 	function updateOrder(index){
 		$state.go("updateOrder", {orderStr: JSON.stringify(vm.orders[index])});
+	}
+	
+	$scope.showReport=function(){
+		$scope.options = {
+	            chart: {
+	                type: 'multiBarChart',
+	                height: 450,
+	                width:1050,
+	                margin : {
+	                    top: 20,
+	                    right: 20,
+	                    bottom: 45,
+	                    left: 45
+	                },
+	                clipEdge: true,
+	                //staggerLabels: true,
+	                duration: 500,
+	                stacked: true,
+	                xAxis: {
+	                    axisLabel: '月份',
+	                    showMaxMin: false,
+	                    tickFormat: function(d){
+	                        return d3.format(',f')(d);
+	                    }
+	                },
+	                yAxis: {
+	                    axisLabel: '订单',
+	                    axisLabelDistance: -20,
+	                    tickFormat: function(d){
+	                        return d3.format(',.1f')(d);
+	                    }
+	                }
+	            }
+	        };
+		
+		$scope.data = [{
+		    key: "Cumulative Return",
+		    values: [
+		        { "label" : "A" , "value" : -29.765957771107 },
+		        { "label" : "B" , "value" : 0 },
+		        { "label" : "C" , "value" : 32.807804682612 },
+		        { "label" : "D" , "value" : 196.45946739256 },
+		        { "label" : "E" , "value" : 0.19434030906893 },
+		        { "label" : "F" , "value" : -98.079782601442 },
+		        { "label" : "G" , "value" : -13.925743130903 },
+		        { "label" : "H" , "value" : -5.1387322875705 }
+		    ]
+		}];
 	}
 	
 	/*
