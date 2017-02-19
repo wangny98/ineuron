@@ -273,8 +273,10 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
     vm.createOrder = createOrder;
     function createOrder(file) {
       var userId=$cookies.get('INeuron-UserId');
-      picFileName = userId + "-" + $scope.deliveryDate.getTime();
-      //alert($scope.picFile+picFileSuffix);
+      var picFileName = userId + "-" + $scope.deliveryDate.getTime();
+      var tempFilename=file.name;
+      var tempFilenameSections=tempFilename.split('.');
+      var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
 	
       $http({
 		url : '/order/create',
@@ -295,9 +297,6 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		updateApiToken(data, $cookies);
 		
 		//upload pic to the file server	
-		var filename=file.name;
-		var filenameSections=filename.split('.');
-		var picSuffix=filenameSections[filenameSections.length-1];
 		
 	  	file.upload = Upload.upload({
 	  		url: '/upload',
