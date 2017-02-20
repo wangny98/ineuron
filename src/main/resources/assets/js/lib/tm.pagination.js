@@ -5,7 +5,7 @@
 angular.module('tm.pagination', []).directive('tmPagination',[function(){
     return {
         restrict: 'EA',
-        template: '<div class="page-list">' +
+        template: '<div class="page-list" style="margin-top:20px;">' +
             '<ul class="pagination" style="display:inline;" ng-show="conf.totalItems > 0">' +
             '<li ng-class="{disabled: conf.currentPage == 1}" ng-click="prevPage()"><a href="#"><span>&laquo;</span></a></li>' +
             '<li ng-repeat="item in pageList track by $index" ng-class="{active: item == conf.currentPage, separate: item == \'...\'}" ' +
