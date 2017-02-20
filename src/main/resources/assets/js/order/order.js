@@ -113,7 +113,7 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	var vm = this;
 	$scope.format = "yyyy/MM/dd";
 	
-	$http({
+	/*$http({
 		url : '/order/list',
 		method : 'GET'
 	}).success(function(data) {
@@ -122,20 +122,66 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	}).error(function(data, status) {
 		handleError(status, $rootScope, $uibModal);
 		console.log("order list error");
-	});	
-		
+	});	*/
+	
+	//for list paging
 	$scope.paginationConf = {
             currentPage: 1,
-            itemsPerPage: 15,
-            totalItems: 100,
+            itemsPerPage: 10,
+            //totalItems: 100,
             perPageOptions: [10,15]
         };
+	
+	$http({
+		url : '/order/listbypage',
+		method : 'POST',
+		data : {
+            currentPage: $scope.paginationConf.currentPage,
+            itemsPerPage: $scope.paginationConf.itemsPerPage
+		}
+	}).success(function(data) {
+		updateApiToken(data, $cookies);
+		$scope.paginationConf.totalItems = data.value.totalRecords;
+		//alert("total: "+data.value.totalRecords);
+		vm.orders = data.value.orders;
+		//alert("orders: "+vm.orders[0].orderNumber);
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $uibModal);
+		console.log("order list error");
+	});	  
+		
+	
+	var retreiveOrders = function(){
+		//alert("currentPage: "+$scope.paginationConf.currentPage+" itemsPerPage: "+$scope.paginationConf.itemsPerPage)
+		$http({
+			url : '/order/listbypage',
+			method : 'POST',
+			data : {
+	            currentPage: $scope.paginationConf.currentPage,
+	            itemsPerPage: $scope.paginationConf.itemsPerPage
+			}
+		}).success(function(data) {
+			updateApiToken(data, $cookies);
+			$scope.paginationConf.totalItems = data.value.totalRecords;
+			//alert("total: "+data.value.totalRecords);
+			vm.orders = data.value.orders;
+			//alert("orders: "+vm.orders[0].orderNumber);
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $uibModal);
+			console.log("order list error");
+		});	  
+    };
 
+    // monitoring the change of currentPage and itemsPerPage 
+    $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', retreiveOrders);
+
+    
 	vm.updateOrder=updateOrder;
 	function updateOrder(index){
 		$state.go("updateOrder", {orderStr: JSON.stringify(vm.orders[index])});
 	}
 	
+	//for reports
 	$scope.showReport=function(){
 		$scope.options = {
 	            chart: {
@@ -149,7 +195,7 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	                    left: 45
 	                },
 	                clipEdge: true,
-	                //staggerLabels: true,
+	                // staggerLabels: true,
 	                duration: 500,
 	                stacked: true,
 	                xAxis: {
@@ -296,7 +342,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	 }).success(function(data) {
 		updateApiToken(data, $cookies);
 		
-		//upload pic to the file server	
+		// upload pic to the file server
 		
 	  	file.upload = Upload.upload({
 	  		url: '/upload',
@@ -309,7 +355,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			});
 		}, function (response) {
 			if (response.status > 0)
-				//$scope.errorMsg = response.status + ': ' + response.data;
+				// $scope.errorMsg = response.status + ': ' + response.data;
 				ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
 		}, function (evt) {
 			// Math.min is to fix IE which reports 200% sometimes
@@ -321,13 +367,10 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		$state.go("orderList");
     }).error(function(data, status) {
 		ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
-		//alert(status);
+		// alert(status);
 		handleError(status, $rootScope, $uibModal);
 		console.log("create order error");
-  	})
-  	
-	
-  	    
+  	})  	    
   	}
 
     vm.backward = backward;
@@ -351,7 +394,6 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	$scope.customizedInfo=order.customizedInfo;
 	$scope.price=order.product.productPrice.price;
 	
-    // alert("deliveryDate: "+order.deliveryDate);
 	$scope.deliveryDate=order.deliveryDate;
 	$scope.format = "yyyy/MM/dd";
 	$scope.altInputFormats = ['yyyy/M!/d!'];
