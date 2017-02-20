@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.INeuronRepository;
+import com.ineuron.dataaccess.db.DataTablePageParameters;
 import com.ineuron.domain.order.entity.Order;
+import com.ineuron.domain.order.valueobject.OrderResponse;
 import com.ineuron.domain.order.valueobject.OrderStatus;
 import com.ineuron.domain.production.entity.Production;
 import com.ineuron.domain.device.entity.Device;
@@ -110,6 +112,28 @@ public class OrderService {
 		//System.out.println("get order by name in service: success");
 		if(order!=null) order.init(repository);
 		return order;
+	}
+	
+	public OrderResponse getOrdersByPage(DataTablePageParameters dtPageParameters) throws RepositoryException {
+		OrderResponse orderResponse=new OrderResponse();
+		
+		Integer total=repository.selectOne("getTotalNumberOfOrders", null);
+		orderResponse.setTotalRecords(total);
+		//System.out.println("total: "+orderResponse.getTotalRecords());
+		
+		Integer startP=(dtPageParameters.getCurrentPage()-1)*dtPageParameters.getItemsPerPage();
+		dtPageParameters.setStartPosition(startP);
+		//System.out.println("startP: "+dtPageParameters.getStartPosition());
+		if(startP==0) {
+			List<Order> orders=repository.select("getOrdersOfFirstPage", dtPageParameters);
+			orderResponse.setOrders(orders);  
+		}
+		else{
+			List<Order> orders=repository.select("getOrdersByPage", dtPageParameters);
+			orderResponse.setOrders(orders);  
+		}
+	
+		return orderResponse;
 	}
 	
 	

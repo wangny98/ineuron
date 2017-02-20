@@ -6,46 +6,71 @@
 
 
 	<!-- Order -->
-	
+
 	<insert id="addOrder">
-		insert into Orders (serialNumber,orderNumber,productId,userId,productionPeriod,amount,total,statusId,customizedInfo,orderDate,orderDateTime,deliveryDate,customer,payment,picFile,validFlag)
+		insert into Orders
+		(serialNumber,orderNumber,productId,userId,productionPeriod,amount,total,statusId,customizedInfo,orderDate,orderDateTime,deliveryDate,customer,payment,picFile,validFlag)
 		values(#{serialNumber},#{orderNumber},#{productId},#{userId},#{productionPeriod},#{amount},#{total},#{statusId},#{customizedInfo},#{orderDate},#{orderDateTime},#{deliveryDate},#{customer},#{payment},#{picFile},#{validFlag})
 	</insert>
-	
+
 	<select id="getOrders" resultType="com.ineuron.domain.order.entity.Order">
 		select * from Orders
 	</select>
-	
+
 	<select id="getOrderById" resultType="com.ineuron.domain.order.entity.Order">
-		select * from Orders where id=#{id}
+		select * from Orders where
+		id=#{id}
 	</select>
 
 	<select id="getLatestOrderByDate" resultType="com.ineuron.domain.order.entity.Order">
-		select * from Orders where orderDate=#{orderDate} and 
-		 serialNumber=(select max(serialNumber) from Orders where orderDate=#{orderDate})
+		select * from
+		Orders where orderDate=#{orderDate} and
+		serialNumber=(select max(serialNumber) from Orders where orderDate=#{orderDate})
 	</select>
 
-	<update id="updateOrder">
-		update Orders set amount=#{amount}, customer=#{customer}, total=#{total}, payment=#{payment},
-		 deliveryDate=#{deliveryDate}, customizedInfo=#{customizedInfo}, statusId = #{statusId} where id = #{id}
-	</update>
+	<!-- for order list paging -->
+	<select id="getTotalNumberOfOrders" resultType="Integer">
+		select count(id) from
+		Orders where validFlag=1
+	</select>
+
+	<select id="getOrdersByPage" resultType="com.ineuron.domain.order.entity.Order">
+		select top (#{itemsPerPage}) * from Orders
+		where id>(select max(id)
+		from (select top (#{startPosition}) id from Orders order by id) tt)
+		order by id ASC
+	</select>
 	
+	<select id="getOrdersOfFirstPage" resultType="com.ineuron.domain.order.entity.Order">
+		select top (#{itemsPerPage}) * from [ineuron].[dbo].[Orders]  order by id ASC
+	</select>
+	
+	
+	<update id="updateOrder">
+		update Orders set amount=#{amount},
+		customer=#{customer}, total=#{total}, payment=#{payment},
+		deliveryDate=#{deliveryDate}, customizedInfo=#{customizedInfo},
+		statusId = #{statusId} where id = #{id}
+	</update>
+
 	<update id="updateOrderForStatus">
-		update Orders set statusId = #{statusId} where id = #{id}
+		update Orders set statusId = #{statusId} where id =
+		#{id}
 	</update>
 
 	<update id="deleteOrder">
 		update Orders set validFlag = -1 where id = #{id}
 	</update>
-	
-	
+
+
 	<!-- OrderStatus -->
-	
+
 	<select id="getOrderStatus" resultType="com.ineuron.domain.order.valueobject.OrderStatus">
 		select * from OrderStatus
 	</select>
-	
+
 	<select id="getOrderStatusById" resultType="com.ineuron.domain.order.valueobject.OrderStatus">
-		select * from OrderStatus where id=#{id}
+		select * from
+		OrderStatus where id=#{id}
 	</select>
 </mapper>
