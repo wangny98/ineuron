@@ -36,13 +36,13 @@
 
 	<select id="getOrdersByPage" resultType="com.ineuron.domain.order.entity.Order">
 		select top (#{itemsPerPage}) * from Orders
-		where id>(select max(id)
-		from (select top (#{startPosition}) id from Orders order by id) tt)
+		where validFlag=1 and id>(select max(id)
+		from (select top (#{startPosition}) id from Orders where validFlag=1 order by id) tt)
 		order by id ASC
 	</select>
 	
 	<select id="getOrdersOfFirstPage" resultType="com.ineuron.domain.order.entity.Order">
-		select top (#{itemsPerPage}) * from [ineuron].[dbo].[Orders]  order by id ASC
+		select top (#{itemsPerPage}) * from Orders where validFlag=1 order by id ASC
 	</select>
 	
 	
