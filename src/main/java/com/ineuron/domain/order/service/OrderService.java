@@ -126,6 +126,9 @@ public class OrderService {
 		//System.out.println("startP: "+dtPageParameters.getStartPosition());
 		if(startP==0) {
 			List<Order> orders=repository.select("getOrdersOfFirstPage", dtPageParameters);
+			for (int i = 0; i < orders.size(); i++) {
+				orders.get(i).init(repository);
+			}
 			orderResponse.setOrders(orders);  
 		}
 		else{
