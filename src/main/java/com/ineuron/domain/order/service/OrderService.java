@@ -124,17 +124,18 @@ public class OrderService {
 		Integer startP=(dtPageParameters.getCurrentPage()-1)*dtPageParameters.getItemsPerPage();
 		dtPageParameters.setStartPosition(startP);
 		//System.out.println("startP: "+dtPageParameters.getStartPosition());
+		List<Order> orders;
 		if(startP==0) {
-			List<Order> orders=repository.select("getOrdersOfFirstPage", dtPageParameters);
-			for (int i = 0; i < orders.size(); i++) {
-				orders.get(i).init(repository);
-			}
-			orderResponse.setOrders(orders);  
+			orders=repository.select("getOrdersOfFirstPage", dtPageParameters); 
 		}
 		else{
-			List<Order> orders=repository.select("getOrdersByPage", dtPageParameters);
-			orderResponse.setOrders(orders);  
+			orders=repository.select("getOrdersByPage", dtPageParameters);
 		}
+		
+		for (int i = 0; i < orders.size(); i++) {
+				orders.get(i).init(repository);
+		}
+		orderResponse.setOrders(orders);  
 	
 		return orderResponse;
 	}
