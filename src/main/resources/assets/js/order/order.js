@@ -215,19 +215,43 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	            }
 	        };
 		
-		$scope.data = [{
-		    key: "Cumulative Return",
-		    values: [
-		        { "label" : "A" , "value" : -29.765957771107 },
-		        { "label" : "B" , "value" : 0 },
-		        { "label" : "C" , "value" : 32.807804682612 },
-		        { "label" : "D" , "value" : 196.45946739256 },
-		        { "label" : "E" , "value" : 0.19434030906893 },
-		        { "label" : "F" , "value" : -98.079782601442 },
-		        { "label" : "G" , "value" : -13.925743130903 },
-		        { "label" : "H" , "value" : -5.1387322875705 }
-		    ]
-		}];
+		$scope.data = [
+		               {
+		                   "key" : "North America" ,
+		                   "values" : [ [ 1, 23.041422681023] , [ 2, 19.854291255832]]
+		               },
+
+		               {
+		                   "key" : "Africa" ,
+		                   "values" : [ [ 1, 7.9356392949025] , [ 2, 7.4514668527298]]
+		               },
+
+		               {
+		                   "key" : "South America" ,
+		                   "values" : [ [ 1, 7.9149900245423] , [ 2, 7.0899888751059]]
+		               },
+
+		               {
+		                   "key" : "Asia" ,
+		                   "values" : [ [ 1, 13.153938631352] , [ 2, 12.456410521864]]
+		               } ,
+
+		               {
+		                   "key" : "Europe" ,
+		                   "values" : [ [ 1, 9.3433263069351] , [ 2, 8.4583069475546]]
+		               } ,
+
+		               {
+		                   "key" : "Australia" ,
+		                   "values" : [ [ 1, 5.1162447683392] , [ 2, 4.2022848306513]]
+		               } ,
+
+		               {
+		                   "key" : "Antarctica" ,
+		                   "values" : [ [ 1, 1.3503144674343] , [ 2, 1.2232741112434]]
+		               }
+
+		           ]
 	}
 	
 	/*
