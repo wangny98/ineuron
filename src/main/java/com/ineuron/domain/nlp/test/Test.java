@@ -13,5 +13,7 @@ public class Test {
 		service.parseText("一个月后需要适合金属的耐黄变较好的磁漆1000L");
 		service.parseText("我要500L保温效果最好的外墙漆");
 		service.parseText("无毒环保的水性乳胶漆");
+		service.parseText("买5桶无毒环保的水性乳胶漆");
+		
 	}
 }
