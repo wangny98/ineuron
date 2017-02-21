@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<div ng-controller="FrontpageController">
+ <div style="margin-left:50px; margin-top:100px;">
+	<table>
+	       <tr>
+	       <td style="width: 230px;" class="center-align"><h4>订单</h4></td>
+	       <td style="width: 230px;" class="center-align"><h4>生产</h4></td>
+	       <td style="width: 230px;" class="center-align"><h4>设备</h4></td>
+	       <td style="width: 230px;" class="center-align""><h4>仓储</h4></td>
+	       </tr>
+            <tr>
+                <td style="width: 230px;" class="center-align">
+                    <div width="200px" ng-radial-gauge ranges="ranges" value="value" value-unit="unit" precision="precision" lower-limit="lowerLimit" upper-limit="upperLimit"></div>
+                </td>
+                <td style="width: 230px;" class="center-align">
+                    <div width="200px" ng-radial-gauge ranges="ranges" value="value" value-unit="unit" precision="precision" lower-limit="lowerLimit" upper-limit="upperLimit"></div>
+                </td>
+                <td style="width: 230px;" class="center-align">
+                    <div width="200px" ng-radial-gauge ranges="ranges" value="value" value-unit="unit" precision="precision" lower-limit="lowerLimit" upper-limit="upperLimit"></div>
+                </td>
+                <td style="width: 230px;" class="center-align">
+                    <div width="200px" ng-radial-gauge ranges="ranges" value="value" value-unit="unit" precision="precision" lower-limit="lowerLimit" upper-limit="upperLimit"></div>
+                </td>
+            </tr>
+        </table>
+  </div>
+</div>
+</html>
