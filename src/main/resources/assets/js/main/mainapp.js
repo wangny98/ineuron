@@ -1,6 +1,6 @@
 //define the package as ineuronApp
-var ineuronApp = angular.module('ineuronApp', [ 'ui.router', 'ngCookies',
-		'datatables', 'isteven-multi-select','ui.bootstrap','ui.sortable','ngFileUpload','nvd3','tm.pagination']);
+var ineuronApp = angular.module('ineuronApp', [ 'ui.router', 'ngCookies', 'datatables', 'isteven-multi-select',
+                                                'ui.bootstrap','ui.sortable','ngFileUpload','nvd3','tm.pagination', 'ngRadialGauge']);
 
 ineuronApp.config(function($stateProvider) {
 
@@ -8,7 +8,7 @@ ineuronApp.config(function($stateProvider) {
 	var aboutState = {
 		name : 'about',
 		url : '/about',
-		template : '<h3>琥崧智能控制系统</h3>'
+		templateUrl : '/ineuron/frontpage.html'
 	}
 	
 	
@@ -238,7 +238,7 @@ ineuronApp.controller('NavMenuController', ['$scope', function($scope) {
 	
 }]);
 
-ineuronApp.controller('LogoutController', ['$scope', '$cookies', function($scope, $cookies) {
+ineuronApp.controller('AccountSettingController', ['$scope', '$cookies', function($scope, $cookies) {
 	
 	$scope.displayUsername=$cookies.get("INeuron-UserName", {path : "/"});
 	
@@ -251,6 +251,44 @@ ineuronApp.controller('LogoutController', ['$scope', '$cookies', function($scope
 		$cookies.remove("INeuron-roleList", {path : "/"});
 		window.location.href = "/ineuron/user/index.html/#/login";
 	}
+	
+}]);
+
+
+ineuronApp.controller('FrontpageController', ['$scope', '$timeout', function($scope, $timeout) {
+	
+	$scope.value = 1.5;
+    $scope.upperLimit = 100;
+    $scope.lowerLimit = 0;
+    $scope.unit = "%";
+    $scope.precision = 2;
+    $scope.ranges = [
+        {
+            min: 0,
+            max: 20,
+            color: '#DEDEDE'
+        },
+        {
+            min: 20,
+            max: 40,
+            color: '#8DCA2F'
+        },
+        {
+            min: 40,
+            max: 60,
+            color: '#FDC702'
+        },
+        {
+            min: 60,
+            max: 80,
+            color: '#FF7700'
+        },
+        {
+            min: 80,
+            max: 100,
+            color: '#C50200'
+        }
+    ];
 	
 }]);
 
