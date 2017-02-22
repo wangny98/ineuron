@@ -257,7 +257,10 @@ ineuronApp.controller('AccountSettingController', ['$scope', '$cookies', functio
 
 ineuronApp.controller('FrontpageController', ['$scope', '$timeout', function($scope, $timeout) {
 	
-	$scope.value = 1.5;
+	$scope.valueMaterial = 90;
+	$scope.valueProduction = 90;
+	$scope.valueDevice = 90;
+	$scope.valueInventory = 90;
     $scope.upperLimit = 100;
     $scope.lowerLimit = 0;
     $scope.unit = "%";
@@ -266,25 +269,15 @@ ineuronApp.controller('FrontpageController', ['$scope', '$timeout', function($sc
         {
             min: 0,
             max: 20,
-            color: '#DEDEDE'
-        },
-        {
-            min: 20,
-            max: 40,
-            color: '#8DCA2F'
-        },
-        {
-            min: 40,
-            max: 60,
             color: '#FDC702'
         },
         {
-            min: 60,
-            max: 80,
-            color: '#FF7700'
+            min: 20,
+            max: 90,
+            color: '#8DCA2F'
         },
         {
-            min: 80,
+            min: 90,
             max: 100,
             color: '#C50200'
         }
