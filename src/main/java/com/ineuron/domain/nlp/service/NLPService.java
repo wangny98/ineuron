@@ -1,5 +1,11 @@
 package com.ineuron.domain.nlp.service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,11 +38,13 @@ public class NLPService {
 	
 	private static Set<String> PAINT_NAMES;
 
-
+	private List<String> vvWhiteList;
+	
 	private NLPService() {
 		corenlp = new StanfordCoreNLP("com/ineuron/domain/nlp/nlp-chinese.properties");
 		String[] paintNames = {"PAINT_BY_EFFECT_OF_SURFACE","PAINT_BY_FORM","PAINT_BY_FUNCTION_FORM","PAINT_BY_FUNCTION","PAINT_BY_PLACE"};
 		PAINT_NAMES = new HashSet<String>(Arrays.asList(paintNames));
+		vvWhiteList = readFileByLines("com/ineuron/domain/nlp/dict/vv-whitelist.txt");
 	}
 
 	public static NLPService getInstance() {
@@ -58,10 +66,11 @@ public class NLPService {
 		IndexedWord root = dependencies.getFirstRoot();
 
         List<String> otherAttrs = new ArrayList<String>();
-        Set<IndexedWord> children = dependencies.descendants(root);
+        Set<IndexedWord> nodes = dependencies.descendants(root);
+        nodes.add(root);
         String productName = null;
         
-        for (IndexedWord child : children)
+        for (IndexedWord child : nodes)
         {
         	if(COLOR.equals(child.ner())){
         		result.addColor(child.lemma());
@@ -96,6 +105,8 @@ public class NLPService {
             		|| "NP".equals(child.tag())
             		|| "ADJP".equals(child.tag())){
             	otherAttrs.add(child.lemma());
+            }else if("VV".equals(child.tag()) && isInVVWhiteList(child.lemma())){
+            	otherAttrs.add(child.lemma());
             }
         	
 		}
@@ -107,8 +118,13 @@ public class NLPService {
 		    }
 		}
         result.setProductName(productName);
-        if(productName != null && productName.lastIndexOf("漆") != -1){
-        	otherAttrs.add(productName.substring(0, productName.length()-1));
+        if(productName != null && productName.trim().length() > 1 && productName.lastIndexOf("漆") != -1){
+        	String attribute = productName.substring(0, productName.length() - 1);
+        	boolean matched = matchToKnownAttributes(result, attribute);
+        	if(!matched){
+        		otherAttrs.add(attribute);
+        	}
+        	
         }
         result.setOtherAttributes(otherAttrs);
 		
@@ -119,6 +135,70 @@ public class NLPService {
 
 	}
 
+
+	private boolean isInVVWhiteList(String tag) {
+		if(vvWhiteList.contains(tag)){
+			return true;
+		}
+		return false;
+	}
+	
+	private List<String> readFileByLines(String fileName) {
+		List<String> result = new ArrayList<String>();
+		InputStream in = ClassLoader.getSystemResourceAsStream(fileName);
+        //File file = new File(in);
+        BufferedReader reader = null;
+        try {
+            System.out.println("以行为单位读取文件内容，一次读一整行：");
+            reader = new BufferedReader(new InputStreamReader(in));
+            String tempString = null;
+            int line = 1;
+            // 一次读入一行，直到读入null为文件结束
+            while ((tempString = reader.readLine()) != null) {
+                // 显示行号
+                System.out.println("line " + line + ": " + tempString);
+                line++;
+                result.add(tempString);
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+        return result;
+    }
+
+	private boolean matchToKnownAttributes(ProductSelection result, String attribute) {
+		boolean matched = false;
+		Annotation document = new Annotation(attribute);
+		
+		corenlp.annotate(document);
+		SemanticGraph dependencies = parserOutput(document);
+		IndexedWord root = dependencies.getFirstRoot();
+		if(COLOR.equals(root.ner())){
+    		result.addColor(root.lemma());
+    		matched = true;
+    	}else if(TYPE_BY_FORM.equals(root.ner())){
+    		result.addForm(root.lemma());
+    		matched = true;
+    	}else if(QUALITY.equals(root.ner())){
+    		result.addQuality(root.lemma());
+    		matched = true;
+    	}else if(TYPE_BY_SCOPE.equals(root.ner())){
+    		result.addScope(root.lemma());
+    		matched = true;
+    	}else if(TYPE_BY_FUNCTION.equals(root.ner())){
+    		result.addFunction(root.lemma());
+    		matched = true;
+    	}
+		return matched;
+	}
 
 	private IndexedWord getProductName(SemanticGraph dependencies, IndexedWord root) {
 		if(root.lemma().lastIndexOf("漆") != -1){
