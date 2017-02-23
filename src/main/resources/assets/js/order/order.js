@@ -285,8 +285,9 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 }]);
 
 
-ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal', 'Upload', '$timeout',
-   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, Upload, $timeout) {
+ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', 
+                                                '$rootScope', '$uibModal', 'Upload', '$timeout','$location',
+   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, Upload, $timeout,$location) {
 
 	var vm = this;	
 	var product = eval('(' + $stateParams.productStr + ')');
@@ -297,7 +298,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		$state.go("updateProductPrice",{productStr: $stateParams.productStr});
     }
     else $scope.price=product.productPrice.price;
-    
+   
     // get product's ProductionPeriod
     $http({
 		url : '/production/periodsbyproductid?productId='+product.id,
@@ -342,6 +343,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 
     vm.createOrder = createOrder;
     function createOrder(file) {
+      //generate pic file name	
       var userId=$cookies.get('INeuron-UserId');
       var picFileName = userId + "-" + $scope.deliveryDate.getTime();
       var tempFilename=file.name;
@@ -366,13 +368,11 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	 }).success(function(data) {
 		updateApiToken(data, $cookies);
 		
-		// upload pic to the file server
-		
+		// upload pic to the file server		
 	  	file.upload = Upload.upload({
-	  		url: '/upload',
+	  		url: '/file/upload',
 	  		data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
 	  	});
-
 		file.upload.then(function (response) {
 			$timeout(function () {
 				file.result = response.data;
@@ -386,8 +386,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
 		});
 		
-		ineuronApp.confirm("提示","订单添加成功！", 'sm', $rootScope, $uibModal);
-		
+		ineuronApp.confirm("提示","订单添加成功！", 'sm', $rootScope, $uibModal);		
 		$state.go("orderList");
     }).error(function(data, status) {
 		ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
@@ -405,8 +404,9 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 }]);
 
 
-ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal',
-  function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
+ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies',
+                                                '$rootScope', '$uibModal', '$location','Upload',
+  function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal,$location,Upload) {
 	var order = eval('(' + $stateParams.orderStr + ')');
 	var vm = this;
 	
@@ -429,8 +429,12 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 		};
 	$scope.dateOptions = {
 			showWeeks: false
-		};
-	
+		};	
+	 
+    //get orginal pic from nginx
+    //alert($location.host());
+    $scope.originalPic="http://"+$location.host()+"/images/"+order.picFile;
+    
 	// get orderStatus list
 	$http({
 		url : '/order/orderstatuslist',
@@ -455,8 +459,15 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	}
 	
 	vm.updateOrder = updateOrder;
-	function updateOrder() {
-		
+	function updateOrder(file) {
+		//generate pic file name	
+	      var userId=$cookies.get('INeuron-UserId');
+	      var currentTime=new Date();
+	      var picFileName = userId + "-" + currentTime.getTime();
+	      var tempFilename=file.name;
+	      var tempFilenameSections=tempFilename.split('.');
+	      var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
+	      
 		$http({
 			url : '/order/update',
 			method : 'POST',
@@ -468,10 +479,30 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 				payment:$scope.payment,
 				statusId: $scope.selectedOrderStatus[0].id,
 				deliveryDate: $scope.deliveryDate,
-				customizedInfo: $scope.customizedInfo
+				customizedInfo: $scope.customizedInfo,
+				picFile: picFileName+"."+picSuffix
 			}
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
+			
+			// upload pic to the file server		
+		  	file.upload = Upload.upload({
+		  		url: '/file/upload',
+		  		data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
+		  	});
+			file.upload.then(function (response) {
+				$timeout(function () {
+					file.result = response.data;
+				});
+			}, function (response) {
+				if (response.status > 0)
+					// $scope.errorMsg = response.status + ': ' + response.data;
+					ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
+			}, function (evt) {
+				// Math.min is to fix IE which reports 200% sometimes
+				file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+			});
+			
 			ineuronApp.confirm("提示","修改成功！", 'sm', $rootScope, $uibModal);		
 			$state.go("orderList");
 		}).error(function(data, status) {

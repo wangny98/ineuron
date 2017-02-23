@@ -6,8 +6,8 @@ ineuronApp.config(function($stateProvider) {
 
 
 	var aboutState = {
-		name : 'about',
-		url : '/about',
+		name : 'frontpage',
+		url : '/frontpage',
 		templateUrl : '/ineuron/frontpage.html'
 	}
 	
@@ -257,10 +257,10 @@ ineuronApp.controller('AccountSettingController', ['$scope', '$cookies', functio
 
 ineuronApp.controller('FrontpageController', ['$scope', '$timeout', function($scope, $timeout) {
 	
-	$scope.valueMaterial = 90;
-	$scope.valueProduction = 90;
-	$scope.valueDevice = 90;
-	$scope.valueInventory = 90;
+	$scope.valueMaterial = 80;
+	$scope.valueProduction = 80;
+	$scope.valueDevice = 80;
+	$scope.valueInventory = 80;
     $scope.upperLimit = 100;
     $scope.lowerLimit = 0;
     $scope.unit = "%";
@@ -268,11 +268,11 @@ ineuronApp.controller('FrontpageController', ['$scope', '$timeout', function($sc
     $scope.ranges = [
         {
             min: 0,
-            max: 20,
+            max: 10,
             color: '#FDC702'
         },
         {
-            min: 20,
+            min: 10,
             max: 90,
             color: '#8DCA2F'
         },
