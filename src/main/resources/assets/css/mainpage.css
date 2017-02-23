@@ -86,7 +86,7 @@ color: #fff;
 	color: #328aa4;
 	position: relative;
 	font-weight: bold;
-	font-size: 20px;
+	font-size: 22px;
 	text-align: center;  
 	font-family: cursive;
 }
@@ -111,6 +111,18 @@ color: #fff;
 	width:190px;
 	margin-right:10px;
 	
+}
+
+.customized-fieldset{
+	margin:auto;
+	font-family:cursive;
+}
+
+.customized-legend{
+	margin-bottom:auto;
+	text-align:center;
+	font-size:18px;
+	border:0;
 }
 
 #submitbutton{
