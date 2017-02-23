@@ -453,6 +453,11 @@ public class ProductService {
 				}
 			}
 		}
+		else {
+			for (int i=0; i<productsResult.size(); i++){
+				finalProductsResult.add(productsResult.get(i));
+			}				
+		}
 		
 		for (int i = 0; i < finalProductsResult.size(); i++) {
 			finalProductsResult.get(i).initForProductCategory(repository);
