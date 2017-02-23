@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <head></head>
 <div ng-controller="OrderCreateController as OrderCreate">
-	<div class="message">订单</div>
+	<div class="message">新订单</div>
 	<div>
 		<form ng-submit="OrderCreate.createOrder(picFile)">
 			<table id="table-style" style="margin: 50px auto">
@@ -9,13 +9,13 @@
 					<tr>
 						<th class="labelformat">产品名</th>
 						<td><input class="input-block-level" type="text"
-							ng-model="productName" readonly="true" /></td>
+							ng-model="productName" readonly /></td>
 						<td></td>
 					</tr>
 					<tr>
 						<th class="labelformat">用户名</th>
 						<td><input class="input-block-level" type="text"
-							ng-model="userName" readonly="true" /></td>
+							ng-model="userName" readonly /></td>
 						<td></td>
 					</tr>
 					<tr>
@@ -27,7 +27,7 @@
 					<tr>
 						<th class="labelformat">单价</th>
 						<td><input class="input-block-level" type="text"
-							ng-model="price" readonly="true" /></td>
+							ng-model="price" readonly /></td>
 						<td></td>
 					</tr>
 					<tr>
@@ -48,7 +48,7 @@
 					<tr>
 						<th class="labelformat">预期生产周期</th>
 						<td><input type="text" style="height: 30px; width: 210px;"
-							ng-model="productionPeriod" readonly="true" /> <label
+							ng-model="productionPeriod" readonly /> <label
 							class="right-align" style="padding-top: 5px; padding-right: 5px;">天</label>
 						</td>
 						<td></td>

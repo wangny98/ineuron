@@ -4,7 +4,7 @@
 	ng-controller="OrderUpdateController as OrderUpdate">
 	<div class="message">订单更新</div>
 	<div>
-		<form ng-submit="OrderUpdate.updateOrder()">
+		<form ng-submit="OrderUpdate.updateOrder(picFile)">
 			<table id="table-style" style="margin: 50px auto">
 				<tbody>
 					<tr>
@@ -80,6 +80,30 @@
 						<td><textarea style="min-height: 60px"
 								class="input-block-level" type="text"
 								ng-model="customizedInfo" /></td>
+						<td></td>
+					</tr>
+					<tr>
+					<th class="labelformat">原图片</th>
+						<td>
+						<img style="width: 200px; min-height: 80px" src="{{originalPic}}" />
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th class="labelformat">更新图片</th>
+						<td><input type="file" ngf-select ng-model="picFile"
+							name="file" ngf-max-size="20MB" required
+							ngf-model-invalid="errorFile"> <i
+							ng-show="myForm.file.$error.maxSize">文件大小超过上限
+								{{errorFile.size / 1000000|number:1}}MB: 最大：10M</i> <img
+							ng-show="myForm.file.$valid" ngf-thumbnail="picFile"
+							class="thumb">
+							<button ng-click="picFile = null" ng-show="picFile">删除</button> 
+							<span class="progress" ng-show="picFile.progress >= 0">
+								<div style="width: {{picFile.progress"
+									ng-bind="picFile.progress + '%'"></div>
+							</span>
+						</td>
 						<td></td>
 					</tr>
 					<tr>
