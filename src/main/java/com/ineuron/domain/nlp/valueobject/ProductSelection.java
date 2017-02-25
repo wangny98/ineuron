@@ -1,23 +1,24 @@
 package com.ineuron.domain.nlp.valueobject;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ProductSelection {
 	//产品
 	private String productName;
 	//颜色
-	private List<String> colors;
+	private Set<String> colors;
 	//形态
-	private List<String> forms;
+	private Set<String> forms;
 	//功能
-	private List<String> functions;
+	private Set<String> functions;
 	//用途
-	private List<String> scopes;	
+	private Set<String> scopes;	
 	//品质
-	private List<String> qualities;
+	private Set<String> qualities;
 	//其他属性
-	private List<String> otherAttributes;
+	private Set<String> otherAttributes;
 	
 	public String toString(){
 		
@@ -85,65 +86,65 @@ public class ProductSelection {
 		this.productName = productName;
 	}
 	
-	public List<String> getColors() {
+	public Set<String> getColors() {
 		return colors;
 	}
 
 	public void addColor(String color) {
 		if(colors == null){
-			colors = new ArrayList<String>();
+			colors = new HashSet<String>();
 		}
 		colors.add(color);
 	}
 
-	public List<String> getForms() {
+	public Set<String> getForms() {
 		return forms;
 	}
 
 	public void addForm(String form) {
 		if(forms == null){
-			forms = new ArrayList<String>();
+			forms = new HashSet<String>();
 		}
 		forms.add(form);
 	}
 
-	public List<String> getFunctions() {
+	public Set<String> getFunctions() {
 		return functions;
 	}
 
 	public void addFunction(String function) {
 		if(functions == null){
-			functions = new ArrayList<String>();
+			functions = new HashSet<String>();
 		}
 		functions.add(function);
 	}
 
-	public List<String> getScopes() {
+	public Set<String> getScopes() {
 		return scopes;
 	}
 
 	public void addScope(String scope) {
 		if(scopes == null){
-			scopes = new ArrayList<String>();
+			scopes = new HashSet<String>();
 		}
 		scopes.add(scope);
 	}
 
-	public List<String> getQualities() {
+	public Set<String> getQualities() {
 		return qualities;
 	}
 
 	public void addQuality(String quality) {
 		if(qualities == null){
-			qualities = new ArrayList<String>();
+			qualities = new HashSet<String>();
 		}
 		qualities.add(quality);
 	}
 
-	public List<String> getOtherAttributes() {
+	public Set<String> getOtherAttributes() {
 		return otherAttributes;
 	}
-	public void setOtherAttributes(List<String> otherAttributes) {
+	public void setOtherAttributes(Set<String> otherAttributes) {
 		this.otherAttributes = otherAttributes;
 	}
 	

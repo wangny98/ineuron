@@ -1,8 +1,6 @@
 package com.ineuron.domain.nlp.service;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -65,7 +63,7 @@ public class NLPService {
 		SemanticGraph dependencies = parserOutput(document);
 		IndexedWord root = dependencies.getFirstRoot();
 
-        List<String> otherAttrs = new ArrayList<String>();
+        Set<String> otherAttrs = new HashSet<String>();
         Set<IndexedWord> nodes = dependencies.descendants(root);
         nodes.add(root);
         String productName = null;
@@ -82,7 +80,11 @@ public class NLPService {
         		result.addQuality(child.lemma());
         		continue;
         	}else if(TYPE_BY_SCOPE.equals(child.ner())){
-        		result.addScope(child.lemma());
+        		String scope = child.lemma();
+        		if(scope.lastIndexOf("漆") != -1){
+        			scope = scope.substring(0, scope.length() -1);
+        		}
+        		result.addScope(scope);
         		continue;
         	}else if(TYPE_BY_FUNCTION.equals(child.ner())){
         		result.addFunction(child.lemma());
@@ -146,17 +148,12 @@ public class NLPService {
 	private List<String> readFileByLines(String fileName) {
 		List<String> result = new ArrayList<String>();
 		InputStream in = ClassLoader.getSystemResourceAsStream(fileName);
-        //File file = new File(in);
         BufferedReader reader = null;
         try {
-            System.out.println("以行为单位读取文件内容，一次读一整行：");
-            reader = new BufferedReader(new InputStreamReader(in));
+            reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             String tempString = null;
             int line = 1;
-            // 一次读入一行，直到读入null为文件结束
             while ((tempString = reader.readLine()) != null) {
-                // 显示行号
-                System.out.println("line " + line + ": " + tempString);
                 line++;
                 result.add(tempString);
             }

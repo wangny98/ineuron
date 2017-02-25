@@ -16,7 +16,7 @@ public class Test {
 		
 		service.parseText("竹炭净味漆");
 		service.parseText("10天后需要适合木器的具有防火功能的透明漆1000L");
-		service.parseText("我要500L保温效果最好的外墙漆");
+		service.parseText("我要500L保温效果最好的内墙漆");
 		service.parseText("木器");	
 		service.parseText("柔光亚光 ");
 		
