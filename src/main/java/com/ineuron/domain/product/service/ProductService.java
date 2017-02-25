@@ -2,6 +2,7 @@ package com.ineuron.domain.product.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -432,12 +433,12 @@ public class ProductService {
 		
 		if (parsedResult.getScopes() != null)
 		{
-			List<String> scopes=parsedResult.getScopes();
+			Set<String> scopes=parsedResult.getScopes();
 			
-			for (int i = 0; i < scopes.size(); i++) {
+			for (String scope:scopes) {
 				List<Attribute> scopeList = repository
 						.select("getAttributesByTerm",
-								"%" + scopes.get(i) + "%");
+								"%" + scope + "%");
 				for (int j = 0; j < scopeList.size(); j++) {
 					for (int k = 0; k < productsResult.size(); k++) {
 						// remove the product which attribute code includes scope code
@@ -452,6 +453,11 @@ public class ProductService {
 					}
 				}
 			}
+		}
+		else {
+			for (int i=0; i<productsResult.size(); i++){
+				finalProductsResult.add(productsResult.get(i));
+			}				
 		}
 		
 		for (int i = 0; i < finalProductsResult.size(); i++) {
