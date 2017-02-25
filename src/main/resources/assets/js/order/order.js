@@ -182,76 +182,70 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	}
 	
 	//for reports
-	$scope.showReport=function(){
-		$scope.options = {
+  $scope.showReport=function(){
+	  $scope.options = {
 	            chart: {
-	                type: 'multiBarChart',
+	                type: 'lineChart',
 	                height: 450,
-	                width:1050,
+	                width:900,
 	                margin : {
 	                    top: 20,
 	                    right: 20,
-	                    bottom: 45,
-	                    left: 45
+	                    bottom: 40,
+	                    left: 55
 	                },
-	                clipEdge: true,
-	                // staggerLabels: true,
-	                duration: 500,
-	                stacked: true,
+	                x: function(d){ return d[0]; },
+	                y: function(d){ return d[1]; },
+	                useInteractiveGuideline: true,
+	                color: d3.scale.category10().range(),
+	                
 	                xAxis: {
-	                    axisLabel: '月份',
-	                    showMaxMin: false,
-	                    tickFormat: function(d){
-	                        return d3.format(',f')(d);
-	                    }
+	                    axisLabel: '月份'
 	                },
 	                yAxis: {
-	                    axisLabel: '订单',
-	                    axisLabelDistance: -20,
+	                    axisLabel: '订单量  ',
 	                    tickFormat: function(d){
-	                        return d3.format(',.1f')(d);
-	                    }
+	                        return d3.format('.02f')(d);
+	                    },
+	                    axisLabelDistance: -10
+	                },
+	                callback: function(chart){
+	                    console.log("!!! lineChart callback !!!");
+	                }
+	            },
+	            title: {
+	                enable: true,
+	                text: '各个产品2016年月销量统计'
+	            },
+	            subtitle: {
+	                enable: true,
+	                text: '',
+	                css: {
+	                    'text-align': 'center',
+	                    'margin': '10px 13px 0px 7px'
+	                }
+	            },
+	            caption: {
+	                enable: true,
+	                html: '<b>Figure 1.</b> xxx, <span style="text-decoration: underline;">xx</span> <i>xxx</i> ',
+	                css: {
+	                    'text-align': 'justify',
+	                    'margin': '10px 13px 0px 7px'
 	                }
 	            }
 	        };
-		
-		$scope.data = [
-		               {
-		                   "key" : "North America" ,
-		                   "values" : [ [ 1, 23.041422681023] , [ 2, 19.854291255832]]
-		               },
 
-		               {
-		                   "key" : "Africa" ,
-		                   "values" : [ [ 1, 7.9356392949025] , [ 2, 7.4514668527298]]
-		               },
-
-		               {
-		                   "key" : "South America" ,
-		                   "values" : [ [ 1, 7.9149900245423] , [ 2, 7.0899888751059]]
-		               },
-
-		               {
-		                   "key" : "Asia" ,
-		                   "values" : [ [ 1, 13.153938631352] , [ 2, 12.456410521864]]
-		               } ,
-
-		               {
-		                   "key" : "Europe" ,
-		                   "values" : [ [ 1, 9.3433263069351] , [ 2, 8.4583069475546]]
-		               } ,
-
-		               {
-		                   "key" : "Australia" ,
-		                   "values" : [ [ 1, 5.1162447683392] , [ 2, 4.2022848306513]]
-		               } ,
-
-		               {
-		                   "key" : "Antarctica" ,
-		                   "values" : [ [ 1, 1.3503144674343] , [ 2, 1.2232741112434]]
-		               }
-
-		           ]
+	        $scope.data = [
+	            {
+	                key: "环保外墙高档漆",
+	                values: [ [ 1 , 3] , [ 2 , 5] ,[ 3 , 8] , [ 4 , 12]]
+	            },
+	            {
+	                 key: "竹炭抗甲醛净味全效",
+	                values: [ [ 1 , 2] , [ 2 , 3] ,[ 3 , 7] , [ 4 , 15]]
+	                
+	            }
+	        ];
 	}
 	
 	/*
