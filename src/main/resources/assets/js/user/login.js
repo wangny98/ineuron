@@ -55,7 +55,7 @@ ineuronApp.controller('UserLoginController', ['$scope', '$http', '$location', '$
 					//init search text
 					$cookies.remove("INeuron-ProductSearchText", {path : "/"});
 					
-					window.location.href = "/ineuron/main.html#/about";
+					window.location.href = "/ineuron/main.html#/frontpage";
 
 				}).error(function(data) {
 					ineuronApp.confirm("提示","不正确的用户名或者密码！", 'sm', $rootScope, $uibModal);

@@ -2,6 +2,7 @@ package com.ineuron.domain.product.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -39,6 +40,8 @@ public class ProductService {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ProductService.class);
+
+	private boolean addAll;
 
 	public ProductCategory createProductCategory(ProductCategory productCategory)
 			throws RepositoryException {
@@ -339,7 +342,7 @@ public class ProductService {
 		if (parsedResult.getForms() != null)
 			attributeWords.addAll(parsedResult.getForms());
 
-		// productName; function; otherattr; quality
+		// Get productName; function; otherattr; quality
 		List<String> productWords = new ArrayList<String>();
 		if (parsedResult.getProductName() != null
 				&& parsedResult.getProductName().length() > 0)
@@ -358,7 +361,7 @@ public class ProductService {
 		// get all the products which code includes the matched attribute's code
 		for (int i = 0; i < attributeWords.size(); i++) {
 			List<Attribute> attributeList = repository
-					.select("getAttributesByNLPWord",
+					.select("getAttributesByTerm",
 							"%" + attributeWords.get(i) + "%");
 			for (int j = 0; j < attributeList.size(); j++) {
 				for (int k = 0; k < allProducts.size(); k++) {
@@ -375,11 +378,11 @@ public class ProductService {
 			}
 		}
 
-		// get all the products which productcategory equals to the matched
-		// productcategory
+		// get all the products which product category equals to the matched
+		// product category
 		for (int i = 0; i < productWords.size(); i++) {
 			List<ProductCategory> productCategoryList = repository.select(
-					"getProductCategoriesByNLPWord", "%" + productWords.get(i)
+					"getProductCategoriesByTerm", "%" + productWords.get(i)
 							+ "%");
 			for (int j = 0; j < productCategoryList.size(); j++) {
 				for (int k = 0; k < allProducts.size(); k++) {
@@ -397,7 +400,7 @@ public class ProductService {
 		// search all the products by nlp'ed terms (product name, functions, qualities, other attributes) stored in productWords 
 		for (int i = 0; i < productWords.size(); i++) {
 			List<Product> productList = repository.select(
-					"getProductsByNLPWord", "%" + productWords.get(i) + "%");
+					"getProductsByTerm", "%" + productWords.get(i) + "%");
 			for (int j = 0; j < productList.size(); j++) {
 				for (int k=0; k<allProducts.size();k++){
 					Product p = allProducts.get(k);
@@ -412,7 +415,7 @@ public class ProductService {
 		//search in product name/descriptions with attribute words for double check
 		for (int i = 0; i < attributeWords.size(); i++) {
 			List<Product> productList = repository.select(
-					"getProductsByNLPWord", "%" + attributeWords.get(i) + "%");
+					"getProductsByTerm", "%" + attributeWords.get(i) + "%");
 			for (int j = 0; j < productList.size(); j++) {
 				for (int k=0; k<allProducts.size();k++){
 					Product p = allProducts.get(k);
@@ -423,12 +426,46 @@ public class ProductService {
 				}
 			}
 		}
+		
+		
+		//filter out products which scope are not matched the required scope
+		List<Product> finalProductsResult = new ArrayList<Product>();
+		
+		if (parsedResult.getScopes() != null)
+		{
+			Set<String> scopes=parsedResult.getScopes();
 			
-		for (int i = 0; i < productsResult.size(); i++) {
-			productsResult.get(i).initForProductCategory(repository);
-			productsResult.get(i).initForProductPrice(repository);
+			for (String scope:scopes) {
+				List<Attribute> scopeList = repository
+						.select("getAttributesByTerm",
+								"%" + scope + "%");
+				for (int j = 0; j < scopeList.size(); j++) {
+					for (int k = 0; k < productsResult.size(); k++) {
+						// remove the product which attribute code includes scope code
+						//System.out.println("product scope: "+productsResult.get(k).getCode()+productsResult.get(k).getName());
+						//System.out.println("nlp scope: "+scopeList.get(j).getCode());
+						if (productsResult.get(k).getCode().contains(scopeList.get(j).getCode())) {
+							{
+								//System.out.println("removed product: "+productsResult.get(k).getName());
+								finalProductsResult.add(productsResult.get(k));
+							}
+						}
+					}
+				}
+			}
 		}
-		return productsResult;
+		else {
+			for (int i=0; i<productsResult.size(); i++){
+				finalProductsResult.add(productsResult.get(i));
+			}				
+		}
+		
+		for (int i = 0; i < finalProductsResult.size(); i++) {
+			finalProductsResult.get(i).initForProductCategory(repository);
+			finalProductsResult.get(i).initForProductPrice(repository);
+		}
+		
+		return finalProductsResult;
 	}
 
 }

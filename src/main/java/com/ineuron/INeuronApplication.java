@@ -1,5 +1,10 @@
 package com.ineuron;
 
+import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
+
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,12 +14,6 @@ import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.domain.nlp.service.NLPService;
 import com.ineuron.domain.user.util.DesUtil;
 import com.ineuron.domain.user.valueobject.RolesCache;
-import com.ineuron.resources.UploadResource;
-
-import io.dropwizard.Application;
-import io.dropwizard.assets.AssetsBundle;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 
 /**
  * I-Neuron Entry Point!

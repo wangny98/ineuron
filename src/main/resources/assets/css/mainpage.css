@@ -5,8 +5,9 @@ min-width:200px;
 }
 #main-nav.nav-tabs.nav-stacked > li > a {
 padding: 10px 8px;
-font-size: 14px;
+font-size: 18px;
 font-weight: 600;
+font-family: cursive;
 color: #4A515B;
 background: #E9E9E9;
 background: -moz-linear-gradient(top, #FAFAFA 0%, #E9E9E9 100%);
@@ -43,13 +44,14 @@ color: #FFF;
 margin-bottom: 4px;
 }
 .nav-header{
-text-indent: 20px;
+text-indent: 18px;
 }
 /*定义二级菜单样式*/
 .secondmenu a {
-font-size: 12px;
+font-size: 17px;
 color: #4A515B;
 text-align: center;
+font-family: cursive;
 }
 .navbar-static-top {
 /*background-color: #212121;
@@ -74,6 +76,7 @@ color: #fff;
 	font-size:x-large;
 	font-weight:bold;
 	color:aqua;
+	font-family: cursive;
 }
 
 .message {
@@ -83,18 +86,22 @@ color: #fff;
 	color: #328aa4;
 	position: relative;
 	font-weight: bold;
-	font-size: large;
+	font-size: 22px;
 	text-align: center;  
+	font-family: cursive;
 }
 
 .labelformat {
 	min-width:80px;
+	font-family: cursive;
+	font-size:16px;
 }
 
 .right-align{
 	font-weight:bold;
 	font-size:large;
 	float:right;
+	font-family: cursive;
 }
 
 .custombutton{
@@ -104,6 +111,18 @@ color: #fff;
 	width:190px;
 	margin-right:10px;
 	
+}
+
+.customized-fieldset{
+	margin:auto;
+	font-family:cursive;
+}
+
+.customized-legend{
+	margin-bottom:auto;
+	text-align:center;
+	font-size:18px;
+	border:0;
 }
 
 #submitbutton{
@@ -136,7 +155,7 @@ hr.hr10 {
 body{
     background-size: cover;
     background:url(../images/bgcube.jpg);
-	background-repeat: no-repeat;
+	background-repeat: no-repeat;	
 }
 
 .thumb {

@@ -182,76 +182,70 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	}
 	
 	//for reports
-	$scope.showReport=function(){
-		$scope.options = {
+  $scope.showReport=function(){
+	  $scope.options = {
 	            chart: {
-	                type: 'multiBarChart',
+	                type: 'lineChart',
 	                height: 450,
-	                width:1050,
+	                width:900,
 	                margin : {
 	                    top: 20,
 	                    right: 20,
-	                    bottom: 45,
-	                    left: 45
+	                    bottom: 40,
+	                    left: 55
 	                },
-	                clipEdge: true,
-	                // staggerLabels: true,
-	                duration: 500,
-	                stacked: true,
+	                x: function(d){ return d[0]; },
+	                y: function(d){ return d[1]; },
+	                useInteractiveGuideline: true,
+	                color: d3.scale.category10().range(),
+	                
 	                xAxis: {
-	                    axisLabel: '月份',
-	                    showMaxMin: false,
-	                    tickFormat: function(d){
-	                        return d3.format(',f')(d);
-	                    }
+	                    axisLabel: '月份'
 	                },
 	                yAxis: {
-	                    axisLabel: '订单',
-	                    axisLabelDistance: -20,
+	                    axisLabel: '订单量  ',
 	                    tickFormat: function(d){
-	                        return d3.format(',.1f')(d);
-	                    }
+	                        return d3.format('.02f')(d);
+	                    },
+	                    axisLabelDistance: -10
+	                },
+	                callback: function(chart){
+	                    console.log("!!! lineChart callback !!!");
+	                }
+	            },
+	            title: {
+	                enable: true,
+	                text: '各个产品2016年月销量统计'
+	            },
+	            subtitle: {
+	                enable: true,
+	                text: '',
+	                css: {
+	                    'text-align': 'center',
+	                    'margin': '10px 13px 0px 7px'
+	                }
+	            },
+	            caption: {
+	                enable: true,
+	                html: '<b>Figure 1.</b> xxx, <span style="text-decoration: underline;">xx</span> <i>xxx</i> ',
+	                css: {
+	                    'text-align': 'justify',
+	                    'margin': '10px 13px 0px 7px'
 	                }
 	            }
 	        };
-		
-		$scope.data = [
-		               {
-		                   "key" : "North America" ,
-		                   "values" : [ [ 1, 23.041422681023] , [ 2, 19.854291255832]]
-		               },
 
-		               {
-		                   "key" : "Africa" ,
-		                   "values" : [ [ 1, 7.9356392949025] , [ 2, 7.4514668527298]]
-		               },
-
-		               {
-		                   "key" : "South America" ,
-		                   "values" : [ [ 1, 7.9149900245423] , [ 2, 7.0899888751059]]
-		               },
-
-		               {
-		                   "key" : "Asia" ,
-		                   "values" : [ [ 1, 13.153938631352] , [ 2, 12.456410521864]]
-		               } ,
-
-		               {
-		                   "key" : "Europe" ,
-		                   "values" : [ [ 1, 9.3433263069351] , [ 2, 8.4583069475546]]
-		               } ,
-
-		               {
-		                   "key" : "Australia" ,
-		                   "values" : [ [ 1, 5.1162447683392] , [ 2, 4.2022848306513]]
-		               } ,
-
-		               {
-		                   "key" : "Antarctica" ,
-		                   "values" : [ [ 1, 1.3503144674343] , [ 2, 1.2232741112434]]
-		               }
-
-		           ]
+	        $scope.data = [
+	            {
+	                key: "环保外墙高档漆",
+	                values: [ [ 1 , 3] , [ 2 , 5] ,[ 3 , 8] , [ 4 , 12]]
+	            },
+	            {
+	                 key: "竹炭抗甲醛净味全效",
+	                values: [ [ 1 , 2] , [ 2 , 3] ,[ 3 , 7] , [ 4 , 15]]
+	                
+	            }
+	        ];
 	}
 	
 	/*
@@ -285,8 +279,9 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 }]);
 
 
-ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal', 'Upload', '$timeout',
-   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, Upload, $timeout) {
+ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', 
+                                                '$rootScope', '$uibModal', 'Upload', '$timeout','$location',
+   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, Upload, $timeout,$location) {
 
 	var vm = this;	
 	var product = eval('(' + $stateParams.productStr + ')');
@@ -297,7 +292,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		$state.go("updateProductPrice",{productStr: $stateParams.productStr});
     }
     else $scope.price=product.productPrice.price;
-    
+   
     // get product's ProductionPeriod
     $http({
 		url : '/production/periodsbyproductid?productId='+product.id,
@@ -342,6 +337,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 
     vm.createOrder = createOrder;
     function createOrder(file) {
+      //generate pic file name	
       var userId=$cookies.get('INeuron-UserId');
       var picFileName = userId + "-" + $scope.deliveryDate.getTime();
       var tempFilename=file.name;
@@ -366,13 +362,11 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	 }).success(function(data) {
 		updateApiToken(data, $cookies);
 		
-		// upload pic to the file server
-		
+		// upload pic to the file server		
 	  	file.upload = Upload.upload({
-	  		url: '/upload',
+	  		url: '/file/upload',
 	  		data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
 	  	});
-
 		file.upload.then(function (response) {
 			$timeout(function () {
 				file.result = response.data;
@@ -386,8 +380,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
 		});
 		
-		ineuronApp.confirm("提示","订单添加成功！", 'sm', $rootScope, $uibModal);
-		
+		ineuronApp.confirm("提示","订单添加成功！", 'sm', $rootScope, $uibModal);		
 		$state.go("orderList");
     }).error(function(data, status) {
 		ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
@@ -405,8 +398,9 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 }]);
 
 
-ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal',
-  function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal) {
+ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies',
+                                                '$rootScope', '$uibModal', '$location','Upload',
+  function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal,$location,Upload) {
 	var order = eval('(' + $stateParams.orderStr + ')');
 	var vm = this;
 	
@@ -429,8 +423,12 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 		};
 	$scope.dateOptions = {
 			showWeeks: false
-		};
-	
+		};	
+	 
+    //get orginal pic from nginx
+    //alert($location.host());
+    $scope.originalPic="http://"+$location.host()+"/images/"+order.picFile;
+    
 	// get orderStatus list
 	$http({
 		url : '/order/orderstatuslist',
@@ -455,8 +453,15 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	}
 	
 	vm.updateOrder = updateOrder;
-	function updateOrder() {
-		
+	function updateOrder(file) {
+		//generate pic file name	
+	      var userId=$cookies.get('INeuron-UserId');
+	      var currentTime=new Date();
+	      var picFileName = userId + "-" + currentTime.getTime();
+	      var tempFilename=file.name;
+	      var tempFilenameSections=tempFilename.split('.');
+	      var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
+	      
 		$http({
 			url : '/order/update',
 			method : 'POST',
@@ -468,10 +473,30 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 				payment:$scope.payment,
 				statusId: $scope.selectedOrderStatus[0].id,
 				deliveryDate: $scope.deliveryDate,
-				customizedInfo: $scope.customizedInfo
+				customizedInfo: $scope.customizedInfo,
+				picFile: picFileName+"."+picSuffix
 			}
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
+			
+			// upload pic to the file server		
+		  	file.upload = Upload.upload({
+		  		url: '/file/upload',
+		  		data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
+		  	});
+			file.upload.then(function (response) {
+				$timeout(function () {
+					file.result = response.data;
+				});
+			}, function (response) {
+				if (response.status > 0)
+					// $scope.errorMsg = response.status + ': ' + response.data;
+					ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
+			}, function (evt) {
+				// Math.min is to fix IE which reports 200% sometimes
+				file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+			});
+			
 			ineuronApp.confirm("提示","修改成功！", 'sm', $rootScope, $uibModal);		
 			$state.go("orderList");
 		}).error(function(data, status) {

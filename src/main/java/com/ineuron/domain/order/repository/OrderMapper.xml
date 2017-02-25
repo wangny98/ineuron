@@ -47,10 +47,9 @@
 	
 	
 	<update id="updateOrder">
-		update Orders set amount=#{amount},
-		customer=#{customer}, total=#{total}, payment=#{payment},
-		deliveryDate=#{deliveryDate}, customizedInfo=#{customizedInfo},
-		statusId = #{statusId} where id = #{id}
+		update Orders set amount=#{amount},	customer=#{customer}, total=#{total}, 
+		payment=#{payment},	deliveryDate=#{deliveryDate}, customizedInfo=#{customizedInfo},
+		picFile=#{picFile},	statusId = #{statusId} where id = #{id}
 	</update>
 
 	<update id="updateOrderForStatus">
