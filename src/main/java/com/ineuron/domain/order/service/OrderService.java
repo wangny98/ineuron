@@ -1,6 +1,7 @@
 package com.ineuron.domain.order.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -12,12 +13,12 @@ import com.google.inject.Inject;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.dataaccess.db.DataTablePageParameters;
+import com.ineuron.dataaccess.db.ReportData;
 import com.ineuron.domain.order.entity.Order;
+import com.ineuron.domain.order.valueobject.OrderReportGroupByProduct;
 import com.ineuron.domain.order.valueobject.OrderResponse;
 import com.ineuron.domain.order.valueobject.OrderStatus;
-import com.ineuron.domain.production.entity.Production;
-import com.ineuron.domain.device.entity.Device;
-
+import com.ineuron.domain.product.entity.Product;
 
 public class OrderService {
 
@@ -114,6 +115,9 @@ public class OrderService {
 		return order;
 	}
 	
+	/*
+	 * for data table paging
+	 */
 	public OrderResponse getOrdersByPage(DataTablePageParameters dtPageParameters) throws RepositoryException {
 		OrderResponse orderResponse=new OrderResponse();
 		
@@ -147,5 +151,72 @@ public class OrderService {
 		return orderStatusList;
 	}
 
+	
+	/*
+	 * for Order Report
+	 */
+	public List<ReportData> getOrdersGroupbyProductAndMonth() throws RepositoryException {
+		List<OrderReportGroupByProduct> orderReport = repository.select("getOrdersGroupbyProductAndMonth", null);
+		List<Product> products=repository.select("getProducts", null);
+		
+		for (int i = 0; i < orderReport.size(); i++) {
+			//orderReport.get(i).init(repository);
+			for(int j=0; j<products.size(); j++){
+				if(orderReport.get(i).getProductId()==products.get(j).getId()){
+					orderReport.get(i).setProductName(products.get(j).getName());
+					break;
+				}
+			}
+		}
+		
+		List<ReportData> reportData=new ArrayList<ReportData>();
+		boolean added=false;
+		
+		for (int i = 0; i < orderReport.size(); i++){
+			List<Object> valueData=new ArrayList<Object>();
+			ReportData oneReportData=new ReportData();
+			added=false;
+			valueData.add(orderReport.get(i).getMonth());
+			valueData.add(orderReport.get(i).getAmount());
+			
+
+			/*System.out.println("products in order report: "+orderReport.get(i).getProductName());
+			System.out.println("products in order report: "+orderReport.get(i).getProductId());
+			System.out.println("valueData month to be added: "+valueData.get(0));
+			System.out.println("valueData amount to be added: "+valueData.get(1));
+			
+			System.out.println("orderReport["+i+"]");
+			for (int m = 0; m < reportData.size(); m++){
+				System.out.println("before each for(orderReport) reportData value: "+"report["+m+"]:"+reportData.get(m).getKey()+" "+reportData.get(m).getValues());
+			}*/
+			
+			for (int j = 0; j < reportData.size(); j++){
+				//already has the product in the report, just add the value
+				if(reportData.get(j).getKey()==orderReport.get(i).getProductName()){
+					reportData.get(j).getValues().add(valueData);
+					added=true;
+					break;
+				}
+			}
+			//new product, so add both product name and value in the report data
+			if(!(added)){
+				oneReportData.setKey(orderReport.get(i).getProductName());
+				oneReportData.getValues().add(valueData);
+				reportData.add(oneReportData);
+				//System.out.println("add new product value: "+oneReportData.getKey()+oneReportData.getValues());
+				//System.out.println("now in reportData: "+reportData.get(reportData.size()-1).getValues());
+			}
+			/*
+			for (int n = 0; n < reportData.size(); n++){
+				System.out.println("data in reportData after each for(orderReport): "+"reportData["+n+"]"+reportData.get(n).getKey()+" "+reportData.get(n).getValues());
+			}*/
+		}
+		/*
+		System.out.println("final report data size: "+reportData.size());
+		for (int k = 0; k < reportData.size(); k++){
+			System.out.println("products in final report data: "+reportData.get(k).getKey());
+		}*/
+		return reportData;
+	}
 
 }
