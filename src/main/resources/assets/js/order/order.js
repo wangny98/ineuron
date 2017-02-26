@@ -215,7 +215,7 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	            },
 	            title: {
 	                enable: true,
-	                text: '各个产品2016年月销量统计'
+	                text: '各个产品2017年月销量统计'
 	            },
 	            subtitle: {
 	                enable: true,
@@ -235,17 +235,18 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	            }
 	        };
 
-	        $scope.data = [
-	            {
-	                key: "环保外墙高档漆",
-	                values: [ [ 1 , 3] , [ 2 , 5] ,[ 3 , 8] , [ 4 , 12]]
-	            },
-	            {
-	                 key: "竹炭抗甲醛净味全效",
-	                values: [ [ 1 , 2] , [ 2 , 3] ,[ 3 , 7] , [ 4 , 15]]
-	                
-	            }
-	        ];
+		$http({
+			url : '/order/ordersbyproductspermonth',
+			method : 'GET'
+		}).success(function(data) {
+			updateApiToken(data, $cookies);
+			$scope.data=data.value;
+			//alert("total: "+data.value.totalRecords);
+			//alert("orders: "+vm.orders[0].orderNumber);
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $uibModal);
+			console.log("order list error");
+		});	  
 	}
 	
 	/*

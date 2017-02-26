@@ -13,8 +13,10 @@
 		values(#{serialNumber},#{orderNumber},#{productId},#{userId},#{productionPeriod},#{amount},#{total},#{statusId},#{customizedInfo},#{orderDate},#{orderDateTime},#{deliveryDate},#{customer},#{payment},#{picFile},#{validFlag})
 	</insert>
 
+
+   <!-- Search Orders -->
 	<select id="getOrders" resultType="com.ineuron.domain.order.entity.Order">
-		select * from Orders
+		select * from Orders where validFlag=1
 	</select>
 
 	<select id="getOrderById" resultType="com.ineuron.domain.order.entity.Order">
@@ -44,6 +46,14 @@
 	<select id="getOrdersOfFirstPage" resultType="com.ineuron.domain.order.entity.Order">
 		select top (#{itemsPerPage}) * from Orders where validFlag=1 order by id ASC
 	</select>
+	
+	
+	<!-- Search for Reports -->
+	 <select id="getOrdersGroupbyProductAndMonth" resultType="com.ineuron.domain.order.valueobject.OrderReportGroupByProduct">
+		SELECT year(orderDate) as 'year',month(orderDate) as 'month',count(1) as 'amount', productId  
+		FROM Orders where validFlag=1 group by productId, year(orderDate),month(orderDate)
+	</select>
+	  
 	
 	
 	<update id="updateOrder">
