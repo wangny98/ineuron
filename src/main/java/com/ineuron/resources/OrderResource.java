@@ -6,6 +6,7 @@ import com.ineuron.api.INeuronResponse;
 import com.ineuron.common.exception.InvalidAPITokenException;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.DataTablePageParameters;
+import com.ineuron.dataaccess.db.ReportData;
 import com.ineuron.domain.order.entity.Order;
 import com.ineuron.domain.order.service.OrderService;
 import com.ineuron.domain.order.valueobject.OrderStatus;
@@ -82,6 +83,27 @@ public class OrderResource {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 	}
+	
+	@Path("/ordersbyproductspermonth")
+	@GET
+	@Timed
+	public Response getOrderNumbersByProductsPerMonth(@Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			//System.out.println("before create order");
+			List<ReportData> orders=orderService.getOrdersGroupbyProductAndMonth();
+			//System.out.println("after get orders by page");
+			response.setValue(orders);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+	}
+	
 	
 	@Path("/create")
 	@POST
