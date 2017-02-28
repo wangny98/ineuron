@@ -33,11 +33,11 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 	$scope.searchObj.productSearchText=$cookies.get('INeuron-ProductSearchText');
 	if($scope.searchObj.productSearchText!=null){
 		$http({
-			url : '/product/productsbynlpwords?words=' + $scope.searchObj.productSearchText,
+			url : '/order/nlpsearchfororder?words=' + $scope.searchObj.productSearchText,
 			method : 'GET'
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
-			vm.products = data.value;
+			vm.products = data.value.products;
 			/*
 			 * if(vm.products==null){ $scope.notFoundProducts=true; }
 			 */
@@ -58,11 +58,11 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 		$cookies.put('INeuron-ProductSearchText', $scope.searchObj.productSearchText, {path : "/"});
 
 		$http({
-			url : '/product/productsbynlpwords?words=' + $scope.searchObj.productSearchText,
+			url : '/order/nlpsearchfororder?words=' + $scope.searchObj.productSearchText,
 			method : 'GET'
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
-			vm.products = data.value;
+			vm.products = data.value.products;
 			/*
 			 * if(vm.products==null){ $scope.notFoundProducts=true; }
 			 */
@@ -226,12 +226,12 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	                }
 	            },
 	            caption: {
-	                enable: true,
+	                /*enable: true,
 	                html: '<b>Figure 1.</b> xxx, <span style="text-decoration: underline;">xx</span> <i>xxx</i> ',
 	                css: {
 	                    'text-align': 'justify',
 	                    'margin': '10px 13px 0px 7px'
-	                }
+	                }*/
 	            }
 	        };
 

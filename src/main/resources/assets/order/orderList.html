@@ -9,9 +9,25 @@
 			<span class="glyphicon glyphicon-plus"></span> 新增订单
 		</button>
 	</div>
-	-->	
-	<uib-tabset active="active" type="tabs"> 
-	<uib-tab index="0" heading="订单列表" style="font-weight:bold;">
+	-->
+	<table>
+	<tbody>
+	<tr>
+	<td>筛选：
+	</td>
+	<td>
+		<div uib-dropdown>
+
+			<ul class="dropdown-menu" uib-dropdown-menu>
+				<li><a href="#"></a></li>
+				<li><a href="#" ng-click="logout()">退出</a></li>
+			</ul>
+		</div>
+	</td>
+	</tbody>
+	</table>
+	<uib-tabset active="active" type="tabs"> <uib-tab
+		index="0" heading="订单列表" style="font-weight:bold;">
 	<table id="table-style">
 		<thead>
 			<tr>
@@ -60,12 +76,11 @@
 			</tr>
 		</tbody>
 	</table>
-	<tm-pagination conf="paginationConf"></tm-pagination>
-    </uib-tab> 
-	<uib-tab index="1" heading="报表分析" style="font-weight:bold;" select="showReport()">
-	 <div style="width:100%">
-		 <nvd3 options='options' data='data' ></nvd3>
-	 </div>
-	</uib-tab>
-	</uib-tabset>
+	<tm-pagination conf="paginationConf"></tm-pagination> </uib-tab> <uib-tab
+		index="1" heading="报表分析" style="font-weight:bold;"
+		select="showReport()">
+	<div style="width: 100%">
+		<nvd3 options='options' data='data'></nvd3>
+	</div>
+	</uib-tab> </uib-tabset>
 </div>
