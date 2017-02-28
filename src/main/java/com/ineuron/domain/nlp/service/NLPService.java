@@ -38,11 +38,14 @@ public class NLPService {
 
 	private List<String> vvWhiteList;
 	
+	private List<String> synonymMatrix;
+	
 	private NLPService() {
 		corenlp = new StanfordCoreNLP("com/ineuron/domain/nlp/nlp-chinese.properties");
 		String[] paintNames = {"PAINT_BY_EFFECT_OF_SURFACE","PAINT_BY_FORM","PAINT_BY_FUNCTION_FORM","PAINT_BY_FUNCTION","PAINT_BY_PLACE"};
 		PAINT_NAMES = new HashSet<String>(Arrays.asList(paintNames));
 		vvWhiteList = readFileByLines("com/ineuron/domain/nlp/dict/vv-whitelist.txt");
+		synonymMatrix = readFileByLines("com/ineuron/domain/nlp/dict/synonym-matrix.txt");
 	}
 
 	public static NLPService getInstance() {
@@ -93,6 +96,7 @@ public class NLPService {
                 productName = child.lemma();
                 continue;
             }
+     
         	
         	//VA Predicative adjective
         	//JJ Noun-modifier other than nouns
@@ -129,6 +133,26 @@ public class NLPService {
         	
         }
         result.setOtherAttributes(otherAttrs);
+        
+        //Add the scope term which synonym is matched to the nlp parsed words;
+        //currently, only search for functions and other attributes.
+        List<String> parsedWords=new ArrayList<String>();
+        if(result.getFunctions()!=null) parsedWords.addAll(result.getFunctions());
+        if(result.getOtherAttributes()!=null) parsedWords.addAll(result.getOtherAttributes());
+        
+        if(parsedWords!=null){
+          for (int i=0; i<synonymMatrix.size(); i++){
+        	System.out.println(synonymMatrix.get(i));
+        	String[] synonymPair=synonymMatrix.get(i).split("=");
+        	for(int j=0; j<parsedWords.size(); j++){
+        		System.out.println("s0: "+synonymPair[0]+" s1: "+synonymPair[1]+" nlp words: "+parsedWords.get(j));
+        		if(synonymPair[1].equals(parsedWords.get(j))) {
+        			result.addScope(synonymPair[0]);
+        		}
+        	}
+          }
+        }
+        
 		
 		System.out.println(dependencies.toString());
 		System.out.println(result.toString());

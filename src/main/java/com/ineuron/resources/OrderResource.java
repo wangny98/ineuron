@@ -3,6 +3,7 @@ package com.ineuron.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
 import com.ineuron.api.INeuronResponse;
+import com.ineuron.api.NLPSearchResponse;
 import com.ineuron.common.exception.InvalidAPITokenException;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.DataTablePageParameters;
@@ -11,6 +12,7 @@ import com.ineuron.domain.order.entity.Order;
 import com.ineuron.domain.order.service.OrderService;
 import com.ineuron.domain.order.valueobject.OrderStatus;
 import com.ineuron.domain.order.valueobject.OrderResponse;
+import com.ineuron.domain.product.entity.Product;
 import com.ineuron.domain.user.service.SecurityService;
 
 import javax.ws.rs.GET;
@@ -83,6 +85,30 @@ public class OrderResource {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 	}
+	
+	
+	/*
+	 * NLP based Search for ordering products
+	 */
+	@Path("/nlpsearchfororder")
+	@GET
+	@Timed
+	public Response productsByNLPWords(@QueryParam("words") String words, @Context HttpHeaders httpHeader,
+			@QueryParam("debug") boolean debug) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
+			NLPSearchResponse nlpSearchResponse = orderService.getProductsAndOrderInfoByNLPWords(words);
+			response.setValue(nlpSearchResponse);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+	}
+	
 	
 	@Path("/ordersbyproductspermonth")
 	@GET

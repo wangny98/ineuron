@@ -2,7 +2,6 @@ package com.ineuron.domain.product.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -23,8 +22,7 @@ import com.ineuron.domain.product.valueobject.ManufacturingProcess;
 import com.ineuron.domain.product.valueobject.Material;
 import com.ineuron.domain.product.valueobject.Operation;
 import com.ineuron.domain.product.valueobject.ProductPrice;
-import com.ineuron.domain.nlp.service.NLPService;
-import com.ineuron.domain.nlp.valueobject.ProductSelection;
+
 
 public class ProductService {
 
@@ -319,153 +317,6 @@ public class ProductService {
 			return productPrice;
 		}
 
-	/*
-	 * NLP based Search for Products
-	 */
-
-	public List<Product> getProductsByNLPWords(String words)
-			throws RepositoryException {
-
-		ProductSelection parsedResult = new ProductSelection();
-		System.out.println("nlpEnabled in Service=" + nlpEnabled);
-		if ("yes".equalsIgnoreCase(nlpEnabled)
-				|| "true".equalsIgnoreCase(nlpEnabled)) {
-			parsedResult = NLPService.getInstance().parseText(words);
-		}
-
-		// Get all the nlp'ed attribute words
-		List<String> attributeWords = new ArrayList<String>();
-		if (parsedResult.getScopes() != null)
-			attributeWords.addAll(parsedResult.getScopes());
-		if (parsedResult.getColors() != null)
-			attributeWords.addAll(parsedResult.getColors());
-		if (parsedResult.getForms() != null)
-			attributeWords.addAll(parsedResult.getForms());
-
-		// Get productName; function; otherattr; quality
-		List<String> productWords = new ArrayList<String>();
-		if (parsedResult.getProductName() != null
-				&& parsedResult.getProductName().length() > 0)
-			productWords.add(parsedResult.getProductName());
-		if (parsedResult.getFunctions() != null)
-			productWords.addAll(parsedResult.getFunctions());
-		if (parsedResult.getQualities() != null)
-			productWords.addAll(parsedResult.getQualities());
-		if (parsedResult.getOtherAttributes() != null
-				&& parsedResult.getOtherAttributes().size() > 0)
-			productWords.addAll(parsedResult.getOtherAttributes());
-
-		List<Product> productsResult = new ArrayList<Product>();
-		List<Product> allProducts = repository.select("getProducts", null);
-
-		// get all the products which code includes the matched attribute's code
-		for (int i = 0; i < attributeWords.size(); i++) {
-			List<Attribute> attributeList = repository
-					.select("getAttributesByTerm",
-							"%" + attributeWords.get(i) + "%");
-			for (int j = 0; j < attributeList.size(); j++) {
-				for (int k = 0; k < allProducts.size(); k++) {
-					// product's code include attribute's code
-					if (allProducts.get(k).getCode()
-							.indexOf(attributeList.get(j).getCode()) > -1) {
-						{
-							Product p = allProducts.get(k);
-							if (productsResult.indexOf(p) == -1)
-								productsResult.add(p);
-						}
-					}
-				}
-			}
-		}
-
-		// get all the products which product category equals to the matched
-		// product category
-		for (int i = 0; i < productWords.size(); i++) {
-			List<ProductCategory> productCategoryList = repository.select(
-					"getProductCategoriesByTerm", "%" + productWords.get(i)
-							+ "%");
-			for (int j = 0; j < productCategoryList.size(); j++) {
-				for (int k = 0; k < allProducts.size(); k++) {
-					// product's pc id equals to matched pc id
-					if (allProducts.get(k).getProductCategoryId() == productCategoryList
-							.get(j).getId()) {
-						Product p = allProducts.get(k);
-						if (productsResult.indexOf(p) == -1)
-							productsResult.add(p);
-					}
-				}
-			}
-		}
-
-		// search all the products by nlp'ed terms (product name, functions, qualities, other attributes) stored in productWords 
-		for (int i = 0; i < productWords.size(); i++) {
-			List<Product> productList = repository.select(
-					"getProductsByTerm", "%" + productWords.get(i) + "%");
-			for (int j = 0; j < productList.size(); j++) {
-				for (int k=0; k<allProducts.size();k++){
-					Product p = allProducts.get(k);
-					if (productList.get(j).getId()==p.getId()){
-						if (productsResult.indexOf(p) == -1)
-						 productsResult.add(p);	
-					}
-				}
-			}
-		}
-
-		//search in product name/descriptions with attribute words for double check
-		for (int i = 0; i < attributeWords.size(); i++) {
-			List<Product> productList = repository.select(
-					"getProductsByTerm", "%" + attributeWords.get(i) + "%");
-			for (int j = 0; j < productList.size(); j++) {
-				for (int k=0; k<allProducts.size();k++){
-					Product p = allProducts.get(k);
-					if (productList.get(j).getId()==p.getId()){
-						if (productsResult.indexOf(p) == -1)
-						 productsResult.add(p);	
-					}
-				}
-			}
-		}
-		
-		
-		//filter out products which scope are not matched the required scope
-		List<Product> finalProductsResult = new ArrayList<Product>();
-		
-		if (parsedResult.getScopes() != null)
-		{
-			Set<String> scopes=parsedResult.getScopes();
-			
-			for (String scope:scopes) {
-				List<Attribute> scopeList = repository
-						.select("getAttributesByTerm",
-								"%" + scope + "%");
-				for (int j = 0; j < scopeList.size(); j++) {
-					for (int k = 0; k < productsResult.size(); k++) {
-						// remove the product which attribute code includes scope code
-						//System.out.println("product scope: "+productsResult.get(k).getCode()+productsResult.get(k).getName());
-						//System.out.println("nlp scope: "+scopeList.get(j).getCode());
-						if (productsResult.get(k).getCode().contains(scopeList.get(j).getCode())) {
-							{
-								//System.out.println("removed product: "+productsResult.get(k).getName());
-								finalProductsResult.add(productsResult.get(k));
-							}
-						}
-					}
-				}
-			}
-		}
-		else {
-			for (int i=0; i<productsResult.size(); i++){
-				finalProductsResult.add(productsResult.get(i));
-			}				
-		}
-		
-		for (int i = 0; i < finalProductsResult.size(); i++) {
-			finalProductsResult.get(i).initForProductCategory(repository);
-			finalProductsResult.get(i).initForProductPrice(repository);
-		}
-		
-		return finalProductsResult;
-	}
+	
 
 }

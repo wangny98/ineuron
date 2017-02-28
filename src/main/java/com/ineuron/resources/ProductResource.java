@@ -580,26 +580,4 @@ public class ProductResource {
 		}		
 	}
 
-	/*
-	 * NLP based Search for Products
-	 */
-	@Path("/productsbynlpwords")
-	@GET
-	@Timed
-	public Response productsByNLPWords(@QueryParam("words") String words, @Context HttpHeaders httpHeader,
-			@QueryParam("debug") boolean debug) {
-		try {
-			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
-			List<Product> products = productService.getProductsByNLPWords(words);
-			response.setValue(products);
-			return Response.ok(response).build();
-		} catch (RepositoryException e) {
-			LOGGER.error(e.getMessage(), e.getRootCause());
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-		} catch (InvalidAPITokenException e) {
-			LOGGER.error(e.getMessage(), e.getRootCause());
-			return Response.status(Status.UNAUTHORIZED).build();
-		}
-	}
-
 }
