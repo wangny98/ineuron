@@ -128,6 +128,17 @@ public class OrderService {
 		return order;
 	}
 	
+	public List<Order> getOrdersByProductIds(Integer productIds) throws RepositoryException {
+		System.out.println("productId list: "+productIds);
+		List<Order> orders = repository.select("getOrdersByProductIds", productIds);
+		//System.out.println("get order by name in service: success");
+		for (int i = 0; i < orders.size(); i++) {
+			orders.get(i).init(repository);
+		}
+		return orders;
+	}
+	
+	
 	/*
 	 * for data table paging
 	 */
@@ -138,9 +149,14 @@ public class OrderService {
 		orderResponse.setTotalRecords(total);
 		//System.out.println("total: "+orderResponse.getTotalRecords());
 		
+		/*List<Integer> productIds;
+		if(dtPageParameters.getProductIds()==null){
+			productIds=repository.select("getProductIds",null);
+		}*/
+		
 		Integer startP=(dtPageParameters.getCurrentPage()-1)*dtPageParameters.getItemsPerPage();
 		dtPageParameters.setStartPosition(startP);
-		//System.out.println("startP: "+dtPageParameters.getStartPosition());
+		System.out.println("ordering option: "+dtPageParameters.getOrderingOption());
 		List<Order> orders;
 		if(startP==0) {
 			orders=repository.select("getOrdersOfFirstPage", dtPageParameters); 
