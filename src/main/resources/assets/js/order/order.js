@@ -113,22 +113,32 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	var vm = this;
 	$scope.format = "yyyy/MM/dd";
 	
-	/*$http({
-		url : '/order/list',
-		method : 'GET'
-	}).success(function(data) {
-		updateApiToken(data, $cookies);
-		vm.orders = data.value;
-	}).error(function(data, status) {
-		handleError(status, $rootScope, $uibModal);
-		console.log("order list error");
-	});	*/
 	
-	//for list paging
+	/*
+	 * $http({ url : '/order/list', method : 'GET' }).success(function(data) {
+	 * updateApiToken(data, $cookies); vm.orders = data.value;
+	 * }).error(function(data, status) { handleError(status, $rootScope,
+	 * $uibModal); console.log("order list error"); });
+	 */
+	
+	vm.orderingOptions = [
+	                         { name:"orderDate", label: "下单时间",    ticked: true  },
+	                         { name:"deliveryDate", label: "交付时间",    ticked: false  },
+	                         { name:"total", label: "订单金额",    ticked: false  },
+	                         { name:"amount", label: "数量",    ticked: false  }	                        
+	                     ];	
+	var selectedOrderingOption;
+	
+	//init the ordering option
+    for (o in vm.orderingOptions){
+    	if(vm.orderingOptions[o].ticked==true) selectedOrderingOption=vm.orderingOptions[o].name;
+    }	
+    
+	// init for list paging
 	$scope.paginationConf = {
             currentPage: 1,
             itemsPerPage: 10,
-            //totalItems: 100,
+            // totalItems: 100,
             perPageOptions: [10,15]
         };
 	
@@ -137,51 +147,109 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 		method : 'POST',
 		data : {
             currentPage: $scope.paginationConf.currentPage,
-            itemsPerPage: $scope.paginationConf.itemsPerPage
+            itemsPerPage: $scope.paginationConf.itemsPerPage,
+            orderingOption: selectedOrderingOption
 		}
 	}).success(function(data) {
 		updateApiToken(data, $cookies);
 		$scope.paginationConf.totalItems = data.value.totalRecords;
-		//alert("total: "+data.value.totalRecords);
 		vm.orders = data.value.orders;
-		//alert("orders: "+vm.orders[0].orderNumber);
 	}).error(function(data, status) {
 		handleError(status, $rootScope, $uibModal);
 		console.log("order list error");
 	});	  
 		
 	
-	var retreiveOrders = function(){
-		//alert("currentPage: "+$scope.paginationConf.currentPage+" itemsPerPage: "+$scope.paginationConf.itemsPerPage)
+	var retreiveOrdersForPagingButton = function(){
 		$http({
 			url : '/order/listbypage',
 			method : 'POST',
 			data : {
 	            currentPage: $scope.paginationConf.currentPage,
-	            itemsPerPage: $scope.paginationConf.itemsPerPage
+	            itemsPerPage: $scope.paginationConf.itemsPerPage,
+	            orderingOption: selectedOrderingOption
 			}
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
 			$scope.paginationConf.totalItems = data.value.totalRecords;
-			//alert("total: "+data.value.totalRecords);
 			vm.orders = data.value.orders;
-			//alert("orders: "+vm.orders[0].orderNumber);
 		}).error(function(data, status) {
 			handleError(status, $rootScope, $uibModal);
 			console.log("order list error");
 		});	  
     };
 
-    // monitoring the change of currentPage and itemsPerPage 
-    $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', retreiveOrders);
+    // monitoring the change of currentPage and itemsPerPage
+    $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', retreiveOrdersForPagingButton);
 
+    
+    //refresh order list after select ordering option
+    $scope.refreshOrdersByOrderingOptionChange = function(){
+    	$scope.paginationConf.currentPage=1;
+    	selectedOrderingOption=$scope.outputOrderingOption[0].name;
+    	$http({
+			url : '/order/listbypage',
+			method : 'POST',
+			data : {
+	            currentPage: $scope.paginationConf.currentPage,
+	            itemsPerPage: $scope.paginationConf.itemsPerPage,
+	            orderingOption: selectedOrderingOption
+			}
+		}).success(function(data) {
+			updateApiToken(data, $cookies);
+			$scope.paginationConf.totalItems = data.value.totalRecords;
+			vm.orders = data.value.orders;
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $uibModal);
+			console.log("order list error");
+		});	  
+    }
+    
+    
+    /*
+	 * for order list filtering
+	 */    
+    /*$http({
+    		url : '/product/productlist',
+    		method : 'GET'
+    	}).success(function(data) {
+    		updateApiToken(data, $cookies);
+    		vm.products = data.value;
+    	}).error(function(data, status) {
+    		handleError(status, $rootScope, $uibModal);
+    		console.log("product list error");
+    	});	
+    
+    // refresh order list after selecting filters
+    $scope.refreshOrdersAfterFiltering=function(){
+    	var productIdList=new Array();
+    	var i=0;
+    	for(var p in $scope.selectedProducts){
+    		productIdList[i]=$scope.selectedProducts[p].id;
+    		//alert("$scope.selectedProducts[p].id; "+p.id+" productIdList[i]: "+productIdList[i]);
+    		i++;
+    	}
+    	//alert("productIdList "+productIdList);
+    	$http({
+			url : '/order/listbyproducts',
+			method : 'GET'
+		}).success(function(data) {
+			updateApiToken(data, $cookies)
+			vm.orders = data.value;
+			// alert("orders: "+vm.orders[0].orderNumber);
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $uibModal);
+			console.log("order list error");
+		});	  
+    }*/
+    
     
 	vm.updateOrder=updateOrder;
 	function updateOrder(index){
 		$state.go("updateOrder", {orderStr: JSON.stringify(vm.orders[index])});
 	}
 	
-	//for reports
+	// for reports
   $scope.showReport=function(){
 	  $scope.options = {
 	            chart: {
@@ -226,12 +294,12 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	                }
 	            },
 	            caption: {
-	                /*enable: true,
-	                html: '<b>Figure 1.</b> xxx, <span style="text-decoration: underline;">xx</span> <i>xxx</i> ',
-	                css: {
-	                    'text-align': 'justify',
-	                    'margin': '10px 13px 0px 7px'
-	                }*/
+	                /*
+					 * enable: true, html: '<b>Figure 1.</b> xxx, <span
+					 * style="text-decoration: underline;">xx</span> <i>xxx</i> ',
+					 * css: { 'text-align': 'justify', 'margin': '10px 13px 0px
+					 * 7px' }
+					 */
 	            }
 	        };
 
@@ -241,8 +309,8 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
 			$scope.data=data.value;
-			//alert("total: "+data.value.totalRecords);
-			//alert("orders: "+vm.orders[0].orderNumber);
+			// alert("total: "+data.value.totalRecords);
+			// alert("orders: "+vm.orders[0].orderNumber);
 		}).error(function(data, status) {
 			handleError(status, $rootScope, $uibModal);
 			console.log("order list error");
@@ -338,7 +406,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 
     vm.createOrder = createOrder;
     function createOrder(file) {
-      //generate pic file name	
+      // generate pic file name
       var userId=$cookies.get('INeuron-UserId');
       var picFileName = userId + "-" + $scope.deliveryDate.getTime();
       var tempFilename=file.name;
@@ -363,7 +431,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	 }).success(function(data) {
 		updateApiToken(data, $cookies);
 		
-		// upload pic to the file server		
+		// upload pic to the file server
 	  	file.upload = Upload.upload({
 	  		url: '/file/upload',
 	  		data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
@@ -426,8 +494,8 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 			showWeeks: false
 		};	
 	 
-    //get orginal pic from nginx
-    //alert($location.host());
+    // get orginal pic from nginx
+    // alert($location.host());
     $scope.originalPic="http://"+$location.host()+"/images/"+order.picFile;
     
 	// get orderStatus list
@@ -455,7 +523,7 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	
 	vm.updateOrder = updateOrder;
 	function updateOrder(file) {
-		//generate pic file name	
+		// generate pic file name
 	      var userId=$cookies.get('INeuron-UserId');
 	      var currentTime=new Date();
 	      var picFileName = userId + "-" + currentTime.getTime();
@@ -480,7 +548,7 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
 			
-			// upload pic to the file server		
+			// upload pic to the file server
 		  	file.upload = Upload.upload({
 		  		url: '/file/upload',
 		  		data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},

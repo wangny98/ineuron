@@ -65,6 +65,27 @@ public class OrderResource {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}		
 	}
+	
+	@Path("/listbyproducts")
+	@GET
+	@Timed
+	public Response getOrdersByProducts(@Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			//System.out.println("productIds: "+productIds);
+			List<Order> orders = orderService.getOrdersByProductIds(1);
+			response.setValue(orders);
+			return Response.ok(response).cookie(new NewCookie("name", "Hello, world!")).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}		
+	}
+
+	
 
 	@Path("/listbypage")
 	@POST

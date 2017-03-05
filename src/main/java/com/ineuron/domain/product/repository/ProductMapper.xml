@@ -107,6 +107,10 @@
 	<select id="getMaxProductSNByCategoryId" resultType="com.ineuron.domain.product.entity.Product">
 		select * from Products where productCategoryId=#{productCategoryId} and serialNumber=( select max(serialNumber) from products where productCategoryId=#{productCategoryId})
 	</select>
+	
+	<select id="getProductIds" resultType="Integer">
+		select id from products
+	</select>
 
 	<update id="updateProduct">
 		update Products set name = #{name}, formulaId =

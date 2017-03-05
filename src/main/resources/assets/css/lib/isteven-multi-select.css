@@ -40,9 +40,7 @@
     border: 1px solid #c6c6c6;    
     padding: 1px 8px 1px 8px;    
     font-size: 14px;
-    min-height : 38px !important;
-    min-width:250px;
-    max-width:700px;
+    min-height : 20px !important;
     border-radius: 4px;
     color: #555;   
     -webkit-user-select: none;
@@ -100,7 +98,7 @@
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);    
-    min-width:278px;
+    min-width:90px;
     display: none !important;    
 }
 
@@ -194,8 +192,7 @@
     display: block;
     padding: 8px;   
     overflow: hidden;
-    max-width:650px;
-    }
+}
 
 /* ! to show / hide the checkbox layer above */
 .multiSelect .show {
@@ -215,7 +212,7 @@
     user-select: none;      
     border: 1px solid transparent;
     position: relative;
-    min-width:278px;    
+    min-width:100px;    
     min-height: 32px;    
 }
 
