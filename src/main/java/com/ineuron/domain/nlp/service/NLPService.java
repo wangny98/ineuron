@@ -33,6 +33,8 @@ public class NLPService {
 	private static final String TYPE_BY_FORM = "TYPE_BY_FORM";
 	private static final String TYPE_BY_SCOPE = "TYPE_BY_SCOPE";
 	private static final String TYPE_BY_FUNCTION = "TYPE_BY_FUNCTION";
+	private static final String QUANTITY = "QUANTITY";
+	private static final String FUTURE_DATE = "FUTURE_DATE";
 	
 	private static Set<String> PAINT_NAMES;
 
@@ -73,6 +75,7 @@ public class NLPService {
         
         for (IndexedWord child : nodes)
         {
+        	
         	if(COLOR.equals(child.ner())){
         		result.addColor(child.lemma());
         		continue;
@@ -92,7 +95,13 @@ public class NLPService {
         	}else if(TYPE_BY_FUNCTION.equals(child.ner())){
         		result.addFunction(child.lemma());
         		continue;
-        	}else if(PAINT_NAMES.contains(child.ner())){
+        	}else if(FUTURE_DATE.equals(child.ner())){
+            	result.addDateElement(child.lemma());
+            	continue;
+            }else if(QUANTITY.equals(child.ner())){
+            	result.addQuantityElement(child.lemma());
+            	continue;
+            }else if(PAINT_NAMES.contains(child.ner())){
                 productName = child.lemma();
                 continue;
             }
