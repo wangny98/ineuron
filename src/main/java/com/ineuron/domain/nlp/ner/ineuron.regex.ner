@@ -1,3 +1,5 @@
-( [ {ner:NUMBER} ] /天|周|月|年//后/ )	FUTURE_DATE
-( [ {ner:NUMBER} ] /个//月//后/ )	FUTURE_DATE
-( [ {ner:NUMBER} ] /L|l|ML|ml|千克|克|吨|公斤|桶/ )	QUANTITY
+( [ {ner:NUMBER} ] /天|周|星期|月|年//后/ )	FUTURE_DATE
+( [ {ner:NUMBER} ] /个//月|星期//后/ )	FUTURE_DATE
+( [ {ner:NUMBER} ] /L|l|ML|ml|kg|g|毫升|升|毫克|千克|克|吨|公斤|桶/ )	QUANTITY
+明天	FUTURE_DATE
+后天	FUTURE_DATE

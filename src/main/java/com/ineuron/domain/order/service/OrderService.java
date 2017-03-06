@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.ineuron.api.NLPSearchResponse;
 import com.ineuron.common.exception.RepositoryException;
+import com.ineuron.common.util.ChineseNumberConverter;
 import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.dataaccess.db.DataTablePageParameters;
 import com.ineuron.dataaccess.db.ReportData;
@@ -33,7 +34,7 @@ public class OrderService {
 
 	@Inject
 	INeuronRepository repository;
-	
+
 	@Inject
 	@Named("nlpEnabled")
 	String nlpEnabled;
@@ -41,60 +42,68 @@ public class OrderService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(OrderService.class);
 
-
 	public Order createOrder(Order order) throws RepositoryException {
-		
-		String prefix="SO";
-		
-		Date today=new Date();
+
+		String prefix = "SO";
+
+		Date today = new Date();
 		order.setOrderDateTime(today);
-		
+
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH,0);
-		java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
-		order.setOrderDate(today);		
-		Order o = repository.selectOne("getLatestOrderByDate", format.format(Calendar.getInstance().getTime()));
-		
+		cal.add(Calendar.DAY_OF_MONTH, 0);
+		java.text.SimpleDateFormat format = new java.text.SimpleDateFormat(
+				"yyyy-MM-dd");
+		order.setOrderDate(today);
+		Order o = repository.selectOne("getLatestOrderByDate",
+				format.format(Calendar.getInstance().getTime()));
+
 		int newOrderSN = 0;
 		if (o != null)
 			newOrderSN = o.getSerialNumber() + 1;
 		else
 			newOrderSN = 1;
 		order.setSerialNumber(newOrderSN);
-		
-		//Order number format: SO-[yyyymmdd]-xxxx. currently set the max number per day is 9999
-		SimpleDateFormat dateFormat=new SimpleDateFormat("yyyyMMdd");
+
+		// Order number format: SO-[yyyymmdd]-xxxx. currently set the max number
+		// per day is 9999
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		String todayDateforNumber = dateFormat.format(today);
-	    order.setOrderNumber(prefix+"-"+todayDateforNumber+"-"+String.format("%04d", newOrderSN));	
-		
-	    //set the status to init (id=1)
-	    order.setStatusId(1);
-	    
-	    //valid order is 1; deleted order is -1;
-	    order.setValidFlag(1);
-	    
-	    //deprecated
-	    //TO-DO: calculate the production period based on productionTicket's total period of this productId
-	    //1. calculate the total production period of that productId in productionTicket table 
-	    //2. compare this order's amount to specific device (type='production')'s volume; 
-	    //if btw min and max, then use the total production period (add orders together
-	    //if below min, use the total; if beyond max, use the mod
-	    //3. set the productionperiod value of Order object
-	    
+		order.setOrderNumber(prefix + "-" + todayDateforNumber + "-"
+				+ String.format("%04d", newOrderSN));
+
+		// set the status to init (id=1)
+		order.setStatusId(1);
+
+		// valid order is 1; deleted order is -1;
+		order.setValidFlag(1);
+
+		// deprecated
+		// TO-DO: calculate the production period based on productionTicket's
+		// total period of this productId
+		// 1. calculate the total production period of that productId in
+		// productionTicket table
+		// 2. compare this order's amount to specific device
+		// (type='production')'s volume;
+		// if btw min and max, then use the total production period (add orders
+		// together
+		// if below min, use the total; if beyond max, use the mod
+		// 3. set the productionperiod value of Order object
+
 		order.addOrder(repository);
 		return order;
 	}
 
-	/*public Integer getOrderProductionPeriod(Integer productId) throws RepositoryException{
-				
-	}*/
-	
-	
+	/*
+	 * public Integer getOrderProductionPeriod(Integer productId) throws
+	 * RepositoryException{
+	 * 
+	 * }
+	 */
+
 	public Order updateOrder(Order order) throws RepositoryException {
 		order.updateOrder(repository);
 		return order;
 	}
-	
 
 	public void updateOrderForStatus(Order order) throws RepositoryException {
 		repository.update("updateOrderForStatus", order);
@@ -112,7 +121,6 @@ public class OrderService {
 		return orderList;
 	}
 
-
 	public Order getOrderById(Integer orderId) throws RepositoryException {
 		Order order = repository.selectOne("getOrderById", orderId);
 		if (order != null) {
@@ -123,73 +131,78 @@ public class OrderService {
 
 	public Order getOrderByName(String name) throws RepositoryException {
 		Order order = repository.selectOne("getOrderByName", name);
-		//System.out.println("get order by name in service: success");
-		if(order!=null) order.init(repository);
+		// System.out.println("get order by name in service: success");
+		if (order != null)
+			order.init(repository);
 		return order;
 	}
-	
-	public List<Order> getOrdersByProductIds(Integer productIds) throws RepositoryException {
-		System.out.println("productId list: "+productIds);
-		List<Order> orders = repository.select("getOrdersByProductIds", productIds);
-		//System.out.println("get order by name in service: success");
+
+	public List<Order> getOrdersByProductIds(Integer productIds)
+			throws RepositoryException {
+		System.out.println("productId list: " + productIds);
+		List<Order> orders = repository.select("getOrdersByProductIds",
+				productIds);
+		// System.out.println("get order by name in service: success");
 		for (int i = 0; i < orders.size(); i++) {
 			orders.get(i).init(repository);
 		}
 		return orders;
 	}
-	
-	
+
 	/*
 	 * for data table paging
 	 */
-	public OrderResponse getOrdersByPage(DataTablePageParameters dtPageParameters) throws RepositoryException {
-		OrderResponse orderResponse=new OrderResponse();
-		
-		Integer total=repository.selectOne("getTotalNumberOfOrders", null);
+	public OrderResponse getOrdersByPage(
+			DataTablePageParameters dtPageParameters)
+			throws RepositoryException {
+		OrderResponse orderResponse = new OrderResponse();
+
+		Integer total = repository.selectOne("getTotalNumberOfOrders", null);
 		orderResponse.setTotalRecords(total);
-		//System.out.println("total: "+orderResponse.getTotalRecords());
-		
-		/*List<Integer> productIds;
-		if(dtPageParameters.getProductIds()==null){
-			productIds=repository.select("getProductIds",null);
-		}*/
-		
-		Integer startP=(dtPageParameters.getCurrentPage()-1)*dtPageParameters.getItemsPerPage();
+		// System.out.println("total: "+orderResponse.getTotalRecords());
+
+		/*
+		 * List<Integer> productIds; if(dtPageParameters.getProductIds()==null){
+		 * productIds=repository.select("getProductIds",null); }
+		 */
+
+		Integer startP = (dtPageParameters.getCurrentPage() - 1)
+				* dtPageParameters.getItemsPerPage();
 		dtPageParameters.setStartPosition(startP);
-		System.out.println("ordering option: "+dtPageParameters.getOrderingOption());
+		System.out.println("ordering option: "
+				+ dtPageParameters.getOrderingOption());
 		List<Order> orders;
-		if(startP==0) {
-			orders=repository.select("getOrdersOfFirstPage", dtPageParameters); 
+		if (startP == 0) {
+			orders = repository
+					.select("getOrdersOfFirstPage", dtPageParameters);
+		} else {
+			orders = repository.select("getOrdersByPage", dtPageParameters);
 		}
-		else{
-			orders=repository.select("getOrdersByPage", dtPageParameters);
-		}
-		
+
 		for (int i = 0; i < orders.size(); i++) {
-				orders.get(i).init(repository);
+			orders.get(i).init(repository);
 		}
-		orderResponse.setOrders(orders);  
-	
+		orderResponse.setOrders(orders);
+
 		return orderResponse;
 	}
-	
-	
+
 	public List<OrderStatus> getOrderStatusList() throws RepositoryException {
-		List<OrderStatus> orderStatusList = repository.select("getOrderStatus", null);
-		
+		List<OrderStatus> orderStatusList = repository.select("getOrderStatus",
+				null);
+
 		return orderStatusList;
 	}
 
-	
 	/*
 	 * NLP based Search for ordering products
 	 */
 
-	public NLPSearchResponse getProductsAndOrderInfoByNLPWords(String words)
+	public List<Product> getProductsAndOrderInfoByNLPWords(String words)
 			throws RepositoryException {
 
-		NLPSearchResponse nlpSearchResponse=new NLPSearchResponse();
-		
+		// NLPSearchResponse nlpSearchResponse=new NLPSearchResponse();
+
 		ProductSelection parsedResult = new ProductSelection();
 		System.out.println("nlpEnabled in Service=" + nlpEnabled);
 		if ("yes".equalsIgnoreCase(nlpEnabled)
@@ -219,20 +232,20 @@ public class OrderService {
 				&& parsedResult.getOtherAttributes().size() > 0)
 			productWords.addAll(parsedResult.getOtherAttributes());
 
-		/*//add parsedResult's scope if some synonym is matched to the scope terms in DB
-		List<String> matchedScopes=matchSynonymToScope(productWords);
-		for (int i=0; i<matchedScopes.size(); i++){
-			//parsedResult.
-		}*/
-		
+		/*
+		 * //add parsedResult's scope if some synonym is matched to the scope
+		 * terms in DB List<String>
+		 * matchedScopes=matchSynonymToScope(productWords); for (int i=0;
+		 * i<matchedScopes.size(); i++){ //parsedResult. }
+		 */
+
 		List<Product> productsResult = new ArrayList<Product>();
 		List<Product> allProducts = repository.select("getProducts", null);
 
 		// get all the products which code includes the matched attribute's code
 		for (int i = 0; i < attributeWords.size(); i++) {
-			List<Attribute> attributeList = repository
-					.select("getAttributesByTerm",
-							"%" + attributeWords.get(i) + "%");
+			List<Attribute> attributeList = repository.select(
+					"getAttributesByTerm", "%" + attributeWords.get(i) + "%");
 			for (int j = 0; j < attributeList.size(); j++) {
 				for (int k = 0; k < allProducts.size(); k++) {
 					// product's code include attribute's code
@@ -267,142 +280,239 @@ public class OrderService {
 			}
 		}
 
-		// search all the products by nlp'ed terms (product name, functions, qualities, other attributes) stored in productWords 
+		// search all the products by nlp'ed terms (product name, functions,
+		// qualities, other attributes) stored in productWords
 		for (int i = 0; i < productWords.size(); i++) {
-			List<Product> productList = repository.select(
-					"getProductsByTerm", "%" + productWords.get(i) + "%");
+			List<Product> productList = repository.select("getProductsByTerm",
+					"%" + productWords.get(i) + "%");
 			for (int j = 0; j < productList.size(); j++) {
-				for (int k=0; k<allProducts.size();k++){
+				for (int k = 0; k < allProducts.size(); k++) {
 					Product p = allProducts.get(k);
-					if (productList.get(j).getId()==p.getId()){
+					if (productList.get(j).getId() == p.getId()) {
 						if (productsResult.indexOf(p) == -1)
-						 productsResult.add(p);	
+							productsResult.add(p);
 					}
 				}
 			}
 		}
 
-		//search in product name/descriptions with attribute words for double check
+		// search in product name/descriptions with attribute words for double
+		// check
 		for (int i = 0; i < attributeWords.size(); i++) {
-			List<Product> productList = repository.select(
-					"getProductsByTerm", "%" + attributeWords.get(i) + "%");
+			List<Product> productList = repository.select("getProductsByTerm",
+					"%" + attributeWords.get(i) + "%");
 			for (int j = 0; j < productList.size(); j++) {
-				for (int k=0; k<allProducts.size();k++){
+				for (int k = 0; k < allProducts.size(); k++) {
 					Product p = allProducts.get(k);
-					if (productList.get(j).getId()==p.getId()){
+					if (productList.get(j).getId() == p.getId()) {
 						if (productsResult.indexOf(p) == -1)
-						 productsResult.add(p);	
+							productsResult.add(p);
 					}
 				}
 			}
 		}
-		
-		
-		//filter out products which scope are not matched to the required scope
+
+		// filter out products which scope are not matched to the required scope
 		List<Product> finalProductsResult = new ArrayList<Product>();
-		
-		if (parsedResult.getScopes() != null)
-		{
-			Set<String> scopes=parsedResult.getScopes();
-			
-			for (String scope:scopes) {
-				List<Attribute> scopeList = repository.select("getAttributesByTerm","%" + scope + "%");
+
+		if (parsedResult.getScopes() != null) {
+			Set<String> scopes = parsedResult.getScopes();
+
+			for (String scope : scopes) {
+				List<Attribute> scopeList = repository.select(
+						"getAttributesByTerm", "%" + scope + "%");
 				for (int j = 0; j < scopeList.size(); j++) {
 					for (int k = 0; k < productsResult.size(); k++) {
-						// remove the product which attribute code includes scope code
-						//System.out.println("product scope: "+productsResult.get(k).getCode()+productsResult.get(k).getName());
-						//System.out.println("nlp scope: "+scopeList.get(j).getCode());
-						if (productsResult.get(k).getCode().contains(scopeList.get(j).getCode())) {
+						// remove the product which attribute code includes
+						// scope code
+						// System.out.println("product scope: "+productsResult.get(k).getCode()+productsResult.get(k).getName());
+						// System.out.println("nlp scope: "+scopeList.get(j).getCode());
+						if (productsResult.get(k).getCode()
+								.contains(scopeList.get(j).getCode())) {
 							{
-								//System.out.println("removed product: "+productsResult.get(k).getName());
+								// System.out.println("removed product: "+productsResult.get(k).getName());
 								finalProductsResult.add(productsResult.get(k));
 							}
 						}
 					}
 				}
 			}
-		}
-		else {
-			for (int i=0; i<productsResult.size(); i++){
+		} else {
+			for (int i = 0; i < productsResult.size(); i++) {
 				finalProductsResult.add(productsResult.get(i));
-			}				
+			}
 		}
-		
+
 		for (int i = 0; i < finalProductsResult.size(); i++) {
 			finalProductsResult.get(i).initForProductCategory(repository);
 			finalProductsResult.get(i).initForProductPrice(repository);
 		}
-		
-		nlpSearchResponse.setProducts(finalProductsResult);
-		
-		//to-do:
-		//get Order amount and deliveryDate from NLP analysis service result
-	/*	Order order;
-		order.setAmount(amount);
-		order.setDeliveryDate(deliveryDate);*/
-		
-		
-		return nlpSearchResponse;
+
+		// set the order init amount from NLP analysis service result
+		Order order = new Order();
+		if (parsedResult.getQuantity() != null) {
+			List<String> nlpQuantityStr = parsedResult.getQuantity();
+			float amount;
+
+			try {
+				amount = Float.parseFloat(nlpQuantityStr.get(0));
+			} catch (NumberFormatException ex) {
+				// System.out.println("Error: Not valid NumberFormat.");
+				amount = ChineseNumberConverter.convertToNum(nlpQuantityStr
+						.get(0));
+			}
+
+			switch (nlpQuantityStr.get(1)) {
+			case "升":
+			case "L":
+			case "l":
+				order.setAmount(amount);
+				break;
+			case "毫升":
+			case "ml":
+			case "ML":
+				order.setAmount(amount / 1000);
+				break;
+			case "千克":
+			case "kg":
+			case "KG":
+				order.setAmount(amount);
+				break;
+			case "克":
+			case "g":
+			case "G":
+				order.setAmount(amount / 1000);
+				break;
+			case "吨":
+				order.setAmount(amount * 1000);
+				break;
+			}
+
+		}
+
+		// set the order delivery date from NLP analysis service result
+
+		if (parsedResult.getDate() != null) {
+			List<String> nlpDateStr = parsedResult.getDate();
+			int dateNum;
+			Calendar cal = Calendar.getInstance();
+
+			//three cases: 1. tomorrow; 2. the day after tomorrow; 3. format like "一周后"
+			switch (nlpDateStr.get(0)) {
+			case "明天":
+				cal.add(Calendar.DATE, 1);
+				break;
+			case "后天":
+				cal.add(Calendar.DATE, 2);
+				break;
+			default:
+				try {
+					dateNum = (int) Float.parseFloat(nlpDateStr.get(0));
+				} catch (NumberFormatException ex) {
+					dateNum = (int) ChineseNumberConverter
+							.convertToNum(nlpDateStr.get(0));
+				}
+
+				switch (nlpDateStr.get(1)) {
+				case "周":
+				case "星期":
+					cal.add(Calendar.DATE, dateNum * 7);
+					break;
+				case "月":
+					cal.add(Calendar.DATE, dateNum * 30);
+					break;
+				case "个":
+					switch (nlpDateStr.get(2)) {
+					case "星期":
+					case "周":
+						cal.add(Calendar.DATE, dateNum * 7);
+						break;
+					case "月":
+						cal.add(Calendar.DATE, dateNum * 30);
+						break;
+					}
+					break;
+				}
+				break;
+			}
+
+			System.out.println("nlp date: "+cal.getTime());
+			order.setDeliveryDate(cal.getTime());
+		}
+
+		for (int i = 0; i < finalProductsResult.size(); i++) {
+			finalProductsResult.get(i).setOrder(order);
+		}
+
+		return finalProductsResult;
 	}
-	
-	
+
 	/*
 	 * Match synonym to scope term
 	 */
-	/*public List<String> matchSynonymToScope(List<String> words) throws RepositoryException{
-		List<String> matchedScopes=new ArrayList<String>();
-		List<String> sysDefinedScopes=repository.select("getAttributes", null);
-		
-		return matchedScopes;
-	}*/
-	
+	/*
+	 * public List<String> matchSynonymToScope(List<String> words) throws
+	 * RepositoryException{ List<String> matchedScopes=new ArrayList<String>();
+	 * List<String> sysDefinedScopes=repository.select("getAttributes", null);
+	 * 
+	 * return matchedScopes; }
+	 */
+
 	/*
 	 * for Order Report
 	 */
-	public List<ReportData> getOrdersGroupbyProductAndMonth() throws RepositoryException {
-		List<OrderReportGroupByProduct> orderReport = repository.select("getOrdersGroupbyProductAndMonth", null);
-		List<Product> products=repository.select("getProducts", null);
-		
+	public List<ReportData> getOrdersGroupbyProductAndMonth()
+			throws RepositoryException {
+		List<OrderReportGroupByProduct> orderReport = repository.select(
+				"getOrdersGroupbyProductAndMonth", null);
+		List<Product> products = repository.select("getProducts", null);
+
 		for (int i = 0; i < orderReport.size(); i++) {
-			//orderReport.get(i).init(repository);
-			for(int j=0; j<products.size(); j++){
-				if(orderReport.get(i).getProductId()==products.get(j).getId()){
-					orderReport.get(i).setProductName(products.get(j).getName());
+			// orderReport.get(i).init(repository);
+			for (int j = 0; j < products.size(); j++) {
+				if (orderReport.get(i).getProductId() == products.get(j)
+						.getId()) {
+					orderReport.get(i)
+							.setProductName(products.get(j).getName());
 					break;
 				}
 			}
 		}
-		
-		List<ReportData> reportData=new ArrayList<ReportData>();
-		boolean added=false;
-		
-		for (int i = 0; i < orderReport.size(); i++){
-			List<Object> valueData=new ArrayList<Object>();
-			ReportData oneReportData=new ReportData();
-			added=false;
+
+		List<ReportData> reportData = new ArrayList<ReportData>();
+		boolean added = false;
+
+		for (int i = 0; i < orderReport.size(); i++) {
+			List<Object> valueData = new ArrayList<Object>();
+			ReportData oneReportData = new ReportData();
+			added = false;
 			valueData.add(orderReport.get(i).getMonth());
 			valueData.add(orderReport.get(i).getAmount());
-			
-			for (int j = 0; j < reportData.size(); j++){
-				//already has the product in the report, just add the value
-				if(reportData.get(j).getKey()==orderReport.get(i).getProductName()){
+
+			for (int j = 0; j < reportData.size(); j++) {
+				// already has the product in the report, just add the value
+				if (reportData.get(j).getKey() == orderReport.get(i)
+						.getProductName()) {
 					reportData.get(j).getValues().add(valueData);
-					added=true;
+					added = true;
 					break;
 				}
 			}
-			//new product, so add both product name and value in the report data
-			if(!(added)){
+			// new product, so add both product name and value in the report
+			// data
+			if (!(added)) {
 				oneReportData.setKey(orderReport.get(i).getProductName());
 				oneReportData.getValues().add(valueData);
-				reportData.add(oneReportData);}
-			
+				reportData.add(oneReportData);
+			}
+
 		}
 		/*
-		System.out.println("final report data size: "+reportData.size());
-		for (int k = 0; k < reportData.size(); k++){
-			System.out.println("products in final report data: "+reportData.get(k).getKey());
-		}*/
+		 * System.out.println("final report data size: "+reportData.size()); for
+		 * (int k = 0; k < reportData.size(); k++){
+		 * System.out.println("products in final report data: "
+		 * +reportData.get(k).getKey()); }
+		 */
 		return reportData;
 	}
 

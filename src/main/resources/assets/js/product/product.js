@@ -306,10 +306,7 @@ ineuronApp.controller('ProductPriceUpdateController', ['$scope', '$stateParams',
 	var vm = this;
 	vm.units = [
 	            { name: "升" },
-	            { name: "毫升" },
-	            { name: "克" },
-	            { name: "千克" },
-	            { name: "吨" }
+	            { name: "千克" }
 	            ]; 
 	
 	if(product.productPrice!=null){
