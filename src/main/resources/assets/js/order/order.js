@@ -37,10 +37,7 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 			method : 'GET'
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
-			vm.products = data.value.products;
-			/*
-			 * if(vm.products==null){ $scope.notFoundProducts=true; }
-			 */
+			vm.products = data.value;
 		}).error(function(data, status) {
 			// ineuronApp.confirm("提示","查询产品失败！", 'sm', $rootScope, $uibModal);
 			handleError(status, $rootScope, $uibModal);
@@ -62,10 +59,7 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 			method : 'GET'
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
-			vm.products = data.value.products;
-			/*
-			 * if(vm.products==null){ $scope.notFoundProducts=true; }
-			 */
+			vm.products = data.value;
 		}).error(function(data, status) {
 			// ineuronApp.confirm("提示","查询产品失败！", 'sm', $rootScope, $uibModal);
 			handleError(status, $rootScope, $uibModal);
@@ -356,11 +350,15 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	var product = eval('(' + $stateParams.productStr + ')');
 	$scope.userName=$cookies.get('INeuron-UserName');
     $scope.productName=product.name;
+    $scope.amount=product.order.amount;
     if(product.productPrice==null){
     	ineuronApp.confirm("提示","产品还未定价，请先给此产品设定价格！", 'sm', $rootScope, $uibModal);		
 		$state.go("updateProductPrice",{productStr: $stateParams.productStr});
     }
-    else $scope.price=product.productPrice.price;
+    else{ 
+    	$scope.price=product.productPrice.price;
+    	$scope.unit=product.productPrice.unit;
+    }
    
     // get product's ProductionPeriod
     $http({
@@ -374,8 +372,9 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		console.log("get product's production periods error");
 	});	
     
-    
-	$scope.deliveryDate = new Date();
+    if(product.order.deliveryDate!=null)
+    	$scope.deliveryDate=product.order.deliveryDate;
+    else $scope.deliveryDate = new Date();
 	$scope.format = "yyyy/MM/dd";
 	$scope.altInputFormats = ['yyyy/M!/d!'];
 
@@ -480,6 +479,7 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	$scope.payment=order.payment;
 	$scope.customizedInfo=order.customizedInfo;
 	$scope.price=order.product.productPrice.price;
+	$scope.unit=order.product.productPrice.unit;
 	
 	$scope.deliveryDate=order.deliveryDate;
 	$scope.format = "yyyy/MM/dd";

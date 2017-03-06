@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.INeuronRepository;
+import com.ineuron.domain.order.entity.Order;
 import com.ineuron.domain.product.repository.ProductRepository;
 import com.ineuron.domain.product.valueobject.ManufacturingProcess;
 import com.ineuron.domain.product.valueobject.Operation;
@@ -27,6 +28,7 @@ public class Product {
 	private List<Operation> operations;
 	private List<OperationType> operationTypes;
 	private ProductPrice productPrice;
+	private Order order; //this is for product order;
 
 	//private static final Logger LOGGER = LoggerFactory.getLogger("Product");
 
@@ -178,6 +180,14 @@ public class Product {
 
 	public void setProductPrice(ProductPrice productPrice) {
 		this.productPrice = productPrice;
+	}
+
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 	
 	

@@ -118,8 +118,8 @@ public class OrderResource {
 			@QueryParam("debug") boolean debug) {
 		try {
 			INeuronResponse response = new INeuronResponse(securityService, httpHeader, debug);
-			NLPSearchResponse nlpSearchResponse = orderService.getProductsAndOrderInfoByNLPWords(words);
-			response.setValue(nlpSearchResponse);
+			List<Product> products = orderService.getProductsAndOrderInfoByNLPWords(words);
+			response.setValue(products);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e.getRootCause());
