@@ -24,7 +24,7 @@
 							
 						</tr>
 						<tr>
-							<th class="labelformat">定制化信息</th>
+							<th class="labelformat">个性化包装外观信息</th>
 							<td><textarea style="min-width: 250px; min-height: 60px"
 									class="input-block-level" type="text" ng-model="customizedInfo" />
 							</td>
@@ -53,38 +53,44 @@
 					<tbody>
 						<tr>
 							<th class="labelformat">单价</th>
-							<td><input style="width: 210px;" class="input-block-level" type="text"
-								ng-model="price" readonly /></td>
+							<td><input style="width: 200px; height:30px; float:left;" class="input-block-level" type="text"
+								ng-model="price" readonly />
+								<label	class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">{{unit}}</label>
+							</td>
 							<td></td>
 							<th class="labelformat">数量</th>
 							<td><input type="number" ng-model="amount"
-								style="height: 30px; width: 210px;"
-								ng-change="calculateTotalAndPeriod()" required /></td>
+								style="height: 30px; width: 200px;"
+								ng-change="calculateTotalAndPeriod()" required />
+							<label	class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">{{unit}}</label>
+							</td>
 							<td style="color: red">*</td>
 							<th class="labelformat">总价</th>
 							<td><input type="text" ng-model="total"
-								style="height: 30px; width: 210px;" required /> <label
+								style="height: 30px; width: 200px;" required /> <label
 								class="right-align"
 								style="padding-top: 5px; padding-right: 5px;">元</label></td>
 							<td style="color: red">*</td>
 						</tr>
 						<tr>
 							<th class="labelformat">预期生产周期</th>
-							<td><input type="text" style="height: 30px; width: 210px;"
+							<td><input type="text" style="height: 30px; width: 200px;"
 								ng-model="productionPeriod" readonly /> <label
 								class="right-align"
 								style="padding-top: 5px; padding-right: 5px;">天</label></td>
 							<td></td>
 							<th class="labelformat">付款</th>
 							<td><input type="number" ng-model="payment"
-								style="height: 30px; width: 210px;" /> <label
+								style="height: 30px; width: 200px;" /> <label
 								class="right-align"
 								style="padding-top: 5px; padding-right: 5px;">元</label></td>
 							<td></td>
 							<th class="labelformat">交付日期</th>
 							<td>
 								<div style="float: left;">
-									<input style="width: 210px; height: 34px;" type="text"
+									<input style="width: 200px; height: 34px;" type="text"
 										uib-datepicker-popup="{{format}}" ng-model="deliveryDate"
 										is-open="popup1.opened" ng-required="true" close-text="关闭"
 										clear-text="清空" current-text="今天"

@@ -6,6 +6,7 @@ import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.domain.order.valueobject.OrderStatus;
 import com.ineuron.domain.product.entity.Product;
+import com.ineuron.domain.product.valueobject.ProductPrice;
 import com.ineuron.domain.user.entity.User;
 
 public class Order {
@@ -29,6 +30,7 @@ public class Order {
 	private Integer validFlag;
 
 	private Product product;
+	private ProductPrice productPrice;
 	private User user;
 	private OrderStatus orderStatus;
 
@@ -57,6 +59,8 @@ public class Order {
 			if (product != null) {
 				product.initForProductPrice(repository);
 			}
+			
+			productPrice=repository.selectOne("getProductPriceByProductId", productId);
 		}
 
 		if (userId != null)
@@ -224,6 +228,14 @@ public class Order {
 
 	public void setPicFile(String picFile) {
 		this.picFile = picFile;
+	}
+
+	public ProductPrice getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(ProductPrice productPrice) {
+		this.productPrice = productPrice;
 	}
 
 }

@@ -29,6 +29,10 @@
 		Orders where orderDate=#{orderDate} and
 		serialNumber=(select max(serialNumber) from Orders where orderDate=#{orderDate})
 	</select>
+	
+	<select id="getOrdersByProductIds" resultType="com.ineuron.domain.order.entity.Order">
+		select * from Orders where productId in(#{productIds})
+	</select>
 
 	<!-- for order list paging -->
 	<select id="getTotalNumberOfOrders" resultType="Integer">
@@ -39,8 +43,9 @@
 	<select id="getOrdersByPage" resultType="com.ineuron.domain.order.entity.Order">
 		select top (#{itemsPerPage}) * from Orders
 		where validFlag=1 and id>(select max(id)
-		from (select top (#{startPosition}) id from Orders where validFlag=1 order by id) tt)
-		order by id ASC
+		from (select top (#{startPosition}) id from Orders 
+		where validFlag=1 order by id) tt)
+		order by ${orderingOption} ASC
 	</select>
 	
 	<select id="getOrdersOfFirstPage" resultType="com.ineuron.domain.order.entity.Order">
