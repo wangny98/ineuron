@@ -104,6 +104,9 @@ public class NLPService {
             }else if(PAINT_NAMES.contains(child.ner())){
                 productName = child.lemma();
                 continue;
+            }else if(child.lemma().lastIndexOf("色") != -1){
+            	result.addColor(child.lemma());
+        		continue;
             }
      
         	
