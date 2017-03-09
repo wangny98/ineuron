@@ -597,9 +597,28 @@ public class ProductResource {
 		} catch (InvalidAPITokenException e) {
 			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
-		}
-		
+		}		
 	}
+	
+	
+	@Path("/labelproductpackagetype")
+	@GET
+	@Timed
+	public Response labelProductPackage(@Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			ProductPackageType productPackageType = productService.getLabelProductPackageType();
+			response.setValue(productPackageType);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}		
+	}
+	
 	
 	@Path("/createproductpackagetype")
 	@POST

@@ -246,6 +246,14 @@
 		select * from ProductPackageTypes where volume>0 
 	</select>
 	
+	<select id="getAllProductPackageTypes" resultType="com.ineuron.domain.product.valueobject.ProductPackageType">
+		select * from ProductPackageTypes
+	</select>
+	
+	<select id="getLabelProductPackageType" resultType="com.ineuron.domain.product.valueobject.ProductPackageType">
+		select * from ProductPackageTypes where volume=0
+	</select>
+	
 	<insert id="addProductPackageType">
 		insert into ProductPackageTypes (price,cost,volume,unit,type) values(#{price},#{cost},#{volume},#{unit},#{type})
 	</insert>

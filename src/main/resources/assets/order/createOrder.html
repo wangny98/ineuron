@@ -64,14 +64,10 @@
 								required /> <label class="right-align"
 								style="padding-top: 5px; padding-right: 5px;">{{unit}}</label></td>
 							<td style="color: red">*</td>
-							<th class="labelformat">总价</th>
-							<td><input type="text" ng-model="total" class="inputformat"
-								required /> <label class="right-align"
-								style="padding-top: 5px; padding-right: 5px;">元</label></td>
-							<td style="color: red">*</td>
-							<th class="labelformat">付款</th>
-							<td><input type="number" ng-model="payment"
-								class="inputformat" /> <label class="right-align"
+							<th class="labelformat">产品总价</th>
+							<td><input class="inputformat" style="float: left;"
+								class="input-block-level" type="text" ng-model="productCharge"
+								readonly /> <label class="right-align"
 								style="padding-top: 5px; padding-right: 5px;">元</label></td>
 							<td></td>
 						</tr>
@@ -80,15 +76,40 @@
 							<td><div isteven-multi-select
 									input-model="OrderCreate.productPackageTypes"
 									output-model="selectedProductPackageType"
-									output-properties="id volume unit" button-label="volume unit"
-									item-label="volume unit" tick-property="ticked"
-									orientation="horizontal" selection-mode="single"
+									button-label="volume unit" item-label="volume unit"
+									tick-property="ticked" orientation="horizontal"
+									selection-mode="single"
 									on-item-click="calculatePackageAmount()"></div></td>
 							<td style="color: red">*</td>
 							<th class="labelformat">包装总数</th>
 							<td><input type="text" ng-model="packageAmount"
 								class="inputformat" readonly /> <label class="right-align"
 								style="padding-top: 5px; padding-right: 5px;">个</label></td>
+							<td></td>
+							<th class="labelformat">包装总价</th>
+							<td><input class="inputformat" style="float: left;"
+								class="input-block-level" type="text" ng-model="packageCharge"
+								readonly /> <label class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">元</label></td>
+							<td></td>
+							<th class="labelformat">个性化标签费用</th>
+							<td><input class="inputformat" style="float: left;"
+								class="input-block-level" type="text"
+								ng-model="labelPackageCharge" readonly /> <label
+								class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">元</label></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th class="labelformat">总价</th>
+							<td><input type="number" step="0.01" ng-model="totalCharge"
+								class="inputformat" required /> <label class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">元</label></td>
+							<td style="color: red">*</td>
+							<th class="labelformat">付款</th>
+							<td><input type="number" step="0.01" ng-model="payment"
+								class="inputformat" /> <label class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">元</label></td>
 							<td></td>
 							<th class="labelformat">预期生产周期</th>
 							<td><input type="text" class="inputformat"

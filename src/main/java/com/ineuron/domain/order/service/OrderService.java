@@ -27,6 +27,7 @@ import com.ineuron.domain.order.valueobject.OrderStatus;
 import com.ineuron.domain.product.entity.Product;
 import com.ineuron.domain.product.valueobject.Attribute;
 import com.ineuron.domain.product.valueobject.ProductCategory;
+import com.ineuron.domain.product.valueobject.ProductPackageType;
 import com.ineuron.domain.nlp.service.NLPService;
 import com.ineuron.domain.nlp.valueobject.ProductSelection;
 
@@ -70,24 +71,12 @@ public class OrderService {
 		String todayDateforNumber = dateFormat.format(today);
 		order.setOrderNumber(prefix + "-" + todayDateforNumber + "-"
 				+ String.format("%04d", newOrderSN));
-
+		
 		// set the status to init (id=1)
 		order.setStatusId(1);
 
 		// valid order is 1; deleted order is -1;
 		order.setValidFlag(1);
-
-		// deprecated
-		// TO-DO: calculate the production period based on productionTicket's
-		// total period of this productId
-		// 1. calculate the total production period of that productId in
-		// productionTicket table
-		// 2. compare this order's amount to specific device
-		// (type='production')'s volume;
-		// if btw min and max, then use the total production period (add orders
-		// together
-		// if below min, use the total; if beyond max, use the mod
-		// 3. set the productionperiod value of Order object
 
 		order.addOrder(repository);
 		return order;

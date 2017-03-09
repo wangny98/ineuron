@@ -327,6 +327,11 @@ public class ProductService {
 			return productPackageTypes;
 		}
 		
+		public ProductPackageType getLabelProductPackageType() throws RepositoryException {
+			ProductPackageType productPackageType = repository.selectOne("getLabelProductPackageType", null);
+			return productPackageType;
+		}
+		
 		public void createProductPackageType(ProductPackageType productPackageType)
 				throws RepositoryException {
 			repository.add("addProductPackageType", productPackageType);

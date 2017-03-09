@@ -204,8 +204,8 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	 * $http({ url : '/product/productlist', method : 'GET'
 	 * }).success(function(data) { updateApiToken(data, $cookies); vm.products =
 	 * data.value; }).error(function(data, status) { handleError(status,
-	 * $rootScope, $uibModal); console.log("product list error"); });
-	 *  // refresh order list after selecting filters
+	 * $rootScope, $uibModal); console.log("product list error"); }); // refresh
+	 * order list after selecting filters
 	 * $scope.refreshOrdersAfterFiltering=function(){ var productIdList=new
 	 * Array(); var i=0; for(var p in $scope.selectedProducts){
 	 * productIdList[i]=$scope.selectedProducts[p].id;
@@ -343,10 +343,11 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
     
     if(product.order!=null){
         $scope.amount=product.order.amount;	
-        $scope.total=$scope.amount*$scope.price;
+        $scope.productCharge=$scope.amount*$scope.price;
     }
    
     // get product package type list
+    var j=0;
     $http({
 		url : '/product/productpackagetypelist',
 		method : 'GET'
@@ -354,6 +355,18 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		updateApiToken(data, $cookies);
 		vm.productPackageTypes = data.value;
 		vm.productPackageTypes[0].ticked=true;
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $uibModal);
+		console.log("get product package type list error");
+	});	
+    
+    // get label product package type 
+    $http({
+		url : '/product/labelproductpackagetype',
+		method : 'GET'
+	}).success(function(data) {
+		updateApiToken(data, $cookies);
+		vm.labelProductPackageType= data.value;
 	}).error(function(data, status) {
 		handleError(status, $rootScope, $uibModal);
 		console.log("get product package type list error");
@@ -393,11 +406,18 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	            
 	$scope.calculateTotalAndPeriod=function(){ 
 		
-		// calculate the total price
-	    $scope.total=$scope.amount*$scope.price;
-	    
 	    // calculate the package amount
 	    $scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
+	    
+	    // calculate the total charge including product, package and
+		// personalized label package
+	    $scope.productCharge=parseFloat($scope.amount*$scope.price).toFixed(2);
+	    $scope.packageCharge=parseFloat($scope.packageAmount*$scope.selectedProductPackageType[0].price).toFixed(2);
+	    $scope.labelPackageCharge=vm.labelProductPackageType.price;
+	    var total=parseFloat($scope.amount*$scope.price+
+	                       $scope.packageAmount*$scope.selectedProductPackageType[0].price+
+	    				   vm.labelProductPackageType.price).toFixed(2);	
+	    $scope.totalCharge=parseFloat(total);
 	    
 	    // get production period
 	    for (var i in vm.productPeriods){
@@ -407,8 +427,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 				break;
 			}
 		}   
-	}
-	
+	}	
 	
 
     vm.createOrder = createOrder;
@@ -417,10 +436,14 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
       var now=new Date();	
       var userId=$cookies.get('INeuron-UserId');
       var picFileName = userId + "-" + now.getTime();
-      var tempFilename=file.name;
-      var tempFilenameSections=tempFilename.split('.');
-      var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
-	
+      var picSuffix;
+      
+      if(file!=null){
+    	  var tempFilename=file.name;
+    	  var tempFilenameSections=tempFilename.split('.');
+    	  var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
+      }
+      
       $http({
 		url : '/order/create',
 		method : 'POST',
@@ -429,7 +452,13 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			userId: userId,
 			customer: $scope.customerName,
 			amount: $scope.amount,
-			total: $scope.total,
+			productCharge: $scope.amount*product.productPrice.price,
+			productCost: $scope.amount*product.productPrice.cost,
+			packageCharge: $scope.packageAmount*$scope.selectedProductPackageType[0].price,
+			packageCost: $scope.packageAmount*$scope.selectedProductPackageType[0].cost,
+			labelPackageCharge:vm.labelProductPackageType.price,
+			labelPackageCost:vm.labelProductPackageType.cost,
+			totalCharge: $scope.totalCharge,
 			packageAmount:$scope.packageAmount,
 			productPackageTypeId:$scope.selectedProductPackageType[0].id,
 			productionPeriod:$scope.productionPeriod,
@@ -442,22 +471,24 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		updateApiToken(data, $cookies);
 		
 		// upload pic to the file server
-	  	file.upload = Upload.upload({
-	  		url: '/file/upload',
-	  		data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
-	  	});
-		file.upload.then(function (response) {
-			$timeout(function () {
-				file.result = response.data;
+		if(file!=null){
+			file.upload = Upload.upload({
+				url: '/file/upload',
+				data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
 			});
-		}, function (response) {
-			if (response.status > 0)
-				// $scope.errorMsg = response.status + ': ' + response.data;
-				ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
-		}, function (evt) {
-			// Math.min is to fix IE which reports 200% sometimes
-			file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-		});
+			file.upload.then(function (response) {
+				$timeout(function () {
+					file.result = response.data;
+				});
+			}, function (response) {
+				if (response.status > 0)
+					// $scope.errorMsg = response.status + ': ' + response.data;
+					ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
+			}, function (evt) {
+				// Math.min is to fix IE which reports 200% sometimes
+				file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+			});
+		}
 		
 		ineuronApp.confirm("提示","订单添加成功！", 'sm', $rootScope, $uibModal);		
 		$state.go("orderList");
@@ -486,7 +517,10 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	$scope.orderNumber=order.orderNumber;
 	$scope.customer=order.customer;
 	$scope.amount=order.amount;
-	$scope.total=order.total;
+	$scope.totalCharge=order.totalCharge;
+	$scope.productCharge=order.productCharge;
+	$scope.packageCharge=order.packageCharge;
+	$scope.labelPackageCharge=order.labelPackageCharge;
 	$scope.payment=order.payment;
 	$scope.customizedInfo=order.customizedInfo;
 	$scope.price=order.product.productPrice.price;
@@ -503,8 +537,8 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 		
 		// set the init order package type
 		for(var i in vm.productPackageTypes){
-			if(vm.productPackageType[i].id==order.productPackageTypeId){
-				$scope.selectedProductPackageType[i].ticked=true;
+			if(vm.productPackageTypes[i].id==order.productPackageTypeId){
+				vm.productPackageTypes[i].ticked=true;
 				break;
 			}
 		}
@@ -513,6 +547,17 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 		console.log("get product package type list error");
 	});	
 	
+    // get label product package type 
+    $http({
+		url : '/product/labelproductpackagetype',
+		method : 'GET'
+	}).success(function(data) {
+		updateApiToken(data, $cookies);
+		vm.labelProductPackageType= data.value;
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $uibModal);
+		console.log("get product package type list error");
+	});	
     
     $scope.calculatePackageAmount=function(){
     	$scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
@@ -555,8 +600,18 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	
 	
 	$scope.calculateTotal=function(){ 
-	    $scope.total=$scope.amount*$scope.price;
+		// calculate the package amount
 	    $scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
+	    
+	    // calculate the total charge including product, package and
+		// personalized label package
+	    $scope.productCharge=parseFloat($scope.amount*$scope.price).toFixed(2);
+	    $scope.packageCharge=parseFloat($scope.packageAmount*$scope.selectedProductPackageType[0].price).toFixed(2);
+	    $scope.labelPackageCharge=vm.labelProductPackageType.price;
+	    var total=parseFloat($scope.amount*$scope.price+
+	                       $scope.packageAmount*$scope.selectedProductPackageType[0].price+
+	    				   vm.labelProductPackageType.price).toFixed(2);	
+	    $scope.totalCharge=parseFloat(total);
 	}
 	
 	vm.updateOrder = updateOrder;
@@ -584,7 +639,13 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 				id:order.id,
 				customer: $scope.customer,
 				amount: $scope.amount,
-				total: $scope.total,
+				productCharge: $scope.amount*order.product.productPrice.price,
+				productCost: $scope.amount*order.product.productPrice.cost,
+				packageCharge: $scope.packageAmount*$scope.selectedProductPackageType[0].price,
+				packageCost: $scope.packageAmount*$scope.selectedProductPackageType[0].cost,
+				labelPackageCharge:vm.labelProductPackageType.price,
+				labelPackageCost:vm.labelProductPackageType.cost,
+				totalCharge: $scope.totalCharge,
 				packageAmount:$scope.packageAmount,
 				productPackageTypeId:$scope.selectedProductPackageType[0].id,
 				payment:$scope.payment,				
@@ -608,7 +669,8 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 					});
 				}, function (response) {
 					if (response.status > 0)
-						// $scope.errorMsg = response.status + ': ' + response.data;
+						// $scope.errorMsg = response.status + ': ' +
+						// response.data;
 						ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
 				}, function (evt) {
 					// Math.min is to fix IE which reports 200% sometimes
