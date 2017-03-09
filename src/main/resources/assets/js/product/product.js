@@ -311,6 +311,7 @@ ineuronApp.controller('ProductPriceUpdateController', ['$scope', '$stateParams',
 	
 	if(product.productPrice!=null){
 		$scope.price=product.productPrice.price;
+		$scope.cost=product.productPrice.cost;
 		for (var i in vm.units){
 			//alert(product.productPrice.unit+" vm unit name:"+vm.units[i].name);
 			if(vm.units[i].name==product.productPrice.unit) {
@@ -328,6 +329,7 @@ ineuronApp.controller('ProductPriceUpdateController', ['$scope', '$stateParams',
 			data : {
 				productId : product.id,
 				price: $scope.price,
+				cost: $scope.cost,
 				unit: $scope.selectedUnit[0].name
 			}
 		}).success(function(data) {

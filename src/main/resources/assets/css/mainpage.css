@@ -97,6 +97,11 @@ color: #fff;
 	font-size:16px;
 }
 
+.inputformat {
+	width:90px;
+	height:30px;
+}
+
 .right-align{
 	font-weight:bold;
 	font-size:large;

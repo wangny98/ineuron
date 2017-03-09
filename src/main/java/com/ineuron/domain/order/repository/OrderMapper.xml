@@ -9,8 +9,14 @@
 
 	<insert id="addOrder">
 		insert into Orders
-		(serialNumber,orderNumber,productId,userId,productionPeriod,amount,total,statusId,customizedInfo,orderDate,orderDateTime,deliveryDate,customer,payment,picFile,validFlag)
-		values(#{serialNumber},#{orderNumber},#{productId},#{userId},#{productionPeriod},#{amount},#{total},#{statusId},#{customizedInfo},#{orderDate},#{orderDateTime},#{deliveryDate},#{customer},#{payment},#{picFile},#{validFlag})
+		(serialNumber,orderNumber,productId,userId,productionPeriod,amount,productCharge,productCost,
+		 packageCharge,packageCost,labelPackageCharge,labelPackageCost,totalCharge,
+		 productPackageTypeId,packageAmount,statusId,customizedInfo,
+	     orderDate,orderDateTime,deliveryDate,customer,payment,picFile,validFlag)
+		values(#{serialNumber},#{orderNumber},#{productId},#{userId},#{productionPeriod},#{amount},
+		#{productCharge},#{productCost},#{packageCharge},#{packageCost},#{labelPackageCharge},
+		#{labelPackageCost},#{totalCharge},#{productPackageTypeId},#{packageAmount},#{statusId},
+		#{customizedInfo},#{orderDate},#{orderDateTime},#{deliveryDate},#{customer},#{payment},#{picFile},#{validFlag})
 	</insert>
 
 
@@ -62,7 +68,10 @@
 	
 	
 	<update id="updateOrder">
-		update Orders set amount=#{amount},	customer=#{customer}, total=#{total}, 
+		update Orders set amount=#{amount},	customer=#{customer}, productCharge=#{productCharge}, 
+		productCost=#{productCost},packageCharge=#{packageCharge},packageCost=#{packageCost},
+		labelPackageCharge=#{labelPackageCharge},labelPackageCost=#{labelPackageCost},totalCharge=#{totalCharge},
+		productPackageTypeId=#{productPackageTypeId},packageAmount=#{packageAmount},
 		payment=#{payment},	deliveryDate=#{deliveryDate}, customizedInfo=#{customizedInfo},
 		picFile=#{picFile},	statusId = #{statusId} where id = #{id}
 	</update>

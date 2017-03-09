@@ -10,6 +10,7 @@ import com.ineuron.domain.product.entity.Product;
 import com.ineuron.domain.product.valueobject.ProductCategory;
 import com.ineuron.domain.product.valueobject.AttributeCategory;
 import com.ineuron.domain.product.valueobject.Attribute;
+import com.ineuron.domain.product.valueobject.ProductPackageType;
 import com.ineuron.domain.product.valueobject.ProductPrice;
 import com.ineuron.domain.product.valueobject.ManufacturingProcess;
 import com.ineuron.domain.product.service.ProductService;
@@ -570,6 +571,79 @@ public class ProductResource {
 			System.out.println("updateproductprice");
 			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
 			productService.updateProductPrice(productPrice);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}		
+	}
+	
+	
+	@Path("/productpackagetypelist")
+	@GET
+	@Timed
+	public Response productPackageList(@Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			List<ProductPackageType> productPackageTypes = productService.getProductPackageTypes();
+			response.setValue(productPackageTypes);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}		
+	}
+	
+	
+	@Path("/labelproductpackagetype")
+	@GET
+	@Timed
+	public Response labelProductPackage(@Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			ProductPackageType productPackageType = productService.getLabelProductPackageType();
+			response.setValue(productPackageType);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}		
+	}
+	
+	
+	@Path("/createproductpackagetype")
+	@POST
+	@Timed
+	public Response createProductPackageType(final ProductPackageType productPackageType, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.createProductPackageType(productPackageType);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}		
+	}
+	
+	@Path("/updateproductpackagetype")
+	@POST
+	@Timed
+	public Response updateProductPackageType(final ProductPackageType productPackageType, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService, httpHeader, false);
+			productService.updateProductPackageType(productPackageType);
 			return Response.ok(response).build();
 		} catch (RepositoryException e) {
 			LOGGER.error(e.getMessage(), e.getRootCause());

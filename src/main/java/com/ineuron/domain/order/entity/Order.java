@@ -18,7 +18,16 @@ public class Order {
 	private Integer userId;
 	private Integer productionPeriod;
 	private float amount;
-	private float total;
+	private float productCharge;
+	private float productCost;
+	private float packageCharge;
+	private float packageCost;
+	private float labelPackageCharge;
+	private float labelPackageCost;
+	private float totalCharge;
+	private Integer productPackageTypeId;
+	private Integer packageAmount;
+	private Integer storageContainerAmount;
 	private Integer statusId;
 	private String customizedInfo;
 	private Date orderDate;
@@ -182,13 +191,7 @@ public class Order {
 		this.orderDateTime = orderDateTime;
 	}
 
-	public float getTotal() {
-		return total;
-	}
-
-	public void setTotal(float total) {
-		this.total = total;
-	}
+	
 
 	public Product getProduct() {
 		return product;
@@ -236,6 +239,87 @@ public class Order {
 
 	public void setProductPrice(ProductPrice productPrice) {
 		this.productPrice = productPrice;
+	}
+
+	
+	public Integer getPackageAmount() {
+		return packageAmount;
+	}
+
+	public void setPackageAmount(Integer packageAmount) {
+		this.packageAmount = packageAmount;
+	}
+
+	public Integer getStorageContainerAmount() {
+		return storageContainerAmount;
+	}
+
+	public void setStorageContainerAmount(Integer storageContainerAmount) {
+		this.storageContainerAmount = storageContainerAmount;
+	}
+
+	public Integer getProductPackageTypeId() {
+		return productPackageTypeId;
+	}
+
+	public void setProductPackageTypeId(Integer productPackageTypeId) {
+		this.productPackageTypeId = productPackageTypeId;
+	}
+
+	public float getProductCharge() {
+		return productCharge;
+	}
+
+	public void setProductCharge(float productCharge) {
+		this.productCharge = productCharge;
+	}
+
+	public float getProductCost() {
+		return productCost;
+	}
+
+	public void setProductCost(float productCost) {
+		this.productCost = productCost;
+	}
+
+	public float getPackageCharge() {
+		return packageCharge;
+	}
+
+	public void setPackageCharge(float packageCharge) {
+		this.packageCharge = packageCharge;
+	}
+
+	public float getPackageCost() {
+		return packageCost;
+	}
+
+	public void setPackageCost(float packageCost) {
+		this.packageCost = packageCost;
+	}
+
+	public float getLabelPackageCharge() {
+		return labelPackageCharge;
+	}
+
+	public void setLabelPackageCharge(float labelPackageCharge) {
+		this.labelPackageCharge = labelPackageCharge;
+	}
+
+	public float getLabelPackageCost() {
+		return labelPackageCost;
+	}
+
+	public void setLabelPackageCost(float labelPackageCost) {
+		this.labelPackageCost = labelPackageCost;
+	}
+
+	public float getTotalCharge() {
+		return totalCharge;
+	}
+
+	public void setTotalCharge(float totalCharge) {
+		this.totalCharge = totalCharge;
 	}
 
 }

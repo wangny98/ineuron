@@ -4,9 +4,10 @@
 	<div class="message">新订单</div>
 	<div>
 		<form ng-submit="OrderCreate.createOrder(picFile)">
-			<fieldset class="customized-fieldset" style="margin-top:30px; width: 1050px;">
+			<fieldset class="customized-fieldset"
+				style="margin-top: 30px; width: 1050px;">
 				<legend class="customized-legend">基本信息</legend>
-				<table id="table-style" style="width:100%; margin: auto">
+				<table id="table-style" style="width: 100%; margin: auto">
 					<tbody>
 						<tr>
 							<th class="labelformat">产品名</th>
@@ -21,7 +22,6 @@
 							<td><input class="input-block-level" type="text"
 								ng-model="userName" readonly /></td>
 							<td></td>
-							
 						</tr>
 						<tr>
 							<th class="labelformat">个性化包装外观信息</th>
@@ -31,9 +31,8 @@
 							<td></td>
 							<th class="labelformat">图片</th>
 							<td><input type="file" ngf-select ng-model="picFile"
-								name="file" ngf-max-size="20MB" required
-								ngf-model-invalid="errorFile"> <i
-								ng-show="myForm.file.$error.maxSize">文件大小超过上限
+								name="file" ngf-max-size="20MB" ngf-model-invalid="errorFile">
+								<i ng-show="myForm.file.$error.maxSize">文件大小超过上限
 									{{errorFile.size / 1000000|number:1}}MB: 最大：10M</i> <img
 								ng-show="myForm.file.$valid" ngf-thumbnail="picFile"
 								class="thumb">
@@ -47,50 +46,81 @@
 					</tbody>
 				</table>
 			</fieldset>
-			<fieldset class="customized-fieldset" style="margin-top:20px; width: 1050px;">
+			<fieldset class="customized-fieldset"
+				style="margin-top: 20px; width: 1050px;">
 				<legend class="customized-legend">详细信息</legend>
-				<table id="table-style" style="width:100%; margin: auto">
+				<table id="table-style" style="width: 100%; margin: auto">
 					<tbody>
 						<tr>
 							<th class="labelformat">单价</th>
-							<td><input style="width: 200px; height:30px; float:left;" class="input-block-level" type="text"
-								ng-model="price" readonly />
-								<label	class="right-align"
-								style="padding-top: 5px; padding-right: 5px;">{{unit}}</label>
-							</td>
+							<td><input class="inputformat" style="float: left;"
+								class="input-block-level" type="text" ng-model="price" readonly />
+								<label class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">{{unit}}</label></td>
 							<td></td>
 							<th class="labelformat">数量</th>
 							<td><input type="number" ng-model="amount"
-								style="height: 30px; width: 200px;"
-								ng-change="calculateTotalAndPeriod()" required />
-							<label	class="right-align"
-								style="padding-top: 5px; padding-right: 5px;">{{unit}}</label>
-							</td>
+								class="inputformat" ng-change="calculateTotalAndPeriod()"
+								required /> <label class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">{{unit}}</label></td>
 							<td style="color: red">*</td>
-							<th class="labelformat">总价</th>
-							<td><input type="text" ng-model="total"
-								style="height: 30px; width: 200px;" required /> <label
-								class="right-align"
+							<th class="labelformat">产品总价</th>
+							<td><input class="inputformat" style="float: left;"
+								class="input-block-level" type="text" ng-model="productCharge"
+								readonly /> <label class="right-align"
 								style="padding-top: 5px; padding-right: 5px;">元</label></td>
-							<td style="color: red">*</td>
+							<td></td>
 						</tr>
 						<tr>
+							<th class="labelformat">包装类型</th>
+							<td><div isteven-multi-select
+									input-model="OrderCreate.productPackageTypes"
+									output-model="selectedProductPackageType"
+									button-label="volume unit" item-label="volume unit"
+									tick-property="ticked" orientation="horizontal"
+									selection-mode="single"
+									on-item-click="calculatePackageAmount()"></div></td>
+							<td style="color: red">*</td>
+							<th class="labelformat">包装总数</th>
+							<td><input type="text" ng-model="packageAmount"
+								class="inputformat" readonly /> <label class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">个</label></td>
+							<td></td>
+							<th class="labelformat">包装总价</th>
+							<td><input class="inputformat" style="float: left;"
+								class="input-block-level" type="text" ng-model="packageCharge"
+								readonly /> <label class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">元</label></td>
+							<td></td>
+							<th class="labelformat">个性化标签费用</th>
+							<td><input class="inputformat" style="float: left;"
+								class="input-block-level" type="text"
+								ng-model="labelPackageCharge" readonly /> <label
+								class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">元</label></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th class="labelformat">总价</th>
+							<td><input type="number" step="0.01" ng-model="totalCharge"
+								class="inputformat" required /> <label class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">元</label></td>
+							<td style="color: red">*</td>
+							<th class="labelformat">付款</th>
+							<td><input type="number" step="0.01" ng-model="payment"
+								class="inputformat" /> <label class="right-align"
+								style="padding-top: 5px; padding-right: 5px;">元</label></td>
+							<td></td>
 							<th class="labelformat">预期生产周期</th>
-							<td><input type="text" style="height: 30px; width: 200px;"
+							<td><input type="text" class="inputformat"
 								ng-model="productionPeriod" readonly /> <label
 								class="right-align"
 								style="padding-top: 5px; padding-right: 5px;">天</label></td>
 							<td></td>
-							<th class="labelformat">付款</th>
-							<td><input type="number" ng-model="payment"
-								style="height: 30px; width: 200px;" /> <label
-								class="right-align"
-								style="padding-top: 5px; padding-right: 5px;">元</label></td>
-							<td></td>
 							<th class="labelformat">交付日期</th>
 							<td>
 								<div style="float: left;">
-									<input style="width: 200px; height: 34px;" type="text"
+									<input class="inputformat" type="text"
 										uib-datepicker-popup="{{format}}" ng-model="deliveryDate"
 										is-open="popup1.opened" ng-required="true" close-text="关闭"
 										clear-text="清空" current-text="今天"
@@ -114,7 +144,8 @@
 			<table id="table-style" style="margin: 20px auto">
 				<tbody>
 					<tr>
-						<td><button style="width: 100px" class="btn btn-large btn-primary">
+						<td><button style="width: 100px"
+								class="btn btn-large btn-primary">
 								<span class="glyphicon glyphicon-upload"></span> 提交
 							</button>
 							<button style="width: 100px" class="btn btn-large btn-primary"
