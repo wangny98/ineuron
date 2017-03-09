@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<div ng-controller="ProductPackageTypeListController as ProductPackageTypeList">
+	<div class="right-align">
+		<button class="btn btn-large btn-primary" style="float:right;"
+			ng-click="ProductPackageTypeList.createProductPackageType()">
+			<span class="glyphicon glyphicon-plus"></span> 新增包装类型
+		</button>
+	</div>
+	<table datatable="ng" dt-options="ProductPackageTypeList.dtOptions"
+		dt-column-defs="ProductPackageTypeList.dtColumnDefs" class="row-border hover" id="table-style">
+		<thead>
+			<tr>
+				<th style="width:40px">序号</th>
+				<th>类型</th>
+				<th>容量</th>
+				<th>单位</th>
+				<th>价格</th>
+				<th>成本</th>
+				<th style="width:100px">编辑/删除</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="productPackageType in ProductPackageTypeList.productPackageTypes">
+			   <td style="width:45px; text-align: center;">{{$index+1}}</td>
+			   <td>{{productPackageType.type}}</td>
+			   <td>{{productPackageType.volume}}</td>
+			   <td>{{productPackageType.unit}}</td>
+			   <td>{{productPackageType.price}}</td>
+			   <td>{{productPackageType.cost}}</td>
+				<td>
+					<button type="button"
+						ng-click="ProductPackageTypeList.updateProductPackageType($index)"
+						class="btn btn-warning">
+						<i class="fa fa-edit"></i>
+					</button>
+					<button type="button"
+						ng-click="ProductPackageTypeList.deleteProductPackageType($index)"
+						class="btn btn-danger">
+						<i class="fa fa-times"></i>
+					</button>					
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

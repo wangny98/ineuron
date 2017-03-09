@@ -19,6 +19,10 @@ public class Order {
 	private Integer productionPeriod;
 	private float amount;
 	private float total;
+	private float totalCost;
+	private Integer productPackageTypeId;
+	private Integer packageAmount;
+	private Integer storageContainerAmount;
 	private Integer statusId;
 	private String customizedInfo;
 	private Date orderDate;
@@ -236,6 +240,38 @@ public class Order {
 
 	public void setProductPrice(ProductPrice productPrice) {
 		this.productPrice = productPrice;
+	}
+
+	public float getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(float totalCost) {
+		this.totalCost = totalCost;
+	}
+
+	public Integer getPackageAmount() {
+		return packageAmount;
+	}
+
+	public void setPackageAmount(Integer packageAmount) {
+		this.packageAmount = packageAmount;
+	}
+
+	public Integer getStorageContainerAmount() {
+		return storageContainerAmount;
+	}
+
+	public void setStorageContainerAmount(Integer storageContainerAmount) {
+		this.storageContainerAmount = storageContainerAmount;
+	}
+
+	public Integer getProductPackageTypeId() {
+		return productPackageTypeId;
+	}
+
+	public void setProductPackageTypeId(Integer productPackageTypeId) {
+		this.productPackageTypeId = productPackageTypeId;
 	}
 
 }

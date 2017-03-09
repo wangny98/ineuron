@@ -3,13 +3,6 @@
 <meta charset="UTF-8">
 <div ng-controller="OrderListController as OrderList">
 	<!-- 
-	<div class="right-align">
-		<button class="btn btn-large btn-primary" style="float: right;"
-			ng-click="OrderList.orderCreate()">
-			<span class="glyphicon glyphicon-plus"></span> 新增订单
-		</button>
-	</div>
-	-->
 	<table>
 		<tbody>
 			<tr>
@@ -23,6 +16,7 @@
 				</td>
 		</tbody>
 	</table>
+	 -->
 	<uib-tabset active="active" type="tabs"> <uib-tab
 		index="0" heading="订单列表" style="font-weight:bold;">
 	<table id="table-style">
@@ -30,12 +24,13 @@
 			<tr>
 				<th>No.</th>
 				<th style="width: 20%">订单号</th>
-				<th style="width: 16%;">产品名</th>
-				<th style="width: 16%;">客户</th>
-				<th style="width: 9%;">数量</th>
-				<th style="width: 9%;">金额</th>
-				<th style="width: 10%;">状态</th>
-				<th style="width: 9%;">付款</th>
+				<th style="width: 20%;">产品名</th>
+				<th style="width: 11%;">客户</th>
+				<th style="width: 7%;">数量</th>
+				<th style="width: 7%;">单位</th>
+				<th style="width: 8%;">金额</th>
+				<th style="width: 7%;">状态</th>
+				<th style="width: 8%;">付款</th>
 				<th style="">提交日期</th>
 				<th style="">交付日期</th>
 				<th style="width: 6%;">更新</th>
@@ -49,6 +44,7 @@
 				<td>{{order.product.name}}</td>
 				<td>{{order.customer}}</td>
 				<td>{{order.amount}}</td>
+				<td>{{order.product.productPrice.unit}}</td>
 				<td>{{order.total}}</td>
 				<td>{{order.orderStatus.name}}</td>
 				<td>{{order.payment}}</td>

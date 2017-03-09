@@ -387,15 +387,15 @@ public class OrderService {
 				order.setAmount(amount * 1000);
 				break;
 			}
-
 		}
+		else order.setAmount(0);
 
 		// set the order delivery date from NLP analysis service result
 
+		Calendar cal = Calendar.getInstance();
 		if (parsedResult.getDate() != null) {
 			List<String> nlpDateStr = parsedResult.getDate();
 			int dateNum;
-			Calendar cal = Calendar.getInstance();
 
 			//three cases: 1. tomorrow; 2. the day after tomorrow; 3. format like "一周后"
 			switch (nlpDateStr.get(0)) {
@@ -435,10 +435,10 @@ public class OrderService {
 				}
 				break;
 			}
-
-			System.out.println("nlp date: "+cal.getTime());
+			//System.out.println("nlp date: "+cal.getTime());
 			order.setDeliveryDate(cal.getTime());
 		}
+		else order.setDeliveryDate(cal.getTime());
 
 		for (int i = 0; i < finalProductsResult.size(); i++) {
 			finalProductsResult.get(i).setOrder(order);

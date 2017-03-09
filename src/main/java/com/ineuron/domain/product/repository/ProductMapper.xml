@@ -233,12 +233,27 @@
 	</select>
 
 	<insert id="addProductPrice">
-		insert into ProductPrices (productId,price,unit) values(#{productId},#{price},#{unit})
+		insert into ProductPrices (productId,price,cost,unit) values(#{productId},#{price},#{cost},#{unit})
 	</insert>
 
 	<update id="updateProductPrice">
-		update ProductPrices set price = #{price}, unit = #{unit} where productId = #{productId}
+		update ProductPrices set price = #{price}, cost = #{cost}, unit = #{unit} where productId = #{productId}
 	</update>
+	
+	<!-- ProductPackageTypes -->
+
+	<select id="getProductPackageTypes" resultType="com.ineuron.domain.product.valueobject.ProductPackageType">
+		select * from ProductPackageTypes where volume>0 
+	</select>
+	
+	<insert id="addProductPackageType">
+		insert into ProductPackageTypes (price,cost,volume,unit,type) values(#{price},#{cost},#{volume},#{unit},#{type})
+	</insert>
+
+	<update id="updateProductPackageType">
+		update ProductPackageTypes set price = #{price}, cost = #{cost}, volume = #{volume}, unit = #{unit}, type = #{type} where id = #{id}
+	</update>
+	
 
 	
 	

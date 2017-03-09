@@ -16,6 +16,7 @@ public class ChineseNumberConverter {
 			put("一", 1L);
 			put("壹", 1L);
 			put("二", 2L);
+			put("两", 2L);
 			put("贰", 2L);
 			put("三", 3L);
 			put("叁", 3L);

@@ -17,6 +17,7 @@ import com.ineuron.domain.product.valueobject.AttributeCategory;
 import com.ineuron.domain.product.valueobject.FormulaMaterial;
 import com.ineuron.domain.product.valueobject.Attribute;
 import com.ineuron.domain.product.valueobject.ProductCategory;
+import com.ineuron.domain.product.valueobject.ProductPackageType;
 import com.ineuron.domain.product.repository.ProductRepository;
 import com.ineuron.domain.product.valueobject.ManufacturingProcess;
 import com.ineuron.domain.product.valueobject.Material;
@@ -318,5 +319,23 @@ public class ProductService {
 		}
 
 	
+	// Product Package
+	
+		//get all the product package types without surface personalized info
+		public List<ProductPackageType> getProductPackageTypes() throws RepositoryException {
+			List<ProductPackageType> productPackageTypes = repository.select("getProductPackageTypes", null);
+			return productPackageTypes;
+		}
+		
+		public void createProductPackageType(ProductPackageType productPackageType)
+				throws RepositoryException {
+			repository.add("addProductPackageType", productPackageType);
+			//return productPackageType;
+		}
+
+		public void updateProductPackageType(ProductPackageType productPackageType) throws RepositoryException {
+			repository.update("updateProductPackageType", productPackageType);
+			
+		}
 
 }

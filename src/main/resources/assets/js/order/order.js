@@ -74,7 +74,10 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
 			vm.allProducts = data.value;
-			// alert(vm.products[0].productPrice.price);
+			for (var i in vm.allProducts){
+				// alert(vm.allProducts[i].order);
+				// vm.allProducts[i].order.deliveryDate=new Date();
+			}
 		}).error(function(data, status) {
 			handleError(status, $rootScope, $uibModal);
 			console.log("error in get all products");
@@ -109,24 +112,18 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	
 	
 	/*
-	 * $http({ url : '/order/list', method : 'GET' }).success(function(data) {
-	 * updateApiToken(data, $cookies); vm.orders = data.value;
-	 * }).error(function(data, status) { handleError(status, $rootScope,
-	 * $uibModal); console.log("order list error"); });
-	 */
+	 * vm.orderingOptions = [ { name:"orderDate", label: "下单时间", ticked: true }, {
+	 * name:"deliveryDate", label: "交付时间", ticked: false }, { name:"total",
+	 * label: "订单金额", ticked: false }, { name:"amount", label: "数量", ticked:
+	 * false } ];
+	 */	
+	var selectedOrderingOption="orderDate";
 	
-	vm.orderingOptions = [
-	                         { name:"orderDate", label: "下单时间",    ticked: true  },
-	                         { name:"deliveryDate", label: "交付时间",    ticked: false  },
-	                         { name:"total", label: "订单金额",    ticked: false  },
-	                         { name:"amount", label: "数量",    ticked: false  }	                        
-	                     ];	
-	var selectedOrderingOption;
-	
-	//init the ordering option
-    for (o in vm.orderingOptions){
-    	if(vm.orderingOptions[o].ticked==true) selectedOrderingOption=vm.orderingOptions[o].name;
-    }	
+	// init the ordering option
+   /*
+	 * for (o in vm.orderingOptions){ if(vm.orderingOptions[o].ticked==true)
+	 * selectedOrderingOption=vm.orderingOptions[o].name; }
+	 */	
     
 	// init for list paging
 	$scope.paginationConf = {
@@ -177,7 +174,7 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
     $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', retreiveOrdersForPagingButton);
 
     
-    //refresh order list after select ordering option
+    // refresh order list after select ordering option
     $scope.refreshOrdersByOrderingOptionChange = function(){
     	$scope.paginationConf.currentPage=1;
     	selectedOrderingOption=$scope.outputOrderingOption[0].name;
@@ -203,39 +200,23 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
     /*
 	 * for order list filtering
 	 */    
-    /*$http({
-    		url : '/product/productlist',
-    		method : 'GET'
-    	}).success(function(data) {
-    		updateApiToken(data, $cookies);
-    		vm.products = data.value;
-    	}).error(function(data, status) {
-    		handleError(status, $rootScope, $uibModal);
-    		console.log("product list error");
-    	});	
-    
-    // refresh order list after selecting filters
-    $scope.refreshOrdersAfterFiltering=function(){
-    	var productIdList=new Array();
-    	var i=0;
-    	for(var p in $scope.selectedProducts){
-    		productIdList[i]=$scope.selectedProducts[p].id;
-    		//alert("$scope.selectedProducts[p].id; "+p.id+" productIdList[i]: "+productIdList[i]);
-    		i++;
-    	}
-    	//alert("productIdList "+productIdList);
-    	$http({
-			url : '/order/listbyproducts',
-			method : 'GET'
-		}).success(function(data) {
-			updateApiToken(data, $cookies)
-			vm.orders = data.value;
-			// alert("orders: "+vm.orders[0].orderNumber);
-		}).error(function(data, status) {
-			handleError(status, $rootScope, $uibModal);
-			console.log("order list error");
-		});	  
-    }*/
+    /*
+	 * $http({ url : '/product/productlist', method : 'GET'
+	 * }).success(function(data) { updateApiToken(data, $cookies); vm.products =
+	 * data.value; }).error(function(data, status) { handleError(status,
+	 * $rootScope, $uibModal); console.log("product list error"); });
+	 *  // refresh order list after selecting filters
+	 * $scope.refreshOrdersAfterFiltering=function(){ var productIdList=new
+	 * Array(); var i=0; for(var p in $scope.selectedProducts){
+	 * productIdList[i]=$scope.selectedProducts[p].id;
+	 * //alert("$scope.selectedProducts[p].id; "+p.id+" productIdList[i]:
+	 * "+productIdList[i]); i++; } //alert("productIdList "+productIdList);
+	 * $http({ url : '/order/listbyproducts', method : 'GET'
+	 * }).success(function(data) { updateApiToken(data, $cookies) vm.orders =
+	 * data.value; // alert("orders: "+vm.orders[0].orderNumber);
+	 * }).error(function(data, status) { handleError(status, $rootScope,
+	 * $uibModal); console.log("order list error"); }); }
+	 */
     
     
 	vm.updateOrder=updateOrder;
@@ -350,7 +331,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	var product = eval('(' + $stateParams.productStr + ')');
 	$scope.userName=$cookies.get('INeuron-UserName');
     $scope.productName=product.name;
-    $scope.amount=product.order.amount;
+    
     if(product.productPrice==null){
     	ineuronApp.confirm("提示","产品还未定价，请先给此产品设定价格！", 'sm', $rootScope, $uibModal);		
 		$state.go("updateProductPrice",{productStr: $stateParams.productStr});
@@ -359,7 +340,29 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
     	$scope.price=product.productPrice.price;
     	$scope.unit=product.productPrice.unit;
     }
+    
+    if(product.order!=null){
+        $scope.amount=product.order.amount;	
+        $scope.total=$scope.amount*$scope.price;
+    }
    
+    // get product package type list
+    $http({
+		url : '/product/productpackagetypelist',
+		method : 'GET'
+	}).success(function(data) {
+		updateApiToken(data, $cookies);
+		vm.productPackageTypes = data.value;
+		vm.productPackageTypes[0].ticked=true;
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $uibModal);
+		console.log("get product package type list error");
+	});	
+    
+    $scope.calculatePackageAmount=function(){
+    	$scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
+    }
+    
     // get product's ProductionPeriod
     $http({
 		url : '/production/periodsbyproductid?productId='+product.id,
@@ -372,7 +375,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		console.log("get product's production periods error");
 	});	
     
-    if(product.order.deliveryDate!=null)
+    if(product.order!=null)
     	$scope.deliveryDate=product.order.deliveryDate;
     else $scope.deliveryDate = new Date();
 	$scope.format = "yyyy/MM/dd";
@@ -393,6 +396,9 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		// calculate the total price
 	    $scope.total=$scope.amount*$scope.price;
 	    
+	    // calculate the package amount
+	    $scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
+	    
 	    // get production period
 	    for (var i in vm.productPeriods){
 			if(($scope.amount>=vm.productPeriods[i].productionMinVolume)&&($scope.amount<=vm.productPeriods[i].productionMaxVolume)) {
@@ -402,12 +408,15 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			}
 		}   
 	}
+	
+	
 
     vm.createOrder = createOrder;
     function createOrder(file) {
       // generate pic file name
+      var now=new Date();	
       var userId=$cookies.get('INeuron-UserId');
-      var picFileName = userId + "-" + $scope.deliveryDate.getTime();
+      var picFileName = userId + "-" + now.getTime();
       var tempFilename=file.name;
       var tempFilenameSections=tempFilename.split('.');
       var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
@@ -421,6 +430,8 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			customer: $scope.customerName,
 			amount: $scope.amount,
 			total: $scope.total,
+			packageAmount:$scope.packageAmount,
+			productPackageTypeId:$scope.selectedProductPackageType[0].id,
 			productionPeriod:$scope.productionPeriod,
 			payment:$scope.payment,
 			deliveryDate: $scope.deliveryDate,
@@ -480,7 +491,33 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	$scope.customizedInfo=order.customizedInfo;
 	$scope.price=order.product.productPrice.price;
 	$scope.unit=order.product.productPrice.unit;
+	$scope.packageAmount=order.packageAmount;
 	
+	// get product package type list
+    $http({
+		url : '/product/productpackagetypelist',
+		method : 'GET'
+	}).success(function(data) {
+		updateApiToken(data, $cookies);
+		vm.productPackageTypes = data.value;
+		
+		// set the init order package type
+		for(var i in vm.productPackageTypes){
+			if(vm.productPackageType[i].id==order.productPackageTypeId){
+				$scope.selectedProductPackageType[i].ticked=true;
+				break;
+			}
+		}
+	}).error(function(data, status) {
+		handleError(status, $rootScope, $uibModal);
+		console.log("get product package type list error");
+	});	
+	
+    
+    $scope.calculatePackageAmount=function(){
+    	$scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
+    }
+    
 	$scope.deliveryDate=order.deliveryDate;
 	$scope.format = "yyyy/MM/dd";
 	$scope.altInputFormats = ['yyyy/M!/d!'];
@@ -519,17 +556,26 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	
 	$scope.calculateTotal=function(){ 
 	    $scope.total=$scope.amount*$scope.price;
+	    $scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
 	}
 	
 	vm.updateOrder = updateOrder;
 	function updateOrder(file) {
 		// generate pic file name
 	      var userId=$cookies.get('INeuron-UserId');
-	      var currentTime=new Date();
-	      var picFileName = userId + "-" + currentTime.getTime();
-	      var tempFilename=file.name;
-	      var tempFilenameSections=tempFilename.split('.');
-	      var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
+	      var newPicFile;
+	      
+	      if(file==null){
+	    	  newPicFile=order.picFile;
+	      }
+	      else{
+	    	  var currentTime=new Date();
+	    	  var picFileName = userId + "-" + currentTime.getTime();
+	    	  var tempFilename=file.name;
+	    	  var tempFilenameSections=tempFilename.split('.');
+	    	  var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
+	    	  newPicFile=picFileName+"."+picSuffix;
+	      }
 	      
 		$http({
 			url : '/order/update',
@@ -539,32 +585,36 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 				customer: $scope.customer,
 				amount: $scope.amount,
 				total: $scope.total,
-				payment:$scope.payment,
+				packageAmount:$scope.packageAmount,
+				productPackageTypeId:$scope.selectedProductPackageType[0].id,
+				payment:$scope.payment,				
 				statusId: $scope.selectedOrderStatus[0].id,
 				deliveryDate: $scope.deliveryDate,
 				customizedInfo: $scope.customizedInfo,
-				picFile: picFileName+"."+picSuffix
+				picFile: newPicFile
 			}
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
 			
 			// upload pic to the file server
-		  	file.upload = Upload.upload({
-		  		url: '/file/upload',
-		  		data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
-		  	});
-			file.upload.then(function (response) {
-				$timeout(function () {
-					file.result = response.data;
+			if(file!=null){
+				file.upload = Upload.upload({
+					url: '/file/upload',
+					data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
 				});
-			}, function (response) {
-				if (response.status > 0)
-					// $scope.errorMsg = response.status + ': ' + response.data;
-					ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
-			}, function (evt) {
-				// Math.min is to fix IE which reports 200% sometimes
-				file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-			});
+				file.upload.then(function (response) {
+					$timeout(function () {
+						file.result = response.data;
+					});
+				}, function (response) {
+					if (response.status > 0)
+						// $scope.errorMsg = response.status + ': ' + response.data;
+						ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
+				}, function (evt) {
+					// Math.min is to fix IE which reports 200% sometimes
+					file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+				});
+			}
 			
 			ineuronApp.confirm("提示","修改成功！", 'sm', $rootScope, $uibModal);		
 			$state.go("orderList");
