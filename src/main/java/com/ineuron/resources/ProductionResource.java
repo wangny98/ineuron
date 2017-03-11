@@ -6,6 +6,7 @@ import com.ineuron.api.INeuronResponse;
 import com.ineuron.common.exception.InvalidAPITokenException;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.domain.production.entity.Production;
+import com.ineuron.domain.production.valueobject.ProductionCapacity;
 import com.ineuron.domain.production.valueobject.ProductionPeriod;
 import com.ineuron.domain.production.service.ProductionService;
 import com.ineuron.domain.user.service.SecurityService;
@@ -25,6 +26,7 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.List;
 
 @Path("/production")
@@ -146,4 +148,24 @@ public class ProductionResource {
 		}
 	}*/
 
+	@Path("/productioncapacitybydate")
+	@POST
+	@Timed
+	public Response createProduction(final Date date, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService,
+					httpHeader, false);
+			ProductionCapacity pCapacity=productionService.getProductionCapacityByDate(date);
+			response.setValue(pCapacity);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+
+	}
+	
 }

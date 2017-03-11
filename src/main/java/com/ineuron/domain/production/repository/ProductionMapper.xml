@@ -36,5 +36,17 @@
 	</delete>
 
 	
+	<!-- Production Capacity -->
+	
+	<select id="getProductionCapacityByDate" resultType="com.ineuron.domain.production.valueobject.ProductionCapacity">
+		select * from ProductionCapacity where date=#{date}  
+	</select>
+	
+	<select id="getProductionCapacityByPeriod" resultType="com.ineuron.domain.production.valueobject.ProductionCapacity">
+		select * from ProductionCapacity where date>=#{today} and data<={expectedDate}  
+	</select>
 		
+	<update id="updateProductionCapacityByDate">
+		update ProductionCapacity set where date=#{date} and deviceId={#deviceId}
+	</update>
 </mapper>
