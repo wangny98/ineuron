@@ -1,5 +1,6 @@
 <meta charset="utf-8">
-<head></head>
+<!DOCTYPE html>
+<script src="/ineuron/js/util/speech.js"></script>
 <div ng-controller="SearchForOrderController as SearchForOrder">
 	<!-- <div class="message">下订单</div> -->
 	<uib-tabset active="active" type="tabs"> 
@@ -9,9 +10,12 @@
 			<table id="table-style" style="float: left; margin-top:20px;">
 				<tbody>
 					<tr>
-						<td><input class="input-block-level" type="text"
+						<td><input id="nlp_text" class="input-block-level" type="text"
 							ng-model="searchObj.productSearchText" required ng-required="true"
-							ng-minlength="1" style="min-width: 500px;" /></td>
+							ng-minlength="1" style="min-width: 500px;" />
+      
+						</td>
+						<td><button id="startBtn" >开始语音输入</button> </td>
 						<td>
 							<button id="submitbutton" class="btn btn-large btn-primary">
 								<span class="glyphicon glyphicon-search"></span> 查询产品
