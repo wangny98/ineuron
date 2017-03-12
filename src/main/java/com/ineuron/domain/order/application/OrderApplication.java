@@ -12,14 +12,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.ineuron.api.NLPSearchResponse;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.common.util.ChineseNumberConverter;
 import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.dataaccess.db.DataTablePageParameters;
 import com.ineuron.dataaccess.db.ReportData;
-import com.ineuron.domain.nlp.service.NLPService;
-import com.ineuron.domain.nlp.valueobject.ProductSelection;
 import com.ineuron.domain.order.entity.Order;
 import com.ineuron.domain.order.valueobject.OrderReportGroupByProduct;
 import com.ineuron.domain.order.valueobject.OrderResponse;
