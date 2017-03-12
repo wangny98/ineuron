@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.common.util.ChineseNumberConverter;
+import com.ineuron.common.util.DateTraverse;
 import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.dataaccess.db.DataTablePageParameters;
 import com.ineuron.dataaccess.db.ReportData;
@@ -76,7 +77,43 @@ public class OrderService {
 		// valid order is 1; deleted order is -1;
 		order.setValidFlag(1);
 		
-		
+		//update Production Capacity for the specific day with the new order 
+		//1. search all the dates before expected date (expected date- amount*package period per unit)
+		//1.1 search all the devices for that specific product; 
+		//1.2 check if there is available period (device's consumedperiod<24hour);
+		//1.3 if yes, then check productionTaskList, if there is the same productId task, 
+		//      if yes, then add the volume to that task, and update the production period(check productionperiod table)
+		//      if no, then add a new task with this productId to the list
+		//1.4 if no available period, return result that "cannot deliver within the expected period
+
+
+		ProductionCapacity productionCapacity;
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTime(order.getDeliveryDate());
+
+		List<Date> dates = new ArrayList<Date>();
+		dates.add(today);
+
+		//get package period
+		String unit="升";
+		PackagePeriod packagePeriod=productionService.getPackagePeriodByUnit(unit);
+		Double pDays=Math.ceil(packagePeriod.getPeriod()*order.getAmount()/(3600*24));
+		int packageDays=pDays.intValue();
+
+		cal2.add(Calendar.DATE,(0-packageDays));
+		Date endDate = cal2.getTime(); 
+		dates.add(endDate);
+		List<ProductionCapacity> productionCapacities=productionService.getProductionCapacityByPeriod(dates);
+
+		List<Date> listDate = DateTraverse.getDates(today, endDate);
+        if (!listDate.isEmpty()) {
+            for (Date date : listDate) {
+            	for(ProductionCapacity p:productionCapacities){
+            		//if find one in p, then check the consumedperiod
+            	}
+                //if not find a date, add a new date to production capacity
+            }
+        }
 
 		order.addOrder(repository);
 		return order;
