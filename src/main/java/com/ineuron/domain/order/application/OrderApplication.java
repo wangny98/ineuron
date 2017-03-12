@@ -33,9 +33,6 @@ public class OrderApplication {
 	@Inject
 	INeuronRepository repository;
 
-	@Inject
-	@Named("nlpEnabled")
-	String nlpEnabled;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(OrderApplication.class);
