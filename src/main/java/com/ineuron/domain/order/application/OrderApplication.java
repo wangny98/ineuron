@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.ineuron.api.NLPSearchResponse;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.common.util.ChineseNumberConverter;
 import com.ineuron.dataaccess.db.INeuronRepository;

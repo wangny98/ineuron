@@ -33,9 +33,6 @@ public class ProductService {
 	@Inject
 	ProductRepository productRepository;
 
-	@Inject
-	@Named("nlpEnabled")
-	String nlpEnabled;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ProductService.class);
