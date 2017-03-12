@@ -43,7 +43,7 @@
 	</select>
 	
 	<select id="getProductionCapacityByPeriod" resultType="com.ineuron.domain.production.valueobject.ProductionCapacity">
-		select * from ProductionCapacity where date>=#{today} and data<={expectedDate}  
+		select * from ProductionCapacity where date between #{today} and #{expectedDate}  
 	</select>
 		
 	<update id="updateProductionCapacityByDate">
