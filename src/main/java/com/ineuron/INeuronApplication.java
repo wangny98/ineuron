@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import com.ineuron.common.exception.RepositoryException;
-import com.ineuron.domain.nlp.service.NLPService;
 import com.ineuron.domain.user.util.DesUtil;
 import com.ineuron.domain.user.valueobject.RolesCache;
 
@@ -56,13 +55,8 @@ public class INeuronApplication extends Application<INeuronConfiguration> {
 			LOGGER.info("RolesCache is initiallized...");
 			
 			DesUtil.encrypt("init............");
+			LOGGER.info("DesUtil is initiallized...");
 			
-			String nlpEnabled = configuration.getNlpEnabled();
-			System.out.println("nlpEnabled=" + nlpEnabled);
-			if("yes".equalsIgnoreCase(nlpEnabled)
-					|| "true".equalsIgnoreCase(nlpEnabled)){
-				NLPService.getInstance();
-			}
 			
 		} catch (RepositoryException e) {
 			LOGGER.error("Failed to initiallize the RolesCache", e);
