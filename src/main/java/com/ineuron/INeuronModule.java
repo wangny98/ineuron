@@ -23,11 +23,4 @@ public class INeuronModule extends AbstractModule {
 
 	}
 	
-
-	@Provides
-	@Named("nlpEnabled")
-	public String provideNlpEnabled(INeuronConfiguration configuration) {
-		return configuration.getNlpEnabled();
-
-	}
 }

@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.ineuron.api.NLPSearchResponse;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.common.util.ChineseNumberConverter;
 import com.ineuron.dataaccess.db.INeuronRepository;
@@ -37,10 +36,6 @@ public class OrderService {
 	
 	@Inject
 	ProductionService productionService;
-
-	@Inject
-	@Named("nlpEnabled")
-	String nlpEnabled;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(OrderService.class);
@@ -208,11 +203,8 @@ public class OrderService {
 		// NLPSearchResponse nlpSearchResponse=new NLPSearchResponse();
 
 		ProductSelection parsedResult = new ProductSelection();
-		System.out.println("nlpEnabled in Service=" + nlpEnabled);
-		if ("yes".equalsIgnoreCase(nlpEnabled)
-				|| "true".equalsIgnoreCase(nlpEnabled)) {
-			parsedResult = NLPService.getInstance().parseText(words);
-		}
+		
+		parsedResult = NLPService.getInstance().parseText(words);
 
 		// Get all the nlp'ed attribute words
 		List<String> attributeWords = new ArrayList<String>();
