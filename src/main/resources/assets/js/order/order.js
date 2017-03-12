@@ -1,14 +1,68 @@
 ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal', 'DTOptionsBuilder', 'DTColumnDefBuilder',
    function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, DTOptionsBuilder, DTColumnDefBuilder) {
 
-	var vm = this;
-	// $scope.searchSubmitted=false;
-	// $scope.notFoundProducts=false;
-	// $scope.isCollapsed = true;
+		var vm = this;
+		$scope.searchObj = {
+				productSearchText:''
+		};
+		
+		//----start------speech web api-----------------------
+		var final_transcript = "";
+		
+		vm.rec = new webkitSpeechRecognition();
+		vm.interim = [];
+		vm.final = '';
+		var self = this;
+	
+		vm.rec.continuous = true;
+		vm.rec.lang = 'zh-CN';
+		vm.rec.interimResults = true;
+			
+		vm.rec.onerror = function(event) {
+			console.log('error');
+			console.log(event);
+			self.rec.stop();
+		};
+		  
+		vm.rec.onend = function() {
+				console.log('stopped!');
+		};
+			
+		vm.start = function() {
+			var button = document.getElementById('startBtn');
+			final_transcript = "";
+			if(button.innerHTML == '结束'){
+				self.rec.stop();
+				button.innerHTML = '录音';
+			}else{
+				self.rec.start();
+			}
+				
+		};
 
-	$scope.searchObj = {
-			productSearchText:''
-	};
+		vm.rec.onresult = function(event) { 
+			var interim_transcript = '';
+	
+			for (var i = event.resultIndex; i < event.results.length; ++i) {
+				if (event.results[i].isFinal) {
+					final_transcript += event.results[i][0].transcript;
+	
+				} else {
+					interim_transcript += event.results[i][0].transcript;
+				}
+	
+			}
+			console.log(final_transcript);
+	
+			$scope.searchObj.productSearchText = final_transcript;
+			$scope.$apply();
+			var button = document.getElementById('startBtn');
+			button.innerHTML = '结束';
+		};
+	  
+	
+	//----end------speech web api-----------------------
+	
 	
 	if ($.fn.dataTable.isDataTable('ng') ) {
 	    table = $('ng').DataTable();
@@ -360,7 +414,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		console.log("get product package type list error");
 	});	
     
-    // get label product package type 
+    // get label product package type
     $http({
 		url : '/product/labelproductpackagetype',
 		method : 'GET'
@@ -419,8 +473,9 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	    				   vm.labelProductPackageType.price).toFixed(2);	
 	    $scope.totalCharge=parseFloat(total);
 	    
-	    //calculate estimatedDeliveryPeriod
-	    //call the Production service to search available production capacity from today with order required amount
+	    // calculate estimatedDeliveryPeriod
+	    // call the Production service to search available production capacity
+		// from today with order required amount
 	    
 	    for (var i in vm.productPeriods){
 			if(($scope.amount>=vm.productPeriods[i].productionMinVolume)&&($scope.amount<=vm.productPeriods[i].productionMaxVolume)) {
@@ -549,7 +604,7 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 		console.log("get product package type list error");
 	});	
 	
-    // get label product package type 
+    // get label product package type
     $http({
 		url : '/product/labelproductpackagetype',
 		method : 'GET'

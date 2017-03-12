@@ -1,21 +1,24 @@
 <meta charset="utf-8">
 <!DOCTYPE html>
-<script src="/ineuron/js/util/speech.js"></script>
 <div ng-controller="SearchForOrderController as SearchForOrder">
 	<!-- <div class="message">下订单</div> -->
 	<uib-tabset active="active" type="tabs"> 
 	<uib-tab index="0" heading="查询下单" style="font-weight:bold;">
 	<div>
-		<form ng-submit="searchProducts()">
+	    <table>
+	    <tbody>
+	    <tr>
+	    <td>
+	    <form id="search_form" ng-submit="searchProducts()">
 			<table id="table-style" style="float: left; margin-top:20px;">
 				<tbody>
 					<tr>
 						<td><input id="nlp_text" class="input-block-level" type="text"
-							ng-model="searchObj.productSearchText" required ng-required="true"
+							ng-model="searchObj.productSearchText" 
 							ng-minlength="1" style="min-width: 500px;" />
       
 						</td>
-						<td><button id="startBtn" >开始语音输入</button> </td>
+						
 						<td>
 							<button id="submitbutton" class="btn btn-large btn-primary">
 								<span class="glyphicon glyphicon-search"></span> 查询产品
@@ -25,6 +28,14 @@
 				</tbody>
 			</table>
 		</form>
+	    </td>
+	    <td>
+	    <button id="startBtn" ng-click="SearchForOrder.start()">录音</button>
+	    </td>
+	    </tr>
+	    </tbody>
+	    </table>
+		
 		<table datatable="ng" dt-options="SearchForOrder.dtOptions"
 			dt-column-defs="SearchForOrder.dtColumnDefs" class="row-border hover"
 			id="table-style" style="width: 100%; float: left;">
