@@ -28,13 +28,15 @@ import com.ineuron.domain.product.entity.Product;
 import com.ineuron.domain.product.valueobject.Attribute;
 import com.ineuron.domain.product.valueobject.ProductCategory;
 import com.ineuron.domain.product.valueobject.ProductPackageType;
-import com.ineuron.domain.nlp.service.NLPService;
-import com.ineuron.domain.nlp.valueobject.ProductSelection;
-
+import com.ineuron.domain.production.service.ProductionService;
+import com.ineuron.domain.production.valueobject.ProductionCapacity;
 public class OrderService {
 
 	@Inject
 	INeuronRepository repository;
+	
+	@Inject
+	ProductionService productionService;
 
 	@Inject
 	@Named("nlpEnabled")
@@ -77,6 +79,19 @@ public class OrderService {
 
 		// valid order is 1; deleted order is -1;
 		order.setValidFlag(1);
+		
+		//update Production Capacity for the specific day with the new order 
+		
+		ProductionCapacity productionCapacity;
+		Calendar cal2 = Calendar.getInstance();
+		
+		List<Date> dates = new ArrayList<Date>();
+		dates.add(today);
+		cal2.add(Calendar.DATE, -1);
+		Date endDate = cal2.getTime(); 
+		dates.add(endDate);
+		List<ProductionCapacity> productionCapacities=productionService.getProductionCapacityByPeriod(dates);
+		
 
 		order.addOrder(repository);
 		return order;

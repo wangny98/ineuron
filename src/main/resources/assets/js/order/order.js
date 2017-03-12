@@ -419,7 +419,9 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	    				   vm.labelProductPackageType.price).toFixed(2);	
 	    $scope.totalCharge=parseFloat(total);
 	    
-	    // get production period
+	    //calculate estimatedDeliveryPeriod
+	    //call the Production service to search available production capacity from today with order required amount
+	    
 	    for (var i in vm.productPeriods){
 			if(($scope.amount>=vm.productPeriods[i].productionMinVolume)&&($scope.amount<=vm.productPeriods[i].productionMaxVolume)) {
 				// return value by unit as "day"
@@ -461,7 +463,7 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 			totalCharge: $scope.totalCharge,
 			packageAmount:$scope.packageAmount,
 			productPackageTypeId:$scope.selectedProductPackageType[0].id,
-			productionPeriod:$scope.productionPeriod,
+			estimatedDeliveryPeriod:$scope.productionPeriod,
 			payment:$scope.payment,
 			deliveryDate: $scope.deliveryDate,
 			customizedInfo: $scope.customizedInfo,
