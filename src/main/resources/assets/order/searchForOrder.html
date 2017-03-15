@@ -2,40 +2,42 @@
 <!DOCTYPE html>
 <div ng-controller="SearchForOrderController as SearchForOrder">
 	<!-- <div class="message">下订单</div> -->
-	<uib-tabset active="active" type="tabs"> 
-	<uib-tab index="0" heading="查询下单" style="font-weight:bold;">
+	<uib-tabset active="active" type="tabs"> <uib-tab
+		index="0" heading="查询下单" style="font-weight:bold;">
 	<div>
-	    <table>
-	    <tbody>
-	    <tr>
-	    <td>
-	    <form id="search_form" ng-submit="searchProducts()">
-			<table id="table-style" style="float: left; margin-top:20px;">
-				<tbody>
-					<tr>
-						<td><input id="nlp_text" class="input-block-level" type="text"
-							ng-model="searchObj.productSearchText" 
-							ng-minlength="1" style="min-width: 500px;" />
-      
-						</td>
-						
-						<td>
-							<button id="submitbutton" class="btn btn-large btn-primary">
-								<span class="glyphicon glyphicon-search"></span> 查询产品
-							</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
-	    </td>
-	    <td>
-	    <button id="startBtn" ng-click="SearchForOrder.start()">录音</button>
-	    </td>
-	    </tr>
-	    </tbody>
-	    </table>
-		
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<form id="search_form"  ng-submit="searchProducts()">
+							<table id="table-style" style="float: left; margin-top: 20px;">
+								<tbody>
+									<tr>
+										<td><input id="nlp_text" class="input-block-level"
+											type="text" ng-model="searchObj.productSearchText"
+											ng-minlength="1" style="min-width: 500px;" /></td>
+										<!-- <td>
+											<button id="startBtn"
+												style="border: none; background: #d7efeb"
+												"ng-click="SearchForOrder.start()">
+												语音
+											</button>
+										</td> -->
+										<td>
+											<button id="submitbutton"
+												class="btn btn-large btn-primary">
+												<span class="glyphicon glyphicon-search"></span> 查询产品
+											</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
 		<table datatable="ng" dt-options="SearchForOrder.dtOptions"
 			dt-column-defs="SearchForOrder.dtColumnDefs" class="row-border hover"
 			id="table-style" style="width: 100%; float: left;">
@@ -75,8 +77,8 @@
 			</tbody>
 		</table>
 	</div>
-	</uib-tab> 
-	<uib-tab index="1" heading="全部产品" style="font-weight:bold;" select="showAllProducts()">
+	</uib-tab> <uib-tab index="1" heading="全部产品" style="font-weight:bold;"
+		select="showAllProducts()">
 	<div>
 		<table datatable="ng" dt-options="SearchForOrder.dtOptions"
 			dt-column-defs="SearchForOrder.dtColumnDefs" class="row-border hover"
@@ -117,6 +119,5 @@
 			</tbody>
 		</table>
 	</div>
-	</uib-tab>
-	</uib-tabset>
+	</uib-tab> </uib-tabset>
 </div>

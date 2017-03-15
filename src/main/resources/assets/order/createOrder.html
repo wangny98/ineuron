@@ -2,7 +2,7 @@
 <head></head>
 <div ng-controller="OrderCreateController as OrderCreate">
 	<div class="message">新订单</div>
-	<div>
+	<div ng-init="calculateTotalAndPeriod()">
 		<form ng-submit="OrderCreate.createOrder(picFile)">
 			<fieldset class="customized-fieldset"
 				style="margin-top: 30px; width: 1050px;">
@@ -111,11 +111,9 @@
 								class="inputformat" /> <label class="right-align"
 								style="padding-top: 5px; padding-right: 5px;">元</label></td>
 							<td></td>
-							<th class="labelformat">预期生产周期</th>
+							<th class="labelformat">预估生产周期</th>
 							<td><input type="text" class="inputformat"
-								ng-model="productionPeriod" readonly /> <label
-								class="right-align"
-								style="padding-top: 5px; padding-right: 5px;">天</label></td>
+								ng-model="estimatedDeliveryDateStr" readonly /> </td>
 							<td></td>
 							<th class="labelformat">交付日期</th>
 							<td>

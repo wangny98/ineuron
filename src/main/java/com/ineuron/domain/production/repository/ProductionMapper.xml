@@ -43,9 +43,19 @@
 	</select>
 	
 	<select id="getProductionCapacityByPeriod" resultType="com.ineuron.domain.production.valueobject.ProductionCapacity">
-		select * from ProductionCapacity where date between #{today} and #{endDate}  
+		select * from ProductionCapacity where date between GETDATE() and #{endDate}  
 	</select>
 		
+	<insert id="addProductionCapacity">
+		insert into ProductionCapacity (deviceId,date,consumedPeriod,productionTaskList)
+		values(#{deviceId},#{date},#{consumedPeriod},#{productionTaskList})
+	</insert>
+	
+	<update id="updateProductionCapacity">
+		update ProductionCapacity set deviceId=#{deviceId}, date=#{date}, 
+		consumedPeriod=#{consumedPeriod}, productionTaskList=#{productionTaskList} where id=#{id}
+	</update>
+	
 	<update id="updateProductionCapacityByDate">
 		update ProductionCapacity set where date=#{date} and deviceId={#deviceId}
 	</update>
@@ -53,7 +63,7 @@
 	
 	<!-- Package Period -->
 	<select id="getPackagePeriodByUnit" resultType="com.ineuron.domain.production.valueobject.PackagePeriod">
-		select * from PackagePeriod where unit=#{unit}
+		select * from PackagePeriods where unit=#{unit}
 	</select>
 	
 </mapper>

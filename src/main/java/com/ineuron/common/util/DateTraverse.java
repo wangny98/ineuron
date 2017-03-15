@@ -17,10 +17,10 @@ public class DateTraverse {
 	    Long step = spi / (24 * 60 * 60 * 1000);// 相隔天数
 
 	    List<Date> dateList = new ArrayList<Date>();
-	    dateList.add(endDate);
+	    dateList.add(startDate);
 	    for (int i = 1; i <= step; i++) {
 	        dateList.add(new Date(dateList.get(i - 1).getTime()
-	                - (24 * 60 * 60 * 1000)));// 比上一天减一
+	                + (24 * 60 * 60 * 1000)));// 比上一天加一
 	    }
 	    return dateList;
 	}
