@@ -9,11 +9,11 @@
 
 	<insert id="addOrder">
 		insert into Orders
-		(serialNumber,orderNumber,productId,userId,estimatedDeliveryPeriod,amount,productCharge,productCost,
+		(serialNumber,orderNumber,productId,userId,estimatedDeliveryDate,amount,productCharge,productCost,
 		 packageCharge,packageCost,labelPackageCharge,labelPackageCost,totalCharge,
 		 productPackageTypeId,packageAmount,statusId,customizedInfo,
 	     orderDate,orderDateTime,deliveryDate,customer,payment,picFile,validFlag)
-		values(#{serialNumber},#{orderNumber},#{productId},#{userId},#{estimatedDeliveryPeriod},#{amount},
+		values(#{serialNumber},#{orderNumber},#{productId},#{userId},#{estimatedDeliveryDate},#{amount},
 		#{productCharge},#{productCost},#{packageCharge},#{packageCost},#{labelPackageCharge},
 		#{labelPackageCost},#{totalCharge},#{productPackageTypeId},#{packageAmount},#{statusId},
 		#{customizedInfo},#{orderDate},#{orderDateTime},#{deliveryDate},#{customer},#{payment},#{picFile},#{validFlag})

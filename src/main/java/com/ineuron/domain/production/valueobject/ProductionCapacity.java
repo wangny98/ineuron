@@ -44,10 +44,6 @@ public class ProductionCapacity {
 		this.id = id;
 	}
 
-	public Integer getDeviceId() {
-		return deviceId;
-	}
-
 	public Date getDate() {
 		return date;
 	}
@@ -70,6 +66,14 @@ public class ProductionCapacity {
 
 	public void setProductionTaskList(String productionTaskList) {
 		this.productionTaskList = productionTaskList;
+	}
+
+	public Integer getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(Integer deviceId) {
+		this.deviceId = deviceId;
 	}
 
 	

@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.ineuron.common.exception.RepositoryException;
 import com.ineuron.common.util.ChineseNumberConverter;
+import com.ineuron.common.util.DateTraverse;
 import com.ineuron.dataaccess.db.INeuronRepository;
 import com.ineuron.dataaccess.db.DataTablePageParameters;
 import com.ineuron.dataaccess.db.ReportData;
@@ -27,14 +29,16 @@ import com.ineuron.domain.product.entity.Product;
 import com.ineuron.domain.product.valueobject.Attribute;
 import com.ineuron.domain.product.valueobject.ProductCategory;
 import com.ineuron.domain.product.valueobject.ProductPackageType;
+import com.ineuron.domain.product.valueobject.ProductPrice;
 import com.ineuron.domain.production.service.ProductionService;
 import com.ineuron.domain.production.valueobject.PackagePeriod;
 import com.ineuron.domain.production.valueobject.ProductionCapacity;
+import com.ineuron.domain.production.valueobject.ProductionPeriod;
 public class OrderService {
 
 	@Inject
 	INeuronRepository repository;
-	
+
 	@Inject
 	ProductionService productionService;
 
@@ -69,16 +73,17 @@ public class OrderService {
 		String todayDateforNumber = dateFormat.format(today);
 		order.setOrderNumber(prefix + "-" + todayDateforNumber + "-"
 				+ String.format("%04d", newOrderSN));
-		
+
 		// set the status to init (id=1)
 		order.setStatusId(1);
 
 		// valid order is 1; deleted order is -1;
-		order.setValidFlag(1);
-		
-		
+		order.setValidFlag(1);	
 
 		order.addOrder(repository);
+
+		productionService.updateProductionCapacity(order);
+
 		return order;
 	}
 
@@ -143,7 +148,7 @@ public class OrderService {
 	 */
 	public OrderResponse getOrdersByPage(
 			DataTablePageParameters dtPageParameters)
-			throws RepositoryException {
+					throws RepositoryException {
 		OrderResponse orderResponse = new OrderResponse();
 
 		Integer total = repository.selectOne("getTotalNumberOfOrders", null);
@@ -193,7 +198,7 @@ public class OrderService {
 		// NLPSearchResponse nlpSearchResponse=new NLPSearchResponse();
 
 		ProductSelection parsedResult = new ProductSelection();
-		
+
 		parsedResult = NLPService.getInstance().parseText(words);
 
 		// Get all the nlp'ed attribute words
@@ -252,7 +257,7 @@ public class OrderService {
 		for (int i = 0; i < productWords.size(); i++) {
 			List<ProductCategory> productCategoryList = repository.select(
 					"getProductCategoriesByTerm", "%" + productWords.get(i)
-							+ "%");
+					+ "%");
 			for (int j = 0; j < productCategoryList.size(); j++) {
 				for (int k = 0; k < allProducts.size(); k++) {
 					// product's pc id equals to matched pc id
@@ -376,6 +381,8 @@ public class OrderService {
 		}
 		else order.setAmount(0);
 
+
+
 		// set the order delivery date from NLP analysis service result
 
 		Calendar cal = Calendar.getInstance();
@@ -426,7 +433,29 @@ public class OrderService {
 		}
 		else order.setDeliveryDate(cal.getTime());
 
+		List<ProductPackageType> pTypes=repository.select("getProductPackageTypes", null);
+		ProductPackageType lpType=repository.selectOne("getLabelProductPackageType", null);
 		for (int i = 0; i < finalProductsResult.size(); i++) {
+			//set init estimated delivery date if order amount is not 0
+			if(order.getAmount()>0){	
+				int packageAmount=(int)Math.ceil(order.getAmount()*pTypes.get(0).getVolume());
+				order.setPackageAmount(packageAmount);
+
+				int pId=finalProductsResult.get(i).getId();
+				ProductPrice price=repository.selectOne("getProductPriceByProductId",pId);
+				if(price!=null){
+					order.setProductCharge(order.getAmount()*price.getPrice());
+
+					order.setPackageCharge(packageAmount*pTypes.get(0).getPrice());
+
+					order.setLabelPackageCharge(lpType.getPrice());
+
+					order.setTotalCharge(order.getProductCharge()+
+							order.getPackageCharge()+
+							order.getLabelPackageCharge());
+				}
+			}
+
 			finalProductsResult.get(i).setOrder(order);
 		}
 
@@ -459,7 +488,7 @@ public class OrderService {
 				if (orderReport.get(i).getProductId() == products.get(j)
 						.getId()) {
 					orderReport.get(i)
-							.setProductName(products.get(j).getName());
+					.setProductName(products.get(j).getName());
 					break;
 				}
 			}

@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.ineuron.api.INeuronResponse;
 import com.ineuron.common.exception.InvalidAPITokenException;
 import com.ineuron.common.exception.RepositoryException;
+import com.ineuron.domain.order.entity.Order;
 import com.ineuron.domain.production.entity.Production;
 import com.ineuron.domain.production.valueobject.ProductionCapacity;
 import com.ineuron.domain.production.valueobject.ProductionPeriod;
@@ -86,8 +87,28 @@ public class ProductionResource {
 			LOGGER.error(e.getMessage(), e.getRootCause());
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
-
 	}
+	
+	
+	@Path("/estimateddeliverydate")
+	@POST
+	@Timed
+	public Response getEstimatedDeliveryDate(final Order order, @Context HttpHeaders httpHeader) {
+		try {
+			INeuronResponse response = new INeuronResponse(securityService,
+					httpHeader, false);
+			String dateStr=productionService.getEstimatedDeliveryDate(order);
+			response.setValue(dateStr);
+			return Response.ok(response).build();
+		} catch (RepositoryException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (InvalidAPITokenException e) {
+			LOGGER.error(e.getMessage(), e.getRootCause());
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+	}
+	
 
 	/*@Path("/create")
 	@POST

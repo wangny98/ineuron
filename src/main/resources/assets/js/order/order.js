@@ -1,88 +1,89 @@
 ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$http', '$state', '$cookies', '$rootScope', '$uibModal', 'DTOptionsBuilder', 'DTColumnDefBuilder',
-   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, DTOptionsBuilder, DTColumnDefBuilder) {
+                                                   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, DTOptionsBuilder, DTColumnDefBuilder) {
 
-		var vm = this;
-		$scope.searchObj = {
-				productSearchText:''
-		};
-		
-		//----start------speech web api-----------------------
-		var final_transcript = "";
-		
-		vm.rec = new webkitSpeechRecognition();
-		vm.interim = [];
-		vm.final = '';
-		var self = this;
-	
-		vm.rec.continuous = true;
-		vm.rec.lang = 'zh-CN';
-		vm.rec.interimResults = true;
-			
-		vm.rec.onerror = function(event) {
-			console.log('error');
-			console.log(event);
+	var vm = this;
+	$scope.searchObj = {
+			productSearchText:''
+	};
+
+	// ----start------speech web api-----------------------
+	var final_transcript = "";
+
+	vm.rec = new webkitSpeechRecognition();
+	vm.interim = [];
+	vm.final = '';
+	var self = this;
+
+	vm.rec.continuous = true;
+	vm.rec.lang = 'zh-CN';
+	vm.rec.interimResults = true;
+
+	vm.rec.onerror = function(event) {
+		console.log('error');
+		console.log(event);
+		self.rec.stop();
+	};
+
+	vm.rec.onend = function() {
+		console.log('stopped!');
+	};
+
+	vm.start = function() {
+		var button = document.getElementById('startBtn');
+		final_transcript = "";
+		if(button.innerHTML == '结束'){
 			self.rec.stop();
-		};
-		  
-		vm.rec.onend = function() {
-				console.log('stopped!');
-		};
-			
-		vm.start = function() {
-			var button = document.getElementById('startBtn');
-			final_transcript = "";
-			if(button.innerHTML == '结束'){
-				self.rec.stop();
-				button.innerHTML = '录音';
-			}else{
-				self.rec.start();
-			}
-				
-		};
+			button.innerHTML = '语音';
+		}else{
+			self.rec.start();
+		}
 
-		vm.rec.onresult = function(event) { 
-			var interim_transcript = '';
-	
-			for (var i = event.resultIndex; i < event.results.length; ++i) {
-				if (event.results[i].isFinal) {
-					final_transcript += event.results[i][0].transcript;
-	
-				} else {
-					interim_transcript += event.results[i][0].transcript;
-				}
-	
+	};
+
+	vm.rec.onresult = function(event) { 
+		var interim_transcript = '';
+
+		for (var i = event.resultIndex; i < event.results.length; ++i) {
+			if (event.results[i].isFinal) {
+				final_transcript += event.results[i][0].transcript;
+
+			} else {
+				interim_transcript += event.results[i][0].transcript;
 			}
-			console.log(final_transcript);
-	
-			$scope.searchObj.productSearchText = final_transcript;
-			$scope.$apply();
-			var button = document.getElementById('startBtn');
-			button.innerHTML = '结束';
-		};
-	  
-	
-	//----end------speech web api-----------------------
-	
-	
+
+		}
+		console.log(final_transcript);
+
+		$scope.searchObj.productSearchText = final_transcript;
+		$scope.$apply();
+		var button = document.getElementById('startBtn');
+		//button.innerHTML = '<i class="fa fa-microphone-slash"></i>';
+		button.innerHTML = '结束';
+	};
+
+
+	// ----end------speech web api-----------------------
+
+
 	if ($.fn.dataTable.isDataTable('ng') ) {
-	    table = $('ng').DataTable();
+		table = $('ng').DataTable();
 	}
 	else {
 		vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers').withOption('responsive', true);
 		vm.dtColumnDefs = [ 
-		                    DTColumnDefBuilder.newColumnDef(0),
-		                    DTColumnDefBuilder.newColumnDef(1),
-		                    DTColumnDefBuilder.newColumnDef(2),
-		                    DTColumnDefBuilder.newColumnDef(3),
-		                    DTColumnDefBuilder.newColumnDef(4),
-		                    DTColumnDefBuilder.newColumnDef(5).withClass('none'),
-		                    DTColumnDefBuilder.newColumnDef(6).withClass('none'),
-		                    DTColumnDefBuilder.newColumnDef(7).withClass('none'),
-		                    DTColumnDefBuilder.newColumnDef(8).withClass('none'),
-		                    DTColumnDefBuilder.newColumnDef(9)];
+		                   DTColumnDefBuilder.newColumnDef(0),
+		                   DTColumnDefBuilder.newColumnDef(1),
+		                   DTColumnDefBuilder.newColumnDef(2),
+		                   DTColumnDefBuilder.newColumnDef(3),
+		                   DTColumnDefBuilder.newColumnDef(4),
+		                   DTColumnDefBuilder.newColumnDef(5).withClass('none'),
+		                   DTColumnDefBuilder.newColumnDef(6).withClass('none'),
+		                   DTColumnDefBuilder.newColumnDef(7).withClass('none'),
+		                   DTColumnDefBuilder.newColumnDef(8).withClass('none'),
+		                   DTColumnDefBuilder.newColumnDef(9)];
 	};
-	
-	
+
+
 	// reload the searched result when back from order create
 	$scope.searchObj.productSearchText=$cookies.get('INeuron-ProductSearchText');
 	if($scope.searchObj.productSearchText!=null){
@@ -98,12 +99,12 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 			console.log("error to get productbyname ");
 		});			
 	}
-	
-	
+
+
 	// vm.searchProducts=searchProducts;
 	// function searchProducts(){
 	$scope.searchProducts=function(){
-	// $scope.searchSubmitted=true;
+		// $scope.searchSubmitted=true;
 		// alert("$scope.productSearchText:
 		// "+$scope.searchObj.productSearchText);
 		$cookies.put('INeuron-ProductSearchText', $scope.searchObj.productSearchText, {path : "/"});
@@ -120,7 +121,7 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 			console.log("error to get productbyname ");
 		});			
 	}
-    
+
 	$scope.showAllProducts=function(){
 		$http({
 			url : '/product/productlist',
@@ -143,12 +144,12 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 	function createOrder(index) {
 		$state.go("createOrder",{productStr: JSON.stringify(vm.products[index])});
 	}
-	
+
 	vm.createOrderForAllProducts = createOrderForAllProducts;
 	function createOrderForAllProducts(index) {
 		$state.go("createOrder",{productStr: JSON.stringify(vm.allProducts[index])});
 	}
-	
+
 
 	vm.backward = backward;
 	function backward() {
@@ -160,11 +161,11 @@ ineuronApp.controller('SearchForOrderController', ['$scope', '$stateParams', '$h
 
 ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams', '$rootScope', '$uibModal', '$location', '$cookies', '$state', 
                                               'DTOptionsBuilder', 'DTColumnDefBuilder', 'DTColumnBuilder',
-	function($http, $scope, $stateParams, $rootScope, $uibModal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder) {
+                                              function($http, $scope, $stateParams, $rootScope, $uibModal, $location, $cookies, $state, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder) {
 	var vm = this;
 	$scope.format = "yyyy/MM/dd";
-	
-	
+
+
 	/*
 	 * vm.orderingOptions = [ { name:"orderDate", label: "下单时间", ticked: true }, {
 	 * name:"deliveryDate", label: "交付时间", ticked: false }, { name:"total",
@@ -172,28 +173,28 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	 * false } ];
 	 */	
 	var selectedOrderingOption="orderDate";
-	
+
 	// init the ordering option
-   /*
+	/*
 	 * for (o in vm.orderingOptions){ if(vm.orderingOptions[o].ticked==true)
 	 * selectedOrderingOption=vm.orderingOptions[o].name; }
 	 */	
-    
+
 	// init for list paging
 	$scope.paginationConf = {
-            currentPage: 1,
-            itemsPerPage: 10,
-            // totalItems: 100,
-            perPageOptions: [10,15]
-        };
-	
+			currentPage: 1,
+			itemsPerPage: 10,
+			// totalItems: 100,
+			perPageOptions: [10,15]
+	};
+
 	$http({
 		url : '/order/listbypage',
 		method : 'POST',
 		data : {
-            currentPage: $scope.paginationConf.currentPage,
-            itemsPerPage: $scope.paginationConf.itemsPerPage,
-            orderingOption: selectedOrderingOption
+			currentPage: $scope.paginationConf.currentPage,
+			itemsPerPage: $scope.paginationConf.itemsPerPage,
+			orderingOption: selectedOrderingOption
 		}
 	}).success(function(data) {
 		updateApiToken(data, $cookies);
@@ -203,16 +204,16 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 		handleError(status, $rootScope, $uibModal);
 		console.log("order list error");
 	});	  
-		
-	
+
+
 	var retreiveOrdersForPagingButton = function(){
 		$http({
 			url : '/order/listbypage',
 			method : 'POST',
 			data : {
-	            currentPage: $scope.paginationConf.currentPage,
-	            itemsPerPage: $scope.paginationConf.itemsPerPage,
-	            orderingOption: selectedOrderingOption
+				currentPage: $scope.paginationConf.currentPage,
+				itemsPerPage: $scope.paginationConf.itemsPerPage,
+				orderingOption: selectedOrderingOption
 			}
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
@@ -222,23 +223,23 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 			handleError(status, $rootScope, $uibModal);
 			console.log("order list error");
 		});	  
-    };
+	};
 
-    // monitoring the change of currentPage and itemsPerPage
-    $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', retreiveOrdersForPagingButton);
+	// monitoring the change of currentPage and itemsPerPage
+	$scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', retreiveOrdersForPagingButton);
 
-    
-    // refresh order list after select ordering option
-    $scope.refreshOrdersByOrderingOptionChange = function(){
-    	$scope.paginationConf.currentPage=1;
-    	selectedOrderingOption=$scope.outputOrderingOption[0].name;
-    	$http({
+
+	// refresh order list after select ordering option
+	$scope.refreshOrdersByOrderingOptionChange = function(){
+		$scope.paginationConf.currentPage=1;
+		selectedOrderingOption=$scope.outputOrderingOption[0].name;
+		$http({
 			url : '/order/listbypage',
 			method : 'POST',
 			data : {
-	            currentPage: $scope.paginationConf.currentPage,
-	            itemsPerPage: $scope.paginationConf.itemsPerPage,
-	            orderingOption: selectedOrderingOption
+				currentPage: $scope.paginationConf.currentPage,
+				itemsPerPage: $scope.paginationConf.itemsPerPage,
+				orderingOption: selectedOrderingOption
 			}
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
@@ -248,13 +249,13 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 			handleError(status, $rootScope, $uibModal);
 			console.log("order list error");
 		});	  
-    }
-    
-    
-    /*
+	}
+
+
+	/*
 	 * for order list filtering
 	 */    
-    /*
+	/*
 	 * $http({ url : '/product/productlist', method : 'GET'
 	 * }).success(function(data) { updateApiToken(data, $cookies); vm.products =
 	 * data.value; }).error(function(data, status) { handleError(status,
@@ -271,66 +272,66 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	 * }).error(function(data, status) { handleError(status, $rootScope,
 	 * $uibModal); console.log("order list error"); }); }
 	 */
-    
-    
+
+
 	vm.updateOrder=updateOrder;
 	function updateOrder(index){
 		$state.go("updateOrder", {orderStr: JSON.stringify(vm.orders[index])});
 	}
-	
+
 	// for reports
-  $scope.showReport=function(){
-	  $scope.options = {
-	            chart: {
-	                type: 'lineChart',
-	                height: 450,
-	                width:900,
-	                margin : {
-	                    top: 20,
-	                    right: 20,
-	                    bottom: 40,
-	                    left: 55
-	                },
-	                x: function(d){ return d[0]; },
-	                y: function(d){ return d[1]; },
-	                useInteractiveGuideline: true,
-	                color: d3.scale.category10().range(),
-	                
-	                xAxis: {
-	                    axisLabel: '月份'
-	                },
-	                yAxis: {
-	                    axisLabel: '订单量  ',
-	                    tickFormat: function(d){
-	                        return d3.format('.02f')(d);
-	                    },
-	                    axisLabelDistance: -10
-	                },
-	                callback: function(chart){
-	                    console.log("!!! lineChart callback !!!");
-	                }
-	            },
-	            title: {
-	                enable: true,
-	                text: '各个产品2017年月销量统计'
-	            },
-	            subtitle: {
-	                enable: true,
-	                text: '',
-	                css: {
-	                    'text-align': 'center',
-	                    'margin': '10px 13px 0px 7px'
-	                }
-	            },
-	            caption: {
-	                /*
+	$scope.showReport=function(){
+		$scope.options = {
+				chart: {
+					type: 'lineChart',
+					height: 450,
+					width:900,
+					margin : {
+						top: 20,
+						right: 20,
+						bottom: 40,
+						left: 55
+					},
+					x: function(d){ return d[0]; },
+					y: function(d){ return d[1]; },
+					useInteractiveGuideline: true,
+					color: d3.scale.category10().range(),
+
+					xAxis: {
+						axisLabel: '月份'
+					},
+					yAxis: {
+						axisLabel: '订单量  ',
+						tickFormat: function(d){
+							return d3.format('.02f')(d);
+						},
+						axisLabelDistance: -10
+					},
+					callback: function(chart){
+						console.log("!!! lineChart callback !!!");
+					}
+				},
+				title: {
+					enable: true,
+					text: '各个产品2017年月销量统计'
+				},
+				subtitle: {
+					enable: true,
+					text: '',
+					css: {
+						'text-align': 'center',
+						'margin': '10px 13px 0px 7px'
+					}
+				},
+				caption: {
+					/*
 					 * enable: true, html: '<b>Figure 1.</b> xxx, <span
 					 * style="text-decoration: underline;">xx</span> <i>xxx</i> ',
 					 * css: { 'text-align': 'justify', 'margin': '10px 13px 0px
 					 * 7px' }
 					 */
-	            }
-	        };
+				}
+		};
 
 		$http({
 			url : '/order/ordersbyproductspermonth',
@@ -345,7 +346,7 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 			console.log("order list error");
 		});	  
 	}
-	
+
 	/*
 	 * vm.createOrder=createOrder; function createOrder(){ // alert("index:
 	 * "+index); $state.go("createOrder"); }
@@ -354,7 +355,7 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 	function deleteOrder(index){
 		ineuronApp.confirm("确认","确定删除吗？", 'sm', $rootScope, $uibModal).result.then(function(clickok){  
 			if(clickok){
-				 $http({
+				$http({
 					url : '/product/deleteorder',
 					method : 'POST',
 					data : {
@@ -373,36 +374,57 @@ ineuronApp.controller('OrderListController', ['$http', '$scope', '$stateParams',
 			}
 		});		
 	}
-		
+
 }]);
 
 
 ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http', '$state', '$cookies', 
                                                 '$rootScope', '$uibModal', 'Upload', '$timeout','$location',
-   function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, Upload, $timeout,$location) {
+                                                function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal, Upload, $timeout,$location) {
 
 	var vm = this;	
 	var product = eval('(' + $stateParams.productStr + ')');
 	$scope.userName=$cookies.get('INeuron-UserName');
-    $scope.productName=product.name;
-    
-    if(product.productPrice==null){
-    	ineuronApp.confirm("提示","产品还未定价，请先给此产品设定价格！", 'sm', $rootScope, $uibModal);		
+	$scope.productName=product.name;
+
+	if(product.productPrice==null){
+		ineuronApp.confirm("提示","产品还未定价，请先给此产品设定价格！", 'sm', $rootScope, $uibModal);		
 		$state.go("updateProductPrice",{productStr: $stateParams.productStr});
-    }
-    else{ 
-    	$scope.price=product.productPrice.price;
-    	$scope.unit=product.productPrice.unit;
-    }
-    
-    if(product.order!=null){
-        $scope.amount=product.order.amount;	
-        $scope.productCharge=$scope.amount*$scope.price;
-    }
-   
-    // get product package type list
-    var j=0;
-    $http({
+	}
+	else{ 
+		$scope.price=product.productPrice.price;
+		$scope.unit=product.productPrice.unit;
+	}
+
+	if(product.order!=null){
+		$scope.amount=product.order.amount;	
+		$scope.productCharge=$scope.amount*$scope.price;
+		$scope.packageAmount=product.order.packageAmount;
+		$scope.productCharge=product.order.productCharge;
+		$scope.packageCharge=product.order.packageCharge;
+		$scope.labelPackageCharge=product.order.labelPackageCharge;
+		$scope.totalCharge=product.order.totalCharge;
+		
+		$http({
+			url : '/production/estimateddeliverydate',
+			method : 'POST',
+			data : {
+				productId : product.id,
+				amount: $scope.amount,
+				packageAmount:$scope.packageAmount
+			}
+		}).success(function(data) {
+			updateApiToken(data, $cookies);
+			$scope.estimatedDeliveryDateStr= data.value;
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $uibModal);
+			console.log("get estimatedDeliveryDate error");
+		});	
+	}
+
+	// get product package type list
+	var j=0;
+	$http({
 		url : '/product/productpackagetypelist',
 		method : 'GET'
 	}).success(function(data) {
@@ -413,9 +435,9 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		handleError(status, $rootScope, $uibModal);
 		console.log("get product package type list error");
 	});	
-    
-    // get label product package type
-    $http({
+
+	// get label product package type
+	$http({
 		url : '/product/labelproductpackagetype',
 		method : 'GET'
 	}).success(function(data) {
@@ -425,26 +447,14 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 		handleError(status, $rootScope, $uibModal);
 		console.log("get product package type list error");
 	});	
-    
-    $scope.calculatePackageAmount=function(){
-    	$scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
-    }
-    
-    // get product's ProductionPeriod
-    $http({
-		url : '/production/periodsbyproductid?productId='+product.id,
-		method : 'GET'
-	}).success(function(data) {
-		updateApiToken(data, $cookies);
-		vm.productPeriods = data.value;
-	}).error(function(data, status) {
-		handleError(status, $rootScope, $uibModal);
-		console.log("get product's production periods error");
-	});	
-    
-    if(product.order!=null)
-    	$scope.deliveryDate=product.order.deliveryDate;
-    else $scope.deliveryDate = new Date();
+
+	$scope.calculatePackageAmount=function(){
+		$scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
+	}
+
+	if(product.order!=null)
+		$scope.deliveryDate=product.order.deliveryDate;
+	else $scope.deliveryDate = new Date();
 	$scope.format = "yyyy/MM/dd";
 	$scope.altInputFormats = ['yyyy/M!/d!'];
 
@@ -457,120 +467,132 @@ ineuronApp.controller('OrderCreateController', ['$scope', '$stateParams', '$http
 	$scope.dateOptions = {
 			showWeeks: false
 	};
-	            
-	$scope.calculateTotalAndPeriod=function(){ 
-		
-	    // calculate the package amount
-	    $scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
-	    
-	    // calculate the total charge including product, package and
-		// personalized label package
-	    $scope.productCharge=parseFloat($scope.amount*$scope.price).toFixed(2);
-	    $scope.packageCharge=parseFloat($scope.packageAmount*$scope.selectedProductPackageType[0].price).toFixed(2);
-	    $scope.labelPackageCharge=vm.labelProductPackageType.price;
-	    var total=parseFloat($scope.amount*$scope.price+
-	                       $scope.packageAmount*$scope.selectedProductPackageType[0].price+
-	    				   vm.labelProductPackageType.price).toFixed(2);	
-	    $scope.totalCharge=parseFloat(total);
-	    
-	    // calculate estimatedDeliveryPeriod
-	    // call the Production service to search available production capacity
-		// from today with order required amount
-	    
-	    for (var i in vm.productPeriods){
-			if(($scope.amount>=vm.productPeriods[i].productionMinVolume)&&($scope.amount<=vm.productPeriods[i].productionMaxVolume)) {
-				// return value by unit as "day"
-				$scope.productionPeriod=Math.ceil(vm.productPeriods[i].productionPeriod/3600/8);				
-				break;
-			}
-		}   
-	}	
+
 	
+	$scope.calculateTotalAndPeriod=function(){ 
 
-    vm.createOrder = createOrder;
-    function createOrder(file) {
-      // generate pic file name
-      var now=new Date();	
-      var userId=$cookies.get('INeuron-UserId');
-      var picFileName = userId + "-" + now.getTime();
-      var picSuffix;
-      
-      if(file!=null){
-    	  var tempFilename=file.name;
-    	  var tempFilenameSections=tempFilename.split('.');
-    	  var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
-      }
-      
-      $http({
-		url : '/order/create',
-		method : 'POST',
-		data : {
-			productId : product.id,
-			userId: userId,
-			customer: $scope.customerName,
-			amount: $scope.amount,
-			productCharge: $scope.amount*product.productPrice.price,
-			productCost: $scope.amount*product.productPrice.cost,
-			packageCharge: $scope.packageAmount*$scope.selectedProductPackageType[0].price,
-			packageCost: $scope.packageAmount*$scope.selectedProductPackageType[0].cost,
-			labelPackageCharge:vm.labelProductPackageType.price,
-			labelPackageCost:vm.labelProductPackageType.cost,
-			totalCharge: $scope.totalCharge,
-			packageAmount:$scope.packageAmount,
-			productPackageTypeId:$scope.selectedProductPackageType[0].id,
-			estimatedDeliveryPeriod:$scope.productionPeriod,
-			payment:$scope.payment,
-			deliveryDate: $scope.deliveryDate,
-			customizedInfo: $scope.customizedInfo,
-			picFile: picFileName+"."+picSuffix
-	 	}
-	 }).success(function(data) {
-		updateApiToken(data, $cookies);
-		
-		// upload pic to the file server
-		if(file!=null){
-			file.upload = Upload.upload({
-				url: '/file/upload',
-				data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
-			});
-			file.upload.then(function (response) {
-				$timeout(function () {
-					file.result = response.data;
-				});
-			}, function (response) {
-				if (response.status > 0)
-					// $scope.errorMsg = response.status + ': ' + response.data;
-					ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
-			}, function (evt) {
-				// Math.min is to fix IE which reports 200% sometimes
-				file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-			});
+		// calculate the package amount
+		$scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
+
+		// calculate the total charge including product, package and
+		// personalized label package
+		$scope.productCharge=parseFloat($scope.amount*$scope.price).toFixed(2);
+		$scope.packageCharge=parseFloat($scope.packageAmount*$scope.selectedProductPackageType[0].price).toFixed(2);
+		$scope.labelPackageCharge=vm.labelProductPackageType.price;
+		var total=parseFloat($scope.amount*$scope.price+
+				$scope.packageAmount*$scope.selectedProductPackageType[0].price+
+				vm.labelProductPackageType.price).toFixed(2);	
+		$scope.totalCharge=parseFloat(total);
+
+		$http({
+			url : '/production/estimateddeliverydate',
+			method : 'POST',
+			data : {
+				productId : product.id,
+				amount: $scope.amount,
+				packageAmount:$scope.packageAmount,
+				productPackageTypeId:$scope.selectedProductPackageType[0].id
+			}
+		}).success(function(data) {
+			updateApiToken(data, $cookies);
+			$scope.estimatedDeliveryDateStr= data.value;
+		}).error(function(data, status) {
+			handleError(status, $rootScope, $uibModal);
+			console.log("get estimatedDeliveryDate error");
+		});	
+	}	
+
+
+	vm.createOrder = createOrder;
+	function createOrder(file) {
+
+		var estimatedDeliveryDate=new Date($scope.estimatedDeliveryDateStr);
+		if(estimatedDeliveryDate>$scope.deliveryDate)
+			ineuronApp.confirm("提示","指定交付日期小于预估交付日期，请重新指定交付日期！", 'sm', $rootScope, $uibModal);
+		else{   
+			// generate pic file name
+			var now=new Date();	
+			var userId=$cookies.get('INeuron-UserId');
+			var picFileName = userId + "-" + now.getTime();
+			var picSuffix;
+
+			if(file!=null){
+				var tempFilename=file.name;
+				var tempFilenameSections=tempFilename.split('.');
+				var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
+			}
+
+			$http({
+				url : '/order/create',
+				method : 'POST',
+				data : {
+					productId : product.id,
+					userId: userId,
+					customer: $scope.customerName,
+					amount: $scope.amount,
+					productCharge: $scope.amount*product.productPrice.price,
+					productCost: $scope.amount*product.productPrice.cost,
+					packageCharge: $scope.packageAmount*$scope.selectedProductPackageType[0].price,
+					packageCost: $scope.packageAmount*$scope.selectedProductPackageType[0].cost,
+					labelPackageCharge:vm.labelProductPackageType.price,
+					labelPackageCost:vm.labelProductPackageType.cost,
+					totalCharge: $scope.totalCharge,
+					packageAmount:$scope.packageAmount,
+					productPackageTypeId:$scope.selectedProductPackageType[0].id,
+					estimatedDeliveryDate:estimatedDeliveryDate,
+					payment:$scope.payment,
+					deliveryDate: $scope.deliveryDate,
+					customizedInfo: $scope.customizedInfo,
+					picFile: picFileName+"."+picSuffix
+				}
+			}).success(function(data) {
+				updateApiToken(data, $cookies);
+
+				// upload pic to the file server
+				if(file!=null){
+					file.upload = Upload.upload({
+						url: '/file/upload',
+						data: {file:  Upload.rename(file, picFileName+"."+picSuffix)},
+					});
+					file.upload.then(function (response) {
+						$timeout(function () {
+							file.result = response.data;
+						});
+					}, function (response) {
+						if (response.status > 0)
+							// $scope.errorMsg = response.status + ': ' + response.data;
+							ineuronApp.confirm("提示","上传图片失败！", 'sm', $rootScope, $uibModal);
+					}, function (evt) {
+						// Math.min is to fix IE which reports 200% sometimes
+						file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+					});
+				}
+
+				ineuronApp.confirm("提示","订单添加成功！", 'sm', $rootScope, $uibModal);		
+				$state.go("orderList");
+			}).error(function(data, status) {
+				ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
+				// alert(status);
+				handleError(status, $rootScope, $uibModal);
+				console.log("create order error");
+			}) 
 		}
-		
-		ineuronApp.confirm("提示","订单添加成功！", 'sm', $rootScope, $uibModal);		
-		$state.go("orderList");
-    }).error(function(data, status) {
-		ineuronApp.confirm("提示","添加失败！", 'sm', $rootScope, $uibModal);
-		// alert(status);
-		handleError(status, $rootScope, $uibModal);
-		console.log("create order error");
-  	})  	    
-  	}
+	}
 
-    vm.backward = backward;
-    function backward() {
-    	$state.go("searchForOrder");
-    }
+	vm.backward = backward;
+	function backward() {
+		$state.go("searchForOrder");
+	}
 
 }]);
 
 
 ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http', '$state', '$cookies',
                                                 '$rootScope', '$uibModal', '$location','Upload',
-  function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal,$location,Upload) {
+                                                function($scope, $stateParams, $http, $state, $cookies, $rootScope, $uibModal,$location,Upload) {
 	var order = eval('(' + $stateParams.orderStr + ')');
 	var vm = this;
-	
+
 	$scope.orderNumber=order.orderNumber;
 	$scope.customer=order.customer;
 	$scope.amount=order.amount;
@@ -583,15 +605,15 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 	$scope.price=order.product.productPrice.price;
 	$scope.unit=order.product.productPrice.unit;
 	$scope.packageAmount=order.packageAmount;
-	
+
 	// get product package type list
-    $http({
+	$http({
 		url : '/product/productpackagetypelist',
 		method : 'GET'
 	}).success(function(data) {
 		updateApiToken(data, $cookies);
 		vm.productPackageTypes = data.value;
-		
+
 		// set the init order package type
 		for(var i in vm.productPackageTypes){
 			if(vm.productPackageTypes[i].id==order.productPackageTypeId){
@@ -603,9 +625,9 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 		handleError(status, $rootScope, $uibModal);
 		console.log("get product package type list error");
 	});	
-	
-    // get label product package type
-    $http({
+
+	// get label product package type
+	$http({
 		url : '/product/labelproductpackagetype',
 		method : 'GET'
 	}).success(function(data) {
@@ -615,28 +637,28 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 		handleError(status, $rootScope, $uibModal);
 		console.log("get product package type list error");
 	});	
-    
-    $scope.calculatePackageAmount=function(){
-    	$scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
-    }
-    
+
+	$scope.calculatePackageAmount=function(){
+		$scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
+	}
+
 	$scope.deliveryDate=order.deliveryDate;
 	$scope.format = "yyyy/MM/dd";
 	$scope.altInputFormats = ['yyyy/M!/d!'];
 	$scope.popup1 = {
 			opened: false
-			};
+	};
 	$scope.open1 = function () {
 		$scope.popup1.opened = true;
-		};
+	};
 	$scope.dateOptions = {
 			showWeeks: false
-		};	
-	 
-    // get orginal pic from nginx
-    // alert($location.host());
-    $scope.originalPic="http://"+$location.host()+"/images/"+order.picFile;
-    
+	};	
+
+	// get orginal pic from nginx
+	// alert($location.host());
+	$scope.originalPic="http://"+$location.host()+"/images/"+order.picFile;
+
 	// get orderStatus list
 	$http({
 		url : '/order/orderstatuslist',
@@ -654,41 +676,41 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 		handleError(status, $rootScope, $uibModal);
 		console.log("error to get orderstatus ");
 	});		
-	
-	
+
+
 	$scope.calculateTotal=function(){ 
 		// calculate the package amount
-	    $scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
-	    
-	    // calculate the total charge including product, package and
+		$scope.packageAmount=Math.ceil($scope.amount/$scope.selectedProductPackageType[0].volume);
+
+		// calculate the total charge including product, package and
 		// personalized label package
-	    $scope.productCharge=parseFloat($scope.amount*$scope.price).toFixed(2);
-	    $scope.packageCharge=parseFloat($scope.packageAmount*$scope.selectedProductPackageType[0].price).toFixed(2);
-	    $scope.labelPackageCharge=vm.labelProductPackageType.price;
-	    var total=parseFloat($scope.amount*$scope.price+
-	                       $scope.packageAmount*$scope.selectedProductPackageType[0].price+
-	    				   vm.labelProductPackageType.price).toFixed(2);	
-	    $scope.totalCharge=parseFloat(total);
+		$scope.productCharge=parseFloat($scope.amount*$scope.price).toFixed(2);
+		$scope.packageCharge=parseFloat($scope.packageAmount*$scope.selectedProductPackageType[0].price).toFixed(2);
+		$scope.labelPackageCharge=vm.labelProductPackageType.price;
+		var total=parseFloat($scope.amount*$scope.price+
+				$scope.packageAmount*$scope.selectedProductPackageType[0].price+
+				vm.labelProductPackageType.price).toFixed(2);	
+		$scope.totalCharge=parseFloat(total);
 	}
-	
+
 	vm.updateOrder = updateOrder;
 	function updateOrder(file) {
 		// generate pic file name
-	      var userId=$cookies.get('INeuron-UserId');
-	      var newPicFile;
-	      
-	      if(file==null){
-	    	  newPicFile=order.picFile;
-	      }
-	      else{
-	    	  var currentTime=new Date();
-	    	  var picFileName = userId + "-" + currentTime.getTime();
-	    	  var tempFilename=file.name;
-	    	  var tempFilenameSections=tempFilename.split('.');
-	    	  var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
-	    	  newPicFile=picFileName+"."+picSuffix;
-	      }
-	      
+		var userId=$cookies.get('INeuron-UserId');
+		var newPicFile;
+
+		if(file==null){
+			newPicFile=order.picFile;
+		}
+		else{
+			var currentTime=new Date();
+			var picFileName = userId + "-" + currentTime.getTime();
+			var tempFilename=file.name;
+			var tempFilenameSections=tempFilename.split('.');
+			var picSuffix=tempFilenameSections[tempFilenameSections.length-1];
+			newPicFile=picFileName+"."+picSuffix;
+		}
+
 		$http({
 			url : '/order/update',
 			method : 'POST',
@@ -713,7 +735,7 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 			}
 		}).success(function(data) {
 			updateApiToken(data, $cookies);
-			
+
 			// upload pic to the file server
 			if(file!=null){
 				file.upload = Upload.upload({
@@ -734,7 +756,7 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 					file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
 				});
 			}
-			
+
 			ineuronApp.confirm("提示","修改成功！", 'sm', $rootScope, $uibModal);		
 			$state.go("orderList");
 		}).error(function(data, status) {
@@ -743,12 +765,12 @@ ineuronApp.controller('OrderUpdateController', ['$scope', '$stateParams', '$http
 			console.log("error");
 		})
 	}
-	
-	
+
+
 	vm.backward = backward;
 	function backward() {
 		$state.go("orderList");
 	}
-	
+
 }]);
 

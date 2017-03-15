@@ -16,7 +16,7 @@ public class Order {
 	private String orderNumber;
 	private Integer productId;
 	private Integer userId;
-	private Integer estimatedDeliveryPeriod;
+	private Date estimatedDeliveryDate;
 	private float amount;
 	private float productCharge;
 	private float productCost;
@@ -117,14 +117,6 @@ public class Order {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
-	}
-
-	public Integer getEstimatedDeliveryPeriod() {
-		return estimatedDeliveryPeriod;
-	}
-
-	public void setEstimatedDeliveryPeriod(Integer estimatedDeliveryPeriod) {
-		this.estimatedDeliveryPeriod = estimatedDeliveryPeriod;
 	}
 
 	public float getAmount() {
@@ -320,6 +312,14 @@ public class Order {
 
 	public void setTotalCharge(float totalCharge) {
 		this.totalCharge = totalCharge;
+	}
+
+	public Date getEstimatedDeliveryDate() {
+		return estimatedDeliveryDate;
+	}
+
+	public void setEstimatedDeliveryDate(Date estimatedDeliveryDate) {
+		this.estimatedDeliveryDate = estimatedDeliveryDate;
 	}
 
 }
