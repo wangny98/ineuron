@@ -380,6 +380,7 @@ public class OrderService {
 				break;
 			case "吨":
 			case "t":
+			case "T":
 				order.setAmount(amount * 1000);
 				break;
 			}
