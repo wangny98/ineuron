@@ -365,9 +365,13 @@ public class OrderService {
 				order.setAmount(amount / 1000);
 				break;
 			case "千克":
+			case "公斤":
 			case "kg":
 			case "KG":
 				order.setAmount(amount);
+				break;
+			case "斤":
+				order.setAmount(amount/2);
 				break;
 			case "克":
 			case "g":
@@ -375,6 +379,7 @@ public class OrderService {
 				order.setAmount(amount / 1000);
 				break;
 			case "吨":
+			case "t":
 				order.setAmount(amount * 1000);
 				break;
 			}
