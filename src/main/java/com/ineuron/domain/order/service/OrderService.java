@@ -365,9 +365,13 @@ public class OrderService {
 				order.setAmount(amount / 1000);
 				break;
 			case "千克":
+			case "公斤":
 			case "kg":
 			case "KG":
 				order.setAmount(amount);
+				break;
+			case "斤":
+				order.setAmount(amount/2);
 				break;
 			case "克":
 			case "g":
@@ -375,6 +379,8 @@ public class OrderService {
 				order.setAmount(amount / 1000);
 				break;
 			case "吨":
+			case "t":
+			case "T":
 				order.setAmount(amount * 1000);
 				break;
 			}
@@ -459,7 +465,13 @@ public class OrderService {
 			finalProductsResult.get(i).setOrder(order);
 		}
 
-		return finalProductsResult;
+		if(finalProductsResult.size()==0){
+			for(int p=0; p<allProducts.size(); p++){
+				allProducts.get(p).setOrder(order);
+			}
+			return allProducts;
+		}
+		else return finalProductsResult;
 	}
 
 	/*
