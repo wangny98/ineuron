@@ -459,7 +459,13 @@ public class OrderService {
 			finalProductsResult.get(i).setOrder(order);
 		}
 
-		return finalProductsResult;
+		if(finalProductsResult.size()==0){
+			for(int p=0; p<allProducts.size(); p++){
+				allProducts.get(p).setOrder(order);
+			}
+			return allProducts;
+		}
+		else return finalProductsResult;
 	}
 
 	/*
