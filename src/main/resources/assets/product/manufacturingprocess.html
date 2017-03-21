@@ -43,6 +43,7 @@
 				<th>原料</th>
 				<th>操作内容</th>
 				<th>剩余质量</th>
+				<th>误差允许范围（%）</th>
 				<th>编辑步骤</th>
 			</tr>
 		</thead>
@@ -69,6 +70,7 @@
               </td>
 			  <td>{{row.materialQuantity}}</td>
 			  <td>{{row.remainingQuantity}}</td>
+			  <td>{{row.errorRange}}</td>
 			  <td>
             	<button ng-click="editContact($index)">编辑</button>
 				<button ng-click="removeRow($index)">删除</button>
@@ -90,6 +92,7 @@
               </td>
             <td><input type="text" ng-model="model.selected.materialQuantity" /></td>
 			<td>{{row.remainingQuantity}}</td>
+			<td><input type="text" ng-model="model.selected.errorRange" /></td>
         	<td>
             	<button ng-click="saveContact($index)">完成</button>
             	<button ng-click="reset()">取消</button>
