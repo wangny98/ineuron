@@ -306,7 +306,7 @@ public class OrderService {
 		// filter out products which scope are not matched to the required scope
 		List<Product> finalProductsResult = new ArrayList<Product>();
 
-		if (parsedResult.getScopes() != null) {
+		if (parsedResult.getScopes()!=null) {
 			Set<String> scopes = parsedResult.getScopes();
 
 			for (String scope : scopes) {
@@ -341,10 +341,10 @@ public class OrderService {
 
 		// set the order init amount from NLP analysis service result
 		Order order = new Order();
-		if (parsedResult.getQuantity() != null) {
+		//System.out.println("quantity: "+parsedResult.getQuantity());
+		if (parsedResult.getQuantity()!=null&&parsedResult.getQuantity().size()>0) {
 			List<String> nlpQuantityStr = parsedResult.getQuantity();
 			float amount;
-
 			try {
 				amount = Float.parseFloat(nlpQuantityStr.get(0));
 			} catch (NumberFormatException ex) {
@@ -365,9 +365,13 @@ public class OrderService {
 				order.setAmount(amount / 1000);
 				break;
 			case "千克":
+			case "公斤":
 			case "kg":
 			case "KG":
 				order.setAmount(amount);
+				break;
+			case "斤":
+				order.setAmount(amount/2);
 				break;
 			case "克":
 			case "g":
@@ -375,6 +379,8 @@ public class OrderService {
 				order.setAmount(amount / 1000);
 				break;
 			case "吨":
+			case "t":
+			case "T":
 				order.setAmount(amount * 1000);
 				break;
 			}
@@ -386,7 +392,7 @@ public class OrderService {
 		// set the order delivery date from NLP analysis service result
 
 		Calendar cal = Calendar.getInstance();
-		if (parsedResult.getDate() != null) {
+		if (parsedResult.getDate()!=null&&parsedResult.getDate().size()>0) {
 			List<String> nlpDateStr = parsedResult.getDate();
 			int dateNum;
 
@@ -459,6 +465,12 @@ public class OrderService {
 			finalProductsResult.get(i).setOrder(order);
 		}
 
+		/*if(finalProductsResult.size()==0){
+			for(int p=0; p<allProducts.size(); p++){
+				allProducts.get(p).setOrder(order);
+			}
+			return allProducts;
+		}*/
 		return finalProductsResult;
 	}
 
