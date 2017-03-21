@@ -8,6 +8,7 @@ public class ManufacturingProcess {
 	private Integer operationId;
 	private Integer materialId;
 	private Float materialQuantity;
+	private Float errorRange;
 
 	public Integer getStepId() {
 		return stepId;
@@ -44,6 +45,12 @@ public class ManufacturingProcess {
 	}
 	public void setMaterialQuantity(Float materialQuantity) {
 		this.materialQuantity = materialQuantity;
+	}
+	public Float getErrorRange() {
+		return errorRange;
+	}
+	public void setErrorRange(Float errorRange) {
+		this.errorRange = errorRange;
 	}
 	
 
