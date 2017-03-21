@@ -62,6 +62,10 @@ ineuronApp.controller('ProductManufacturingProcessController', [
 						ineuronApp.confirm("提示","该列只能输入数字！", 'sm', $rootScope, $uibModal);
 						row.materialQuantity = 0;
 					}
+					if(isNaN(row.errorRange)){
+						ineuronApp.confirm("提示","该列只能输入数字！", 'sm', $rootScope, $uibModal);
+						row.materialQuantity = 0;
+					}
 					var operationId = $scope.model.selected.operationId;
 					var operationTypeId = getOperationTypeId(operationId);
 					if(operationTypeId == 1){

@@ -136,9 +136,9 @@
 
 	<insert id="insertProcess">
 		insert into ProductManufacturingProcess
-		(productId,orderId,operationId,materialId,materialQuantity)
+		(productId,orderId,operationId,materialId,materialQuantity,errorRange)
 		values
-		(#{productId},#{orderId},#{operationId},#{materialId},#{materialQuantity})
+		(#{productId},#{orderId},#{operationId},#{materialId},#{materialQuantity},#{errorRange})
 	</insert>
 
 	<select id="getOperations" resultType="com.ineuron.domain.product.valueobject.Operation">
